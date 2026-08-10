@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 
 import type { PageContent, SupportedLocale } from "@/lib/content";
 
-export const SITE_ORIGIN = "https://stara-stolarnia.pl";
+const DEFAULT_SITE_ORIGIN = "https://stara-stolarnia.pl";
+const VERCEL_PRODUCTION_HOSTNAME = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+
+export const SITE_ORIGIN = VERCEL_PRODUCTION_HOSTNAME
+  ? `https://${VERCEL_PRODUCTION_HOSTNAME}`
+  : DEFAULT_SITE_ORIGIN;
 
 const LOCALE_HOME_PATHS = {
   pl: "/pl/",
