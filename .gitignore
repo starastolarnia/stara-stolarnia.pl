@@ -5,3 +5,4 @@ out
 *.log
 *.tsbuildinfo
 .playwright-mcp/**
+bugs/assets/
