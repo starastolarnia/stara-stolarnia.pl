@@ -2,7 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- Local WebP assets are pre-sized; the hero also needs a responsive picture source. */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -13,6 +13,7 @@ import {
 } from "motion/react";
 
 import type { FeatureContent, PageContent } from "@/lib/content";
+import { getLocalePath, LOCALES, SUPPORTED_LOCALES } from "@/lib/i18n";
 
 type VenuePageProps = {
   content: PageContent;
@@ -20,6 +21,15 @@ type VenuePageProps = {
 
 type HeaderProps = {
   site: PageContent["site"];
+};
+
+type HeaderPanel = "menu" | "languages" | null;
+
+type LanguageSwitcherProps = {
+  currentLocale: PageContent["site"]["locale"];
+  isOpen: boolean;
+  label: string;
+  onToggle: () => void;
 };
 
 type LogoProps = {
@@ -45,6 +55,7 @@ type HeroLight = {
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const MARQUEE_GROUPS = [0, 1] as const;
+const SITE_TIME_ZONE = "Europe/Warsaw";
 
 const HERO_LIGHTS = [
   { x: 418, y: 443, radius: 112 },
@@ -95,6 +106,42 @@ const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M5 12h13M14 7l5 5-5 5" />
   </svg>
+);
+
+const LanguageSwitcher = (props: LanguageSwitcherProps) => (
+  <div className="language-switcher">
+    <button
+      className="language-switcher__button"
+      type="button"
+      aria-expanded={props.isOpen}
+      aria-controls="language-navigation"
+      aria-label={props.label}
+      onClick={props.onToggle}
+    >
+      <span className="language-switcher__flag" aria-hidden="true">
+        {LOCALES[props.currentLocale].flag}
+      </span>
+    </button>
+
+    {props.isOpen ? (
+      <nav id="language-navigation" className="language-switcher__menu" aria-label={props.label}>
+        {SUPPORTED_LOCALES.map((locale) => (
+          <a
+            className={locale === props.currentLocale ? "language-switcher__option--active" : undefined}
+            href={getLocalePath(locale)}
+            hrefLang={locale}
+            lang={locale}
+            aria-current={locale === props.currentLocale ? "page" : undefined}
+            key={locale}
+          >
+            <span aria-hidden="true">{LOCALES[locale].flag}</span>
+            <span>{LOCALES[locale].name}</span>
+            <i aria-hidden="true" />
+          </a>
+        ))}
+      </nav>
+    ) : null}
+  </div>
 );
 
 const HeroLights = () => {
@@ -163,11 +210,18 @@ const Header = (props: HeaderProps) => {
   const { site } = props;
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [panel, setPanel] = useState<HeaderPanel>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const isMenuOpen = panel === "menu";
+  const isLanguageOpen = panel === "languages";
 
   useMotionValueEvent(scrollY, "change", (value) => {
     setIsScrolled(value > 48);
   });
+
+  useEffect(() => {
+    document.documentElement.lang = site.locale;
+  }, [site.locale]);
 
   useEffect(() => {
     document.body.dataset.menuOpen = String(isMenuOpen);
@@ -177,16 +231,42 @@ const Header = (props: HeaderProps) => {
     };
   }, [isMenuOpen]);
 
-  const closeMenu = () => setIsMenuOpen(false);
+  useEffect(() => {
+    if (!isLanguageOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) {
+        setPanel(null);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setPanel(null);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isLanguageOpen]);
+
+  const closePanels = () => setPanel(null);
 
   return (
     <header
+      ref={headerRef}
       className={`site-header${isScrolled ? " site-header--scrolled" : ""}${
         isMenuOpen ? " site-header--open" : ""
       }`}
     >
       <div className="site-header__inner">
-        <a className="site-header__logo" href="#top" aria-label={site.homeLabel} onClick={closeMenu}>
+        <a className="site-header__logo" href="#top" aria-label={site.homeLabel} onClick={closePanels}>
           <Logo brand={site.brand} />
         </a>
 
@@ -198,21 +278,32 @@ const Header = (props: HeaderProps) => {
           ))}
         </nav>
 
-        <a className="button button--header" href={site.ctaHref}>
-          {site.ctaLabel}
-        </a>
+        <div className="site-header__actions">
+          <a className="button button--header" href={site.ctaHref}>
+            {site.ctaLabel}
+          </a>
 
-        <button
-          className="menu-button"
-          type="button"
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-navigation"
-          aria-label={isMenuOpen ? site.menuCloseLabel : site.menuOpenLabel}
-          onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
-        >
-          <span />
-          <span />
-        </button>
+          <button
+            className="menu-button"
+            type="button"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={isMenuOpen ? site.menuCloseLabel : site.menuOpenLabel}
+            onClick={() => setPanel((currentPanel) => (currentPanel === "menu" ? null : "menu"))}
+          >
+            <span />
+            <span />
+          </button>
+
+          <LanguageSwitcher
+            currentLocale={site.locale}
+            isOpen={isLanguageOpen}
+            label={site.languageLabel}
+            onToggle={() =>
+              setPanel((currentPanel) => (currentPanel === "languages" ? null : "languages"))
+            }
+          />
+        </div>
       </div>
 
       <AnimatePresence>
@@ -231,7 +322,7 @@ const Header = (props: HeaderProps) => {
                 <motion.a
                   href={item.href}
                   key={item.href}
-                  onClick={closeMenu}
+                  onClick={closePanels}
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.55, delay: 0.07 * index, ease: EASE }}
@@ -241,7 +332,7 @@ const Header = (props: HeaderProps) => {
                 </motion.a>
               ))}
             </div>
-            <a className="mobile-nav__contact" href={site.ctaHref} onClick={closeMenu}>
+            <a className="mobile-nav__contact" href={site.ctaHref} onClick={closePanels}>
               {site.ctaLabel}
               <ArrowIcon />
             </a>
@@ -290,13 +381,18 @@ const FeatureSection = (props: FeatureSectionProps) => {
 
 export const VenuePage = (props: VenuePageProps) => {
   const { content } = props;
-  const { site, hero, story, features, offer, gallery, contact } = content;
+  const { site, hero, story, features, offer, gallery, contact, updatedAt } = content;
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const heroImageY = useTransform(scrollYProgress, [0, 0.22], ["0%", "12%"]);
+  const updatedDate = new Intl.DateTimeFormat(site.locale, {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: SITE_TIME_ZONE,
+  }).format(new Date(updatedAt));
 
   return (
-    <>
+    <div className="venue-page" lang={site.locale}>
       <a className="skip-link" href="#main">
         {site.skipLabel}
       </a>
@@ -333,7 +429,7 @@ export const VenuePage = (props: VenuePageProps) => {
               </a>
             </div>
           </motion.div>
-          <a className="hero__scroll" href="#miejsce">
+          <a className="hero__scroll" href={`#${story.id}`}>
             <span>{site.scrollLabel}</span>
             <i />
           </a>
@@ -486,7 +582,10 @@ export const VenuePage = (props: VenuePageProps) => {
             </a>
           </div>
         </div>
+        <p className="footer__updated">
+          {site.updatedLabel} · <time dateTime={updatedAt}>{updatedDate}</time>
+        </p>
       </footer>
-    </>
+    </div>
   );
 };

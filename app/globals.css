@@ -251,9 +251,88 @@ h2 {
   place-items: center;
 }
 
+.site-header__actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
 .desktop-nav,
 .button--header {
   display: none;
+}
+
+.language-switcher {
+  position: relative;
+  z-index: 3;
+}
+
+.language-switcher__button {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  place-items: center;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.language-switcher__button:hover,
+.language-switcher__button:focus-visible {
+  opacity: 0.72;
+}
+
+.language-switcher__flag {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.language-switcher__menu {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  display: grid;
+  width: 10.5rem;
+  padding: 0.4rem;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: rgba(255, 254, 251, 0.98);
+  box-shadow: 0 1rem 2.5rem rgba(24, 31, 25, 0.16);
+  backdrop-filter: blur(16px);
+}
+
+.language-switcher__menu a {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr 0.4rem;
+  min-height: 2.65rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background-color 200ms ease;
+}
+
+.language-switcher__menu a:hover,
+.language-switcher__menu a:focus-visible {
+  background: var(--sage);
+}
+
+.language-switcher__menu i {
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.language-switcher__option--active i {
+  background: var(--forest);
 }
 
 .menu-button {
@@ -830,6 +909,54 @@ h2 {
   height: 3.6rem;
 }
 
+.footer__updated {
+  width: var(--shell);
+  margin: 2.25rem auto 0;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.locale-redirect {
+  display: grid;
+  min-height: 100svh;
+  place-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  color: var(--ink);
+  background: var(--sand);
+  text-align: center;
+}
+
+.locale-redirect__brand {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(2.5rem, 9vw, 5rem);
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+
+.locale-redirect__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.locale-redirect__links a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
 @media (min-width: 48rem) {
   :root {
     --shell: min(100% - 4rem, 86rem);
@@ -1049,7 +1176,7 @@ h2 {
 
   .site-header__inner {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: auto 1fr auto;
   }
 
   .site-header__logo {
@@ -1059,7 +1186,8 @@ h2 {
   .desktop-nav {
     display: flex;
     align-items: center;
-    gap: 2.3rem;
+    justify-self: center;
+    gap: clamp(1.25rem, 2.3vw, 2.3rem);
   }
 
   .desktop-nav a {
@@ -1092,7 +1220,6 @@ h2 {
   .button--header {
     display: inline-flex;
     min-height: 2.9rem;
-    justify-self: end;
     border-color: var(--white);
     color: var(--ink);
     background: var(--white);
@@ -1117,6 +1244,11 @@ h2 {
 
   .menu-button {
     display: none;
+  }
+
+  .site-header__actions {
+    gap: 0.75rem;
+    justify-self: end;
   }
 
   .hero__content {

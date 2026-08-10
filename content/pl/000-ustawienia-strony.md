@@ -6,6 +6,8 @@ skipLabel: Przejdź do treści
 menuOpenLabel: Otwórz menu
 menuCloseLabel: Zamknij menu
 navigationLabel: Główna nawigacja
+languageLabel: Zmień język
+updatedLabel: Ostatnia aktualizacja
 metaTitle: Stara Stolarnia | sala weselna na skraju lasu
 metaDescription: Kameralna, drewniana sala weselna w Bykowie pod Wrocławiem. Przyjęcia do 180 osób, ceremonia w lesie i spokojna, rodzinna gościnność.
 location: Byków pod Wrocławiem

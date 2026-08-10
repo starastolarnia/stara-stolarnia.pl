@@ -6,9 +6,14 @@ import { remark } from "remark";
 import html from "remark-html";
 import { z } from "zod";
 
-export const SUPPORTED_LOCALES = ["pl"] as const;
+import {
+  DEFAULT_LOCALE,
+  isSupportedLocale,
+  SUPPORTED_LOCALES,
+  type SupportedLocale,
+} from "@/lib/i18n";
 
-export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
+export { SUPPORTED_LOCALES, type SupportedLocale } from "@/lib/i18n";
 
 const linkSchema = z.object({
   label: z.string(),
@@ -16,13 +21,15 @@ const linkSchema = z.object({
 });
 
 const siteSchema = z.object({
-  locale: z.string(),
+  locale: z.enum(SUPPORTED_LOCALES),
   brand: z.string(),
   homeLabel: z.string(),
   skipLabel: z.string(),
   menuOpenLabel: z.string(),
   menuCloseLabel: z.string(),
   navigationLabel: z.string(),
+  languageLabel: z.string(),
+  updatedLabel: z.string(),
   metaTitle: z.string(),
   metaDescription: z.string(),
   location: z.string(),
@@ -140,10 +147,8 @@ export type PageContent = {
   offer: OfferContent;
   gallery: GalleryContent;
   contact: ContactContent;
+  updatedAt: string;
 };
-
-const isSupportedLocale = (locale: string): locale is SupportedLocale =>
-  SUPPORTED_LOCALES.some((supportedLocale) => supportedLocale === locale);
 
 const getContentPath = (locale: SupportedLocale, fileName: string) =>
   path.join(process.cwd(), "content", locale, fileName);
@@ -193,10 +198,11 @@ export const getPageContent = async (locale: SupportedLocale): Promise<PageConte
     offer,
     gallery,
     contact,
+    updatedAt: new Date().toISOString(),
   };
 };
 
-export const getDefaultContent = () => getPageContent("pl");
+export const getDefaultContent = () => getPageContent(DEFAULT_LOCALE);
 
 export const parseLocale = (locale: string): SupportedLocale | null =>
   isSupportedLocale(locale) ? locale : null;

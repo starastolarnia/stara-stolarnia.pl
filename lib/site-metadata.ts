@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import type { PageContent, SupportedLocale } from "@/lib/content";
+import { LOCALES } from "@/lib/i18n";
 
 const DEFAULT_SITE_ORIGIN = "https://stara-stolarnia.pl";
 const VERCEL_PRODUCTION_HOSTNAME = process.env.VERCEL_PROJECT_PRODUCTION_URL;
@@ -9,13 +10,9 @@ export const SITE_ORIGIN = VERCEL_PRODUCTION_HOSTNAME
   ? `https://${VERCEL_PRODUCTION_HOSTNAME}`
   : DEFAULT_SITE_ORIGIN;
 
-const LOCALE_HOME_PATHS = {
-  pl: "/pl/",
-} satisfies Record<SupportedLocale, string>;
-
-const OPEN_GRAPH_LOCALES = {
-  pl: "pl_PL",
-} satisfies Record<SupportedLocale, string>;
+const LOCALE_HOME_PATHS = Object.fromEntries(
+  Object.entries(LOCALES).map(([locale, config]) => [locale, config.path]),
+) as Record<SupportedLocale, string>;
 
 type PageMetadataInput = {
   canonicalPath: string;
@@ -49,7 +46,7 @@ export const getPageMetadata = (input: PageMetadataInput): Metadata => {
       description: site.metaDescription,
       url: canonicalUrl,
       siteName: site.brand,
-      locale: OPEN_GRAPH_LOCALES[locale],
+      locale: LOCALES[locale].openGraphLocale,
       type: "website",
       images: [shareImage],
     },
