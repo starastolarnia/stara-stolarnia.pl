@@ -1,0 +1,26 @@
+{
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/*.js.map": true,
+		"**/*.js": {
+			"when": "$(basename).ts"
+		},
+		"**/*.html": {
+			"when": "$(basename).pug"
+		},
+		"**/*.css": {
+			"when": "$(basename).less"
+		},
+		"*.css": {
+			"when": "$(basename).less"
+		},
+		"**/*.d.ts2": {
+			"when": "$(basename).tsx"
+		},
+		"**/node_modules": true
+	}
+}
