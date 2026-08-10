@@ -910,14 +910,18 @@ h2 {
 }
 
 .footer__updated {
-  width: var(--shell);
-  margin: 2.25rem auto 0;
+  position: relative;
+  left: 50vw;
+  width: max-content;
+  max-width: calc(100vw - 2rem);
+  margin: 2.25rem 0 0;
   color: rgba(255, 255, 255, 0.48);
   font-size: 0.58rem;
   letter-spacing: 0.08em;
   line-height: 1.4;
   text-align: center;
   text-transform: uppercase;
+  transform: translateX(-50%);
 }
 
 @media (min-width: 48rem) {
