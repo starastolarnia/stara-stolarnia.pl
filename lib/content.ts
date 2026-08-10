@@ -15,119 +15,126 @@ import {
 
 export { SUPPORTED_LOCALES, type SupportedLocale } from "@/lib/i18n";
 
+const SINGLE_LETTER_WORD = /(?<![\p{L}\p{N}])(\p{L})[ \t]+(?=\S)/gu;
+
+const protectSingleLetterWords = (copy: string) =>
+  copy.replace(SINGLE_LETTER_WORD, "$1\u00A0");
+
+const copySchema = z.string().transform(protectSingleLetterWords);
+
 const linkSchema = z.object({
-  label: z.string(),
+  label: copySchema,
   href: z.string(),
 });
 
 const siteSchema = z.object({
   locale: z.enum(SUPPORTED_LOCALES),
-  brand: z.string(),
-  homeLabel: z.string(),
-  skipLabel: z.string(),
-  menuOpenLabel: z.string(),
-  menuCloseLabel: z.string(),
-  navigationLabel: z.string(),
-  languageLabel: z.string(),
-  updatedLabel: z.string(),
-  metaTitle: z.string(),
-  metaDescription: z.string(),
-  location: z.string(),
-  ctaLabel: z.string(),
+  brand: copySchema,
+  homeLabel: copySchema,
+  skipLabel: copySchema,
+  menuOpenLabel: copySchema,
+  menuCloseLabel: copySchema,
+  navigationLabel: copySchema,
+  languageLabel: copySchema,
+  updatedLabel: copySchema,
+  metaTitle: copySchema,
+  metaDescription: copySchema,
+  location: copySchema,
+  ctaLabel: copySchema,
   ctaHref: z.string(),
-  scrollLabel: z.string(),
-  footerText: z.string(),
-  facebookLabel: z.string(),
+  scrollLabel: copySchema,
+  footerText: copySchema,
+  facebookLabel: copySchema,
   facebookHref: z.string(),
   partnerHref: z.string(),
-  partnerTitle: z.string(),
+  partnerTitle: copySchema,
   partnerImage: z.string(),
-  partnerImageAlt: z.string(),
+  partnerImageAlt: copySchema,
   nav: z.array(linkSchema),
-  marquee: z.array(z.string()),
+  marquee: z.array(copySchema),
 });
 
 const heroSchema = z.object({
-  eyebrow: z.string(),
-  title: z.string(),
-  lead: z.string(),
-  primaryLabel: z.string(),
+  eyebrow: copySchema,
+  title: copySchema,
+  lead: copySchema,
+  primaryLabel: copySchema,
   primaryHref: z.string(),
-  secondaryLabel: z.string(),
+  secondaryLabel: copySchema,
   secondaryHref: z.string(),
   desktopImage: z.string(),
   mobileImage: z.string(),
-  imageAlt: z.string(),
+  imageAlt: copySchema,
 });
 
 const storySchema = z.object({
   id: z.string(),
-  eyebrow: z.string(),
-  title: z.string(),
-  quote: z.string(),
+  eyebrow: copySchema,
+  title: copySchema,
+  quote: copySchema,
   stats: z.array(
     z.object({
-      value: z.string(),
-      label: z.string(),
+      value: copySchema,
+      label: copySchema,
     }),
   ),
 });
 
 const featureSchema = z.object({
   id: z.string(),
-  eyebrow: z.string(),
-  title: z.string(),
+  eyebrow: copySchema,
+  title: copySchema,
   image: z.string(),
-  imageAlt: z.string(),
+  imageAlt: copySchema,
   imagePosition: z.string(),
   reverse: z.boolean(),
 });
 
 const offerSchema = z.object({
   id: z.string(),
-  eyebrow: z.string(),
-  title: z.string(),
-  lead: z.string(),
-  ctaLabel: z.string(),
+  eyebrow: copySchema,
+  title: copySchema,
+  lead: copySchema,
+  ctaLabel: copySchema,
   ctaHref: z.string(),
   points: z.array(
     z.object({
-      title: z.string(),
-      text: z.string(),
+      title: copySchema,
+      text: copySchema,
     }),
   ),
 });
 
 const gallerySchema = z.object({
   id: z.string(),
-  eyebrow: z.string(),
-  title: z.string(),
-  lead: z.string(),
+  eyebrow: copySchema,
+  title: copySchema,
+  lead: copySchema,
   images: z.array(
     z.object({
       src: z.string(),
-      alt: z.string(),
+      alt: copySchema,
     }),
   ),
 });
 
 const contactSchema = z.object({
   id: z.string(),
-  eyebrow: z.string(),
-  title: z.string(),
-  lead: z.string(),
-  emailLabel: z.string(),
+  eyebrow: copySchema,
+  title: copySchema,
+  lead: copySchema,
+  emailLabel: copySchema,
   email: z.string(),
   emailHref: z.string(),
-  phoneLabel: z.string(),
+  phoneLabel: copySchema,
   phone: z.string(),
   phoneHref: z.string(),
-  addressLabel: z.string(),
-  address: z.string(),
-  mapLabel: z.string(),
+  addressLabel: copySchema,
+  address: copySchema,
+  mapLabel: copySchema,
   mapHref: z.string(),
   image: z.string(),
-  imageAlt: z.string(),
+  imageAlt: copySchema,
 });
 
 type SiteContent = z.infer<typeof siteSchema>;
@@ -170,7 +177,7 @@ const loadMarkdown = async <TSchema extends z.ZodObject>(
   const source = await readFile(filePath, "utf8");
   const { content, data } = matter(source);
   const parsedData = schema.parse(data);
-  const rendered = await remark().use(html).process(content);
+  const rendered = await remark().use(html).process(protectSingleLetterWords(content));
 
   return Object.assign(parsedData, { html: String(rendered) });
 };

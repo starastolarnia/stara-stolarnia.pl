@@ -1,7 +1,7 @@
 ---
 id: kontakt
 eyebrow: Shall we begin?
-title: Tell us about the day you have in mind.
+title: Tell us your vision.
 lead: Send us a message or give us a call. Together, we will check availability and prepare a proposal that suits the style of your celebration.
 emailLabel: Email
 email: sala@stara-stolarnia.pl
