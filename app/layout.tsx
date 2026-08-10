@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 
+import { LOCALE_REDIRECT_SCRIPT } from "@/lib/i18n";
 import { SITE_ORIGIN } from "@/lib/site-metadata";
 
 import "./globals.css";
@@ -33,6 +34,12 @@ const RootLayout = (props: RootLayoutProps) => {
 
   return (
     <html lang="pl" className={`${displayFont.variable} ${bodyFont.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: LOCALE_REDIRECT_SCRIPT }}
+          id="locale-redirect"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

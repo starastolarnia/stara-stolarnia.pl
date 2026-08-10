@@ -920,43 +920,6 @@ h2 {
   text-transform: uppercase;
 }
 
-.locale-redirect {
-  display: grid;
-  min-height: 100svh;
-  place-content: center;
-  gap: 2rem;
-  padding: 2rem;
-  color: var(--ink);
-  background: var(--sand);
-  text-align: center;
-}
-
-.locale-redirect__brand {
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(2.5rem, 9vw, 5rem);
-  letter-spacing: -0.045em;
-  line-height: 0.9;
-}
-
-.locale-redirect__links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.6rem;
-}
-
-.locale-redirect__links a {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.5rem 0.85rem;
-  border: 1px solid var(--line);
-  background: var(--paper);
-  font-size: 0.72rem;
-  font-weight: 600;
-}
-
 @media (min-width: 48rem) {
   :root {
     --shell: min(100% - 4rem, 86rem);
