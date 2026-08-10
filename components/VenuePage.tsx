@@ -14,6 +14,12 @@ import {
 
 import type { FeatureContent, PageContent } from "@/lib/content";
 import { getLocalePath, LOCALES, SUPPORTED_LOCALES } from "@/lib/i18n";
+import {
+  getHeroLightDelay,
+  getHeroLightRestingOpacity,
+  HERO_LIGHT_MASK,
+  HERO_LIGHTS,
+} from "@/components/hero-lights";
 
 type VenuePageProps = {
   content: PageContent;
@@ -47,48 +53,9 @@ type FeatureSectionProps = {
   index: number;
 };
 
-type HeroLight = {
-  x: number;
-  y: number;
-  radius: number;
-};
-
 const EASE = [0.22, 1, 0.36, 1] as const;
 const MARQUEE_GROUPS = [0, 1] as const;
 const SITE_TIME_ZONE = "Europe/Warsaw";
-
-const HERO_LIGHTS = [
-  { x: 418, y: 443, radius: 112 },
-  { x: 1096, y: 438, radius: 92 },
-  { x: 1718, y: 425, radius: 104 },
-  { x: 2315, y: 392, radius: 76 },
-  { x: 2358, y: 466, radius: 36 },
-  { x: 2015, y: 520, radius: 43 },
-  { x: 1617, y: 576, radius: 50 },
-  { x: 1240, y: 625, radius: 56 },
-  { x: 925, y: 650, radius: 50 },
-  { x: 637, y: 671, radius: 46 },
-  { x: 393, y: 687, radius: 43 },
-  { x: 171, y: 707, radius: 38 },
-  { x: 78, y: 758, radius: 18 },
-  { x: 154, y: 750, radius: 19 },
-  { x: 302, y: 746, radius: 20 },
-  { x: 438, y: 738, radius: 20 },
-  { x: 566, y: 726, radius: 21 },
-  { x: 697, y: 713, radius: 21 },
-  { x: 850, y: 702, radius: 22 },
-  { x: 1000, y: 698, radius: 22 },
-  { x: 1103, y: 701, radius: 23 },
-  { x: 1182, y: 687, radius: 23 },
-  { x: 1286, y: 674, radius: 24 },
-  { x: 1395, y: 660, radius: 24 },
-  { x: 1528, y: 645, radius: 25 },
-  { x: 1662, y: 627, radius: 25 },
-  { x: 1834, y: 603, radius: 26 },
-  { x: 2010, y: 578, radius: 26 },
-  { x: 2200, y: 548, radius: 27 },
-  { x: 2370, y: 520, radius: 27 },
-] as const satisfies readonly HeroLight[];
 
 const Logo = (props: LogoProps) => {
   const { brand } = props;
@@ -150,8 +117,8 @@ const HeroLights = () => {
   return (
     <svg
       className="hero-lights"
-      viewBox="0 0 2400 1800"
-      preserveAspectRatio="xMidYMid slice"
+      viewBox={`0 0 ${HERO_LIGHT_MASK.width} ${HERO_LIGHT_MASK.height}`}
+      preserveAspectRatio={HERO_LIGHT_MASK.preserveAspectRatio}
       aria-hidden="true"
     >
       <defs>
@@ -163,9 +130,8 @@ const HeroLights = () => {
         </radialGradient>
       </defs>
       {HERO_LIGHTS.map((light, index) => {
-        const delay = 1.4 + index * 0.1;
-        const distanceFactor = (light.radius - 18) / (112 - 18);
-        const restingOpacity = 0.28 + distanceFactor * 0.44;
+        const delay = getHeroLightDelay(index);
+        const restingOpacity = getHeroLightRestingOpacity(light.radius);
 
         return (
           <motion.circle
