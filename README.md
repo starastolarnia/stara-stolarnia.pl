@@ -4,15 +4,17 @@ Statyczna strona sali weselnej zbudowana w Next.js i TypeScript.
 
 ## Zmiana tekstów
 
-Cała polska treść znajduje się w katalogu [`content/pl`](./content/pl). Każdy plik `.md` odpowiada jednej sekcji strony. Teksty można edytować bez dotykania HTML-a ani komponentów.
+Cała polska treść znajduje się bezpośrednio w katalogu [`content/pl`](./content/pl). Pliki są ponumerowane zgodnie z kolejnością sekcji na stronie, a odstępy co 10 pozwalają później łatwo wstawić nową sekcję. Teksty można edytować bez dotykania HTML-a ani komponentów.
 
-- `site.md`: menu, metadane, stopka i wspólne etykiety
-- `hero.md`: pierwsza sekcja strony
-- `story.md`: historia miejsca i najważniejsze liczby
-- `sections/*.md`: sala, ceremonia oraz gościnność
-- `offer.md`: zakres oferty bez cen
-- `gallery.md`: zdjęcia i ich opisy
-- `contact.md`: dane kontaktowe
+- `000-ustawienia-strony.md`: menu, metadane, stopka i wspólne etykiety; nie jest osobną sekcją
+- `010-poczatek.md`: pierwsza sekcja strony
+- `020-o-miejscu.md`: historia miejsca i najważniejsze liczby
+- `030-sala.md`: wnętrze sali
+- `040-ceremonia.md`: ceremonia w lesie
+- `050-goscinnosc.md`: obsługa i noclegi
+- `060-oferta.md`: zakres oferty bez cen
+- `070-galeria.md`: zdjęcia i ich opisy
+- `080-kontakt.md`: dane kontaktowe
 
 ## Uruchomienie
 

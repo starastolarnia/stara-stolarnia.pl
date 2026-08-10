@@ -174,15 +174,15 @@ export const getPageContent = async (locale: SupportedLocale): Promise<PageConte
   const basePath = path.join(process.cwd(), "content", locale);
   const [site, hero, story, sala, ceremonia, goscinnosc, offer, gallery, contact] =
     await Promise.all([
-      loadFrontmatter(path.join(basePath, "site.md"), siteSchema),
-      loadFrontmatter(path.join(basePath, "hero.md"), heroSchema),
-      loadMarkdown(path.join(basePath, "story.md"), storySchema),
-      loadMarkdown(path.join(basePath, "sections", "sala.md"), featureSchema),
-      loadMarkdown(path.join(basePath, "sections", "ceremonia.md"), featureSchema),
-      loadMarkdown(path.join(basePath, "sections", "goscinnosc.md"), featureSchema),
-      loadFrontmatter(path.join(basePath, "offer.md"), offerSchema),
-      loadFrontmatter(path.join(basePath, "gallery.md"), gallerySchema),
-      loadFrontmatter(path.join(basePath, "contact.md"), contactSchema),
+      loadFrontmatter(path.join(basePath, "000-ustawienia-strony.md"), siteSchema),
+      loadFrontmatter(path.join(basePath, "010-poczatek.md"), heroSchema),
+      loadMarkdown(path.join(basePath, "020-o-miejscu.md"), storySchema),
+      loadMarkdown(path.join(basePath, "030-sala.md"), featureSchema),
+      loadMarkdown(path.join(basePath, "040-ceremonia.md"), featureSchema),
+      loadMarkdown(path.join(basePath, "050-goscinnosc.md"), featureSchema),
+      loadFrontmatter(path.join(basePath, "060-oferta.md"), offerSchema),
+      loadFrontmatter(path.join(basePath, "070-galeria.md"), gallerySchema),
+      loadFrontmatter(path.join(basePath, "080-kontakt.md"), contactSchema),
     ]);
 
   return {

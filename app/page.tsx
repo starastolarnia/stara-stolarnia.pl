@@ -2,27 +2,12 @@ import type { Metadata } from "next";
 
 import { VenuePage } from "@/components/VenuePage";
 import { getDefaultContent } from "@/lib/content";
+import { getPageMetadata } from "@/lib/site-metadata";
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const { site } = await getDefaultContent();
+  const content = await getDefaultContent();
 
-  return {
-    title: site.metaTitle,
-    description: site.metaDescription,
-    alternates: {
-      canonical: "/",
-      languages: {
-        pl: "/pl/",
-      },
-    },
-    openGraph: {
-      title: site.metaTitle,
-      description: site.metaDescription,
-      locale: "pl_PL",
-      type: "website",
-      images: ["/images/hero-forest.webp"],
-    },
-  };
+  return getPageMetadata({ canonicalPath: "/", content, locale: "pl" });
 };
 
 const HomePage = async () => {

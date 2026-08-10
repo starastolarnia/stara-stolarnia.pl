@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { SITE_ORIGIN } from "@/lib/site-metadata";
+
 export const dynamic = "force-static";
 
 const robots = (): MetadataRoute.Robots => ({
@@ -7,7 +9,7 @@ const robots = (): MetadataRoute.Robots => ({
     userAgent: "*",
     allow: "/",
   },
-  sitemap: "https://stara-stolarnia.pl/sitemap.xml",
+  sitemap: `${SITE_ORIGIN}/sitemap.xml`,
 });
 
 export default robots;

@@ -7,6 +7,7 @@ import {
   parseLocale,
   SUPPORTED_LOCALES,
 } from "@/lib/content";
+import { getPageMetadata } from "@/lib/site-metadata";
 
 type LocalePageProps = {
   params: Promise<{
@@ -25,15 +26,13 @@ export const generateMetadata = async (props: LocalePageProps): Promise<Metadata
     return {};
   }
 
-  const { site } = await getPageContent(locale);
+  const content = await getPageContent(locale);
 
-  return {
-    title: site.metaTitle,
-    description: site.metaDescription,
-    alternates: {
-      canonical: `/${locale}/`,
-    },
-  };
+  return getPageMetadata({
+    canonicalPath: `/${locale}/`,
+    content,
+    locale,
+  });
 };
 
 const LocalePage = async (props: LocalePageProps) => {

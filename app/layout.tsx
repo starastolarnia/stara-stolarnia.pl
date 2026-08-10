@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 
+import { SITE_ORIGIN } from "@/lib/site-metadata";
+
 import "./globals.css";
 
 const displayFont = Cormorant_Garamond({
@@ -16,7 +18,7 @@ const bodyFont = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://stara-stolarnia.pl"),
+  metadataBase: new URL(SITE_ORIGIN),
   icons: {
     icon: "/favicon.svg",
   },
