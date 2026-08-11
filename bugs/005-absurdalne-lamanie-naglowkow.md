@@ -1,8 +1,8 @@
 # Bug 005 — Absurdalne łamanie nagłówków
 
 > Start pracy: 2026-08-11 18:32
-> Koniec pracy: —
-> Status: test czerwony
+> Koniec pracy: 2026-08-11 18:54
+> Status: zweryfikowany
 > Zgłoszenie: „co to kurwa jest? jak to przechodzi jaką kolwiek kontrole jakości?” ([zrzut sekcji galerii](assets/005-absurdalne-lamanie-naglowkow/before-gallery.png))
 > Uzupełnienie 1: „czemu tu jest taka dziura?” ([zrzut sekcji o miejscu](assets/005-absurdalne-lamanie-naglowkow/before-story.png))
 > Uzupełnienie 2: „wszędzie te nagłówki maja jakies rozjebany rytm i za dużo linijek, wtf?”
@@ -72,7 +72,7 @@ Zastąpić cztery lokalne limity `10ch`/`12ch`/`16ch` jedną wspólną regułą,
 
 ## Raport z implementacji i testów
 
-Implementacja produkcyjna nie rozpoczęła się; test wspierający został zapisany i potwierdzony na czerwono.
+Test wspierający został najpierw potwierdzony na czerwono, a następnie ten sam niezmieniony kontrakt przeszedł po zmianie produkcyjnej.
 
 ### RED
 
@@ -176,9 +176,23 @@ exit=0
 - AC-4: zielony — 390, 768 i 1699 px bez overflow.
 - AC-5: zielony — pełne 26/26, lint i typecheck; porównanie wizualne nie wykazało zmian poza measure nagłówków.
 
+Walidator raportu po zamknięciu:
+
+```text
+VISUAL_TRUTH_GATE=PASS: raport ma dozwolony stan
+VISUAL_TRUTH_GATE=PASS: claim fixed jest dozwolony
+```
+
 ### Cleanup
 
-Do uzupełnienia po zamknięciu przebiegu.
+- Dostarczenie: commit `572972f7424c686e4a8a1fca0cc3a9320b49f5ca` na `main`; `git merge-base --is-ancestor ... main` zakończył się kodem 0.
+- Sesja nie utworzyła worktree ani katalogu `~/tmp/codex/bug-005`; przeglądarkowy viewport został przywrócony, a karta QA zamknięta.
+- Lokalny, ignorowany cache dowodów `bugs/assets/005-absurdalne-lamanie-naglowkow/` pozostaje do wygaśnięcia po 5 dniach; rozmiar ok. 532 KiB.
+- Dwa poprzednie numery: `bug-003` nie ma katalogu tymczasowego; `bug-004` ma 15 MiB dowodów klatkowych i pozostaje celowo, ponieważ raport 004 nadal ma status `test czerwony`.
+- Globalny sweep znalazł 4 nieużywane sockety `ssh-askpass` starsze niż 4 godziny; usunięto 4/4, łącznie 0 B. Brak kwalifikujących się `TemporaryDirectory.*`, `screenshot*.jpg` i rozpoznawalnych artefaktów w `/tmp`.
+- Wygasłe dowody: 0 kandydatów, 0 usuniętych; raporty 001–003 zamknięto mniej niż 5 dni temu.
+- XcodeBuildMCP nie był używany. Audyt końcowy: `~/tmp` 184 MiB, `~/.codex` 22 GiB, globalny DerivedData 3,8 GiB; 45 GiB wolnego miejsca. Te globalne katalogi są tylko odnotowane i nie były modyfikowane.
+- Brak obcych worktree; jedyny worktree to czysty `main` w repozytorium.
 
 ## Dowód końcowego compositora
 
@@ -194,4 +208,4 @@ Do uzupełnienia po zamknięciu przebiegu.
 3. Render: uruchomić lokalną stronę, ustawić 1699 px, wybrać „Komunia”, a następnie sprawdzić story i galerię; oczekiwane odpowiednio 2 i 1 wiersz oraz `max-width: 100%`.
 4. Breakpointy: powtórzyć dla 390 i 768 px; `document.documentElement.scrollWidth` ma być równe `clientWidth`.
 5. Inspekcja diffu: zmienia się tylko measure czterech klas H2 i test; `EditorialHeading`, treści, H1, `offer__intro h2`, gridy i prawy lead galerii pozostają bez zmian.
-6. Dowód dostarczenia: do uzupełnienia po commicie na `main`.
+6. Dowód dostarczenia: `git merge-base --is-ancestor 572972f7424c686e4a8a1fca0cc3a9320b49f5ca main` ma zwrócić kod 0; `git tag -l 'fix/005-absurdalne-lamanie-naglowkow'` ma zwrócić tag raportu.

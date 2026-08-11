@@ -1,8 +1,8 @@
 # Bug 006 — Nieczytelny dropdown
 
 > Start pracy: 2026-08-11 18:33
-> Koniec pracy: —
-> Status: test czerwony
+> Koniec pracy: 2026-08-11 18:54
+> Status: zweryfikowany
 > Zgłoszenie: „menu dropdown ma za duża przeźroczystość jest nieczytelen i musi być margin między elementami np na 2px”
 > Klasyfikacja: klient-lokalny
 > Rodzaj dowodu: wizualny-statyczny
@@ -64,7 +64,7 @@ W jednej wspólnej regule paneli podnieść krycie bieli z 70% do 95% (`#fffffff
 
 ## Raport z implementacji i testów
 
-Implementacja produkcyjna nie rozpoczęła się; test wspierający został zapisany i potwierdzony na czerwono.
+Test wspierający został najpierw potwierdzony na czerwono, a następnie ten sam niezmieniony kontrakt przeszedł po zmianie produkcyjnej.
 
 ### RED
 
@@ -171,9 +171,23 @@ exit=0
 - AC-4: zielony — event nadal zaokrąglony, language nadal `border-radius: 0`.
 - AC-5: zielony — wybór wydarzeń i języka działa, 26/26 testów, brak błędów konsoli.
 
+Walidator raportu po zamknięciu:
+
+```text
+VISUAL_TRUTH_GATE=PASS: raport ma dozwolony stan
+VISUAL_TRUTH_GATE=PASS: claim fixed jest dozwolony
+```
+
 ### Cleanup
 
-Do uzupełnienia po zamknięciu przebiegu.
+- Dostarczenie: commit `572972f7424c686e4a8a1fca0cc3a9320b49f5ca` na `main`; `git merge-base --is-ancestor ... main` zakończył się kodem 0.
+- Sesja nie utworzyła worktree ani katalogu `~/tmp/codex/bug-006`; przeglądarkowy viewport został przywrócony, a karta QA zamknięta.
+- Lokalny, ignorowany cache dowodów `bugs/assets/006-nieczytelny-dropdown/` pozostaje do wygaśnięcia po 5 dniach; rozmiar ok. 1,5 MiB.
+- Dwa poprzednie numery: `bug-004` ma 15 MiB dowodów klatkowych i pozostaje celowo, bo raport jest nadal aktywny (`test czerwony`); `bug-005` nie ma katalogu tymczasowego poza wymaganym cache dowodów.
+- Globalny sweep znalazł 4 nieużywane sockety `ssh-askpass` starsze niż 4 godziny; usunięto 4/4, łącznie 0 B. Brak kwalifikujących się `TemporaryDirectory.*`, `screenshot*.jpg` i rozpoznawalnych artefaktów w `/tmp`.
+- Wygasłe dowody: 0 kandydatów, 0 usuniętych; raporty 001–003 zamknięto mniej niż 5 dni temu.
+- XcodeBuildMCP nie był używany. Audyt końcowy: `~/tmp` 184 MiB, `~/.codex` 22 GiB, globalny DerivedData 3,8 GiB; 45 GiB wolnego miejsca. Te globalne katalogi są tylko odnotowane i nie były modyfikowane.
+- Brak obcych worktree; jedyny worktree to czysty `main` w repozytorium.
 
 ## Dowód końcowego compositora
 
@@ -190,4 +204,4 @@ Do uzupełnienia po zamknięciu przebiegu.
 4. Render mobile: przy 390 px otworzyć wydarzenia; oczekiwany ten sam materiał i odstęp, promień powiązany z wysokością topbara oraz subtelnie zaznaczone „Wesele”.
 5. Funkcja: wybrać kolejno wydarzenia, potem „English”; treść ma się zmienić, a locale przejść do `/en/` bez błędu konsoli.
 6. Inspekcja diffu: blur, cień, paddingi, aktywne tło i osobne promienie nie mogą się zmienić.
-7. Dowód dostarczenia: do uzupełnienia po commicie na `main`.
+7. Dowód dostarczenia: `git merge-base --is-ancestor 572972f7424c686e4a8a1fca0cc3a9320b49f5ca main` ma zwrócić kod 0; `git tag -l 'fix/006-nieczytelny-dropdown'` ma zwrócić tag raportu.

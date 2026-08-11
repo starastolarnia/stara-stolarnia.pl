@@ -20,3 +20,17 @@
 - **Sygnatura:** element jest matematycznie wyśrodkowany według `innerWidth`, lecz na bitmapie całego okna wypada kilka pikseli w lewo; delta zwykle wynosi około 7–8 px.
 - **Reguła naprawy:** dla elementu wymagającego fizycznego środka okna użyć szerokości treści i kotwicy `50vw` z translacją `-50%`, ograniczyć `max-width` i zweryfikować brak overflow na desktopie oraz mobile.
 - **Raporty:** [Bug 003 — „Ostatnia aktualizacja” nie jest wyśrodkowana](./003-ostatnia-aktualizacja-nie-jest-wysrodkowana.md)
+
+## Arbitralny measure tekstu dubluje ograniczenie grida
+
+- **Mechanizm:** komponent ma poprawnie ograniczoną kolumnę layoutu, ale jego nagłówek dostaje drugi, znacznie węższy `max-width` w jednostkach `ch`; treść składa się niemal słowo po słowie i zostawia pozornie niewykorzystaną kolumnę.
+- **Sygnatura:** nagłówki mają nadmierną liczbę wierszy mimo dużej pustej przestrzeni obok, a computed width elementu jest wielokrotnie mniejsze od szerokości rodzica.
+- **Reguła naprawy:** traktować kolumnę grida jako źródło prawdy o measure, lokalny limit dodawać tylko dla jawnie zatwierdzonej kompozycji i chronić finalny skład pomiarem na wszystkich locale/breakpointach.
+- **Raporty:** [Bug 005 — Absurdalne łamanie nagłówków](./005-absurdalne-lamanie-naglowkow.md)
+
+## Półprzezroczysty panel bez budżetu kontrastu i rytmu wierszy
+
+- **Mechanizm:** wspólny panel nad szczegółowym zdjęciem ma zbyt niską alfę, a grid pozycji nie definiuje odstępu; blur nie kompensuje zmiennej luminancji tła, a powierzchnie opcji zlewają się.
+- **Sygnatura:** tekst menu jest czytelny tylko nad wybranymi fragmentami zdjęcia, a computed `rowGap` wynosi `normal`/0 px.
+- **Reguła naprawy:** ustalać materiał w jednej wspólnej regule, weryfikować computed alpha na zróżnicowanym tle i deklarować jawny odstęp między pozycjami, zachowując lokalne geometrie wariantów.
+- **Raporty:** [Bug 006 — Nieczytelny dropdown](./006-nieczytelny-dropdown.md)
