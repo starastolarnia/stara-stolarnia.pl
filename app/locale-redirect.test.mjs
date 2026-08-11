@@ -48,6 +48,7 @@ test("root locale handoff follows browser preferences and preserves the URL suff
     "/de/?source=invite#kontakt",
   );
   assert.equal(runRedirect({ languages: ["fr-FR"] }), "/pl/");
+  assert.equal(runRedirect({ languages: ["uk-UA"] }), "/uk/");
 });
 
 test("locale redirect does not run on localized pages", () => {
@@ -55,7 +56,7 @@ test("locale redirect does not run on localized pages", () => {
 });
 
 test("all localized pages remain in the static export", () => {
-  for (const locale of ["pl", "en", "de"]) {
+  for (const locale of ["pl", "en", "de", "uk"]) {
     assert.equal(existsSync(new URL(`../out/${locale}/index.html`, import.meta.url)), true);
   }
 });

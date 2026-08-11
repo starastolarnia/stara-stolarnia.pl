@@ -7,13 +7,13 @@ import { SITE_ORIGIN } from "@/lib/site-metadata";
 import "./globals.css";
 
 const displayFont = Cormorant_Garamond({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["cyrillic", "latin", "latin-ext"],
   variable: "--font-display",
   weight: ["400", "500", "600"],
 });
 
 const bodyFont = Manrope({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["cyrillic", "latin", "latin-ext"],
   variable: "--font-body",
   weight: ["400", "500", "600"],
 });

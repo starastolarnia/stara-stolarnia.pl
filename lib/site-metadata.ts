@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import type { PageContent, SupportedLocale } from "@/lib/content";
+import { EVENT_KINDS } from "@/lib/event-kinds";
 import { LOCALES } from "@/lib/i18n";
 
 const DEFAULT_SITE_ORIGIN = "https://stara-stolarnia.pl";
@@ -23,15 +24,16 @@ type PageMetadataInput = {
 export const getPageMetadata = (input: PageMetadataInput): Metadata => {
   const { canonicalPath, content, locale } = input;
   const { hero, site } = content;
+  const shareEvent = hero.events[EVENT_KINDS[0]];
   const canonicalUrl = new URL(canonicalPath, SITE_ORIGIN).toString();
-  const shareImageUrl = new URL(hero.desktopImage, SITE_ORIGIN).toString();
+  const shareImageUrl = new URL(shareEvent.desktopImage, SITE_ORIGIN).toString();
   const shareImage = {
     url: shareImageUrl,
     secureUrl: shareImageUrl,
     type: "image/webp",
     width: 2400,
     height: 1800,
-    alt: hero.imageAlt,
+    alt: shareEvent.imageAlt,
   };
 
   return {

@@ -17,6 +17,12 @@ export const LOCALES = {
     openGraphLocale: "de_DE",
     path: "/de/",
   },
+  uk: {
+    flag: "🇺🇦",
+    name: "Українська",
+    openGraphLocale: "uk_UA",
+    path: "/uk/",
+  },
 } as const;
 
 export type SupportedLocale = keyof typeof LOCALES;

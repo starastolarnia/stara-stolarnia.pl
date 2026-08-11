@@ -13,14 +13,17 @@ const getRule = (selector) => {
   return rule;
 };
 
-test("footer update is anchored to the physical viewport center", () => {
+test("footer uses equal side columns and centers its update in the flexible middle", () => {
   const rule = getRule(".footer__updated");
 
-  assert.match(rule, /width:\s*max-content;/);
-  assert.match(rule, /max-width:\s*calc\(100vw - 2rem\);/);
-  assert.match(rule, /position:\s*relative;/);
-  assert.match(rule, /left:\s*50vw;/);
-  assert.match(rule, /transform:\s*translateX\(-50%\);/);
-  assert.doesNotMatch(rule, /width:\s*var\(--shell\);/);
-  assert.doesNotMatch(rule, /margin:\s*[^;]*auto/);
+  assert.match(rule, /width:\s*100%;/);
+  assert.doesNotMatch(rule, /(?:^|[;\n])\s*(?:position|left|transform):/);
+  assert.match(
+    css,
+    /@media \(min-width:\s*48rem\)[\s\S]*?\.footer__inner\s*\{[^}]*grid-template-columns:\s*minmax\(0,1fr\) minmax\(0,2fr\) minmax\(0,1fr\);/s,
+  );
+  assert.match(
+    css,
+    /@media \(min-width:\s*48rem\)[\s\S]*?\.footer__updated\s*\{[^}]*grid-column:\s*2/s,
+  );
 });

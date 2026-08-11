@@ -12,6 +12,11 @@ import {
   SUPPORTED_LOCALES,
   type SupportedLocale,
 } from "@/lib/i18n";
+import {
+  EVENT_KINDS,
+  NON_WEDDING_EVENT_KINDS,
+  type EventKind,
+} from "@/lib/event-kinds";
 
 export { SUPPORTED_LOCALES, type SupportedLocale } from "@/lib/i18n";
 
@@ -54,17 +59,23 @@ const siteSchema = z.object({
   marquee: z.array(copySchema),
 });
 
-const heroSchema = z.object({
+const heroEventSchema = z.object({
+  tabLabel: copySchema,
   eyebrow: copySchema,
   title: copySchema,
   lead: copySchema,
   primaryLabel: copySchema,
-  primaryHref: z.string(),
-  secondaryLabel: copySchema,
-  secondaryHref: z.string(),
   desktopImage: z.string(),
   mobileImage: z.string(),
   imageAlt: copySchema,
+  imagePosition: z.string(),
+});
+
+const heroSchema = z.object({
+  selectorLabel: copySchema,
+  secondaryLabel: copySchema,
+  secondaryHref: z.string(),
+  events: z.record(z.enum(EVENT_KINDS), heroEventSchema),
 });
 
 const storySchema = z.object({
@@ -137,6 +148,42 @@ const contactSchema = z.object({
   imageAlt: copySchema,
 });
 
+const profiledStorySchema = storySchema.extend({
+  body: z.array(copySchema).length(2),
+});
+
+const profiledFeatureSchema = featureSchema.extend({
+  body: z.array(copySchema).min(1),
+});
+
+const profiledContactSchema = contactSchema
+  .pick({
+    id: true,
+    eyebrow: true,
+    title: true,
+    lead: true,
+    image: true,
+    imageAlt: true,
+  })
+  .extend({
+    emailSubject: copySchema,
+  });
+
+const eventProfileSchema = z.object({
+  navigation: z.array(linkSchema).length(5),
+  marquee: z.array(copySchema).min(3),
+  footerText: copySchema,
+  story: profiledStorySchema,
+  features: z.array(profiledFeatureSchema).length(3),
+  offer: offerSchema,
+  gallery: gallerySchema,
+  contact: profiledContactSchema,
+});
+
+const eventProfilesDocumentSchema = z.object({
+  profiles: z.record(z.enum(NON_WEDDING_EVENT_KINDS), eventProfileSchema),
+});
+
 type SiteContent = z.infer<typeof siteSchema>;
 type HeroContent = z.infer<typeof heroSchema>;
 type MarkdownBody = { html: string };
@@ -146,14 +193,21 @@ type OfferContent = z.infer<typeof offerSchema>;
 type GalleryContent = z.infer<typeof gallerySchema>;
 type ContactContent = z.infer<typeof contactSchema>;
 
-export type PageContent = {
-  site: SiteContent;
-  hero: HeroContent;
+export type EventPageProfile = {
+  navigation: SiteContent["nav"];
+  marquee: SiteContent["marquee"];
+  footerText: string;
   story: StoryContent;
   features: FeatureContent[];
   offer: OfferContent;
   gallery: GalleryContent;
   contact: ContactContent;
+};
+
+export type PageContent = {
+  site: SiteContent;
+  hero: HeroContent;
+  eventProfiles: Record<EventKind, EventPageProfile>;
   updatedAt: string;
 };
 
@@ -182,9 +236,47 @@ const loadMarkdown = async <TSchema extends z.ZodObject>(
   return Object.assign(parsedData, { html: String(rendered) });
 };
 
+const renderParagraphs = async (paragraphs: string[]) => {
+  const rendered = await remark().use(html).process(paragraphs.join("\n\n"));
+
+  return String(rendered);
+};
+
+const buildProfile = async (
+  profile: z.infer<typeof eventProfileSchema>,
+  sharedContact: ContactContent,
+): Promise<EventPageProfile> => {
+  const { body: storyBody, ...story } = profile.story;
+  const { emailSubject, ...contact } = profile.contact;
+  const features = await Promise.all(
+    profile.features.map(async ({ body, ...feature }) => ({
+      ...feature,
+      html: await renderParagraphs(body),
+    })),
+  );
+
+  return {
+    navigation: profile.navigation,
+    marquee: profile.marquee,
+    footerText: profile.footerText,
+    story: {
+      ...story,
+      html: await renderParagraphs(storyBody),
+    },
+    features,
+    offer: profile.offer,
+    gallery: profile.gallery,
+    contact: {
+      ...sharedContact,
+      ...contact,
+      emailHref: `mailto:${sharedContact.email}?subject=${encodeURIComponent(emailSubject.replaceAll("\u00a0", " "))}`,
+    },
+  };
+};
+
 export const getPageContent = async (locale: SupportedLocale): Promise<PageContent> => {
   const basePath = path.join(process.cwd(), "content", locale);
-  const [site, hero, story, sala, ceremonia, goscinnosc, offer, gallery, contact] =
+  const [site, hero, story, sala, ceremonia, goscinnosc, offer, gallery, contact, profileDocument] =
     await Promise.all([
       loadFrontmatter(path.join(basePath, "000-ustawienia-strony.md"), siteSchema),
       loadFrontmatter(path.join(basePath, "010-poczatek.md"), heroSchema),
@@ -195,16 +287,39 @@ export const getPageContent = async (locale: SupportedLocale): Promise<PageConte
       loadFrontmatter(path.join(basePath, "060-oferta.md"), offerSchema),
       loadFrontmatter(path.join(basePath, "070-galeria.md"), gallerySchema),
       loadFrontmatter(path.join(basePath, "080-kontakt.md"), contactSchema),
+      loadFrontmatter(
+        path.join(basePath, "090-rodzaje-uroczystosci.md"),
+        eventProfilesDocumentSchema,
+      ),
     ]);
 
-  return {
-    site,
-    hero,
+  const nonWeddingProfiles = Object.fromEntries(
+    await Promise.all(
+      NON_WEDDING_EVENT_KINDS.map(async (eventKind) => [
+        eventKind,
+        await buildProfile(profileDocument.profiles[eventKind], contact),
+      ]),
+    ),
+  ) as Record<Exclude<EventKind, "weddings">, EventPageProfile>;
+
+  const weddingProfile: EventPageProfile = {
+    navigation: site.nav,
+    marquee: site.marquee,
+    footerText: site.footerText,
     story,
     features: [sala, ceremonia, goscinnosc],
     offer,
     gallery,
     contact,
+  };
+
+  return {
+    site,
+    hero,
+    eventProfiles: {
+      weddings: weddingProfile,
+      ...nonWeddingProfiles,
+    },
     updatedAt: new Date().toISOString(),
   };
 };
