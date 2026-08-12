@@ -220,7 +220,7 @@ test("display headings keep complete sentences together before balancing their l
   assert.equal(component.match(/<EditorialHeading level=\{2\}/g)?.length, 5);
   assert.match(styles, /\.editorial-heading__sentence\s*\{[^}]*text-wrap:\s*pretty;[^}]*display:\s*block/s);
   assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.editorial-heading__sentence\s*\{[^}]*text-wrap:\s*balance/s);
-  assert.match(styles, /\.hero h1\s*\{[^}]*max-width:\s*17ch;/s);
+  assert.match(styles, /\.hero h1\s*\{[^}]*max-width:\s*min\(18ch,100%\);/s);
   assert.doesNotMatch(styles, /\.hero h1\s*\{[^}]*max-width:\s*9ch/s);
 });
 
@@ -402,7 +402,7 @@ test("the desktop header follows the reference geometry and sequences both dragg
   assert.match(component, /window\.addEventListener\("scrollend", releaseNavigationTarget\)/);
   assert.doesNotMatch(component, /className="event-switcher-frame"[\s\S]{0,180}initial=\{reduceMotion \? false : \{ opacity: 0, y:/);
   assert.doesNotMatch(component, /className="site-header__scrolled-controls"[\s\S]{0,180}initial=\{\{ opacity: 0, y:/);
-  assert.match(styles, /--header-max-width:\s*80\.5rem;/);
+  assert.match(styles, /--header-max-width:\s*72rem;/);
   assert.match(styles, /\.site-header\s*\{[^}]*top:\s*var\(--header-top\);[^}]*width:\s*min\(calc\(100% - 1rem\),var\(--header-max-width\)\);[^}]*background:\s*#ffffffb3;[^}]*border-radius:\s*calc\(var\(--header-height\)\/2\);/s);
   assert.match(styles, /\.site-header__center\s*\{/s);
   assert.match(styles, /\.site-header__cta\s*\{[^}]*height:\s*var\(--event-switcher-height\);[^}]*border-radius:\s*\.875rem;/s);
@@ -414,10 +414,10 @@ test("the desktop header follows the reference geometry and sequences both dragg
   assert.doesNotMatch(styles, /\.event-switcher__thumb\s*\{[^}]*overflow:\s*hidden;/s);
   assert.match(styles, /\.logo__stara\s*\{[^}]*font-weight:\s*6\d\d;?/s);
   assert.match(styles, /\.logo__stolarnia\s*\{[^}]*font-weight:\s*6\d\d;?/s);
-  assert.match(styles, /grid-template-columns:\s*7\.75rem minmax\(0,1fr\) 10rem 2\.75rem;/s);
-  assert.match(styles, /column-gap:\s*2rem;/s);
-  assert.match(styles, /@media \(min-width:\s*68rem\)[\s\S]*?--header-height:\s*5\.5rem;[\s\S]*?--header-top:\s*1\.25rem;/s);
-  assert.match(styles, /@media \(min-width:\s*68rem\)[\s\S]*?\.site-header__inner\s*\{[^}]*padding:\s*1\.5rem 3\.4375rem;/s);
+  assert.match(styles, /grid-template-columns:\s*7\.5rem minmax\(0,1fr\) 9rem 2\.75rem;/s);
+  assert.match(styles, /column-gap:\s*1\.25rem;/s);
+  assert.match(styles, /@media \(min-width:\s*68rem\)[\s\S]*?--header-height:\s*4rem;[\s\S]*?--header-top:\s*1\.25rem;/s);
+  assert.match(styles, /@media \(min-width:\s*68rem\)[\s\S]*?\.site-header__inner\s*\{[^}]*padding:\s*\.75rem 1\.5rem;/s);
   assert.match(styles, /\.event-navigation__track\s*\{[^}]*grid-template-columns:\s*repeat\(5,minmax\(0,1fr\)\);/s);
   assert.match(styles, /\.event-navigation__thumb\s*\{[^}]*z-index:\s*1;[^}]*pointer-events:\s*none;[^}]*width:\s*20%;/s);
   assert.match(styles, /\.event-navigation__link\s*\{[^}]*color:\s*var\(--ink-soft\);[^}]*font-size:\s*clamp\(\.58rem,2vw,\.72rem\);[^}]*font-weight:\s*600;/s);
@@ -434,7 +434,7 @@ test("small screens use a scaled top bar with an event dropdown and a three-line
   assert.match(component, /className="menu-button"[\s\S]*?<span \/>\s*<span \/>\s*<span \/>/s);
   assert.match(styles, /--header-height:\s*clamp\(3rem,13vw,3\.5rem\);/);
   assert.match(styles, /--event-switcher-height:\s*clamp\(2\.125rem,10vw,2\.5rem\);/);
-  assert.match(styles, /--header-control-font-size:\s*clamp\(\.625rem,2\.5vw,\.72rem\);/);
+  assert.match(styles, /--header-control-font-size:\s*clamp\(\.75rem,2\.7vw,\.8125rem\);/);
   assert.match(styles, /\.site-header__desktop-event-selector\s*\{[^}]*display:\s*none/s);
   assert.match(styles, /\.site-header__mobile-event-selector \.event-dropdown__trigger-shell\s*\{[^}]*background:\s*transparent;[^}]*border:\s*0;[^}]*border-radius:\s*calc\(var\(--header-height\)\/2\);[^}]*box-shadow:\s*none/s);
   assert.match(styles, /\.site-header__mobile-event-selector \.event-dropdown__menu\s*\{[^}]*width:\s*min\(15rem,calc\(100vw - 1rem\)\);[^}]*border-radius:\s*calc\(var\(--header-height\)\/2\)/s);
@@ -460,12 +460,24 @@ test("the contact section uses an inset balanced layout with a wider headline an
 test("semantic heading scales use the approved compact values", () => {
   const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
 
-  assert.match(styles, /h2\s*\{[^}]*font-size:\s*clamp\(2\.04rem, 7\.2vw, 2\.88rem\);[^}]*font-weight:\s*700;[^}]*line-height:\s*1\.02;/s);
-  assert.match(styles, /\.hero h1\s*\{[^}]*max-width:\s*min\(17ch,100%\);[^}]*font-size:\s*clamp\(2\.75rem,13\.5vw,4\.25rem\);[^}]*line-height:\s*\.88/s);
-  assert.match(styles, /\.offer-point h3\s*\{[^}]*font-size:\s*1\.24rem;/s);
+  assert.match(styles, /h2\s*\{[^}]*font-size:\s*clamp\(2rem, 7\.2vw, 2\.25rem\);[^}]*font-weight:\s*700;[^}]*line-height:\s*1\.11;/s);
+  assert.match(styles, /\.hero h1\s*\{[^}]*max-width:\s*min\(18ch,100%\);[^}]*font-size:\s*clamp\(2\.5rem,11vw,3\.5rem\);[^}]*line-height:\s*1\.05/s);
+  assert.match(styles, /\.offer-point h3\s*\{[^}]*font-size:\s*1\.125rem;/s);
   assert.match(styles, /\.offer__intro h2\s*\{[^}]*max-width:\s*28ch;/s);
-  assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?h2\s*\{[^}]*font-size:\s*clamp\(2\.88rem,\s*5\.04vw,\s*3\.08rem\);?[^}]*font-weight:\s*700;[^}]*line-height:\s*1\.02/s);
-  assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.hero h1\s*\{[^}]*font-size:\s*clamp\(4\.75rem,9vw,6\.96rem\);[^}]*line-height:\s*\.82/s);
-  assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.offer-point h3\s*\{[^}]*font-size:\s*1\.52rem;?/s);
+  assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?h2\s*\{[^}]*font-size:\s*2\.25rem;[^}]*font-weight:\s*700;[^}]*line-height:\s*1\.11/s);
+  assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.hero h1\s*\{[^}]*font-size:\s*3\.5rem;[^}]*line-height:\s*1\.05/s);
+  assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.offer-point h3\s*\{[^}]*font-size:\s*1\.25rem;?/s);
   assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.offer__inner\s*\{[^}]*grid-template-columns:\s*minmax\(0,1\.15fr\) minmax\(26rem,\.85fr\);/s);
+});
+
+test("the typography system uses the reference fonts with Central European coverage", () => {
+  const layout = readFileSync(new URL("../app/layout.tsx", import.meta.url), "utf8");
+  const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(layout, /import \{ Fraunces, Manrope \} from "next\/font\/google";/);
+  assert.match(layout, /const displayFont = Fraunces\(\{[\s\S]*?subsets: \["latin", "latin-ext"\]/s);
+  assert.match(layout, /general-sans@400,500,600,700/);
+  assert.match(styles, /--font-sans:\s*"General Sans", sans-serif;/);
+  assert.match(styles, /h1,h2,h3\s*\{[^}]*font-family:\s*var\(--font-sans\);/s);
+  assert.match(styles, /\.venue-page\[lang="uk"\]\s*\{[^}]*--font-display:\s*var\(--font-cyrillic\);[^}]*--font-sans:\s*var\(--font-cyrillic\), sans-serif/s);
 });

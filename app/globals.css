@@ -8,12 +8,15 @@
     --paper: #fffefb;
     --line: #20241f29;
     --white: #fff;
-    --shell: min(100% - 2rem, 86rem);
+    --font-sans: "General Sans", sans-serif;
+    --shell: min(100% - 3rem, 72rem);
+    --section-space: 5rem;
+    --section-space-compact: 4rem;
     --header-height: clamp(3rem,13vw,3.5rem);
-    --header-top: clamp(.5rem,3vw,1.25rem);
-    --header-max-width: 80.5rem;
+    --header-top: .75rem;
+    --header-max-width: 72rem;
     --event-switcher-height: clamp(2.125rem,10vw,2.5rem);
-    --header-control-font-size: clamp(.625rem,2.5vw,.72rem);
+    --header-control-font-size: clamp(.75rem,2.7vw,.8125rem);
     --header-icon-size: clamp(2.125rem,9vw,2.5rem);
     --ease: cubic-bezier(.22, 1, .36, 1)
 }
@@ -27,12 +30,16 @@ html {
 body {
     color: var(--ink);
     background: var(--paper);
-    font-family: var(--font-body), Arial, sans-serif;
+    font-family: var(--font-sans);
     text-rendering: optimizelegibility;
     -webkit-font-smoothing: antialiased;
     margin: 0;
     font-size: 1rem;
-    line-height: 1.65
+    line-height: 1.625
+}
+.venue-page[lang="uk"] {
+    --font-display: var(--font-cyrillic);
+    --font-sans: var(--font-cyrillic), sans-serif
 }
 body[data-menu-open=true] {
     overflow: hidden
@@ -59,16 +66,16 @@ h1,h2,h3,p,blockquote,figure {
     margin: 0
 }
 h1,h2,h3 {
-    font-family: var(--font-display), Georgia, serif;
-    letter-spacing: -.035em;
+    font-family: var(--font-sans);
+    letter-spacing: -.025em;
     text-wrap: balance;
-    font-weight: 500;
-    line-height: .96
+    font-weight: 700;
+    line-height: 1.1
 }
 h2 {
-    font-size: clamp(2.04rem, 7.2vw, 2.88rem);
+    font-size: clamp(2rem, 7.2vw, 2.25rem);
     font-weight: 700;
-    line-height: 1.02;
+    line-height: 1.11;
 }
 .editorial-heading__sentence {
     text-wrap: pretty;
@@ -117,13 +124,12 @@ h2 {
     min-height: 3.2rem;
     color: var(--white);
     background: var(--forest);
-    letter-spacing: .13em;
-    text-transform: uppercase;
+    letter-spacing: 0;
     transition: color .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease);
     justify-content: center;
     align-items: center;
-    padding: .85rem 1.4rem;
-    font-size: .68rem;
+    padding: .8rem 1.25rem;
+    font-size: .875rem;
     font-weight: 600;
     line-height: 1;
     display: inline-flex
@@ -144,13 +150,12 @@ h2 {
 .text-link {
     width: fit-content;
     color: var(--forest);
-    letter-spacing: .12em;
-    text-transform: uppercase;
+    letter-spacing: 0;
     border-bottom: 1px solid;
     align-items: center;
     gap: .8rem;
     padding-block: .35rem;
-    font-size: .72rem;
+    font-size: .875rem;
     font-weight: 600;
     line-height: 1.3;
     display: inline-flex
@@ -507,8 +512,8 @@ h2 {
 .mobile-nav__links a {
     border-bottom: 1px solid var(--line);
     min-height: 3.9rem;
-    font-family: var(--font-display), Georgia, serif;
-    letter-spacing: -.035em;
+    font-family: var(--font-sans);
+    letter-spacing: -.025em;
     align-items: baseline;
     gap: 1.15rem;
     font-size: clamp(2rem,9vw,3rem);
@@ -517,7 +522,7 @@ h2 {
 }
 .mobile-nav__links span {
     color: var(--ink-soft);
-    font-family: var(--font-body), Arial, sans-serif;
+    font-family: var(--font-sans);
     letter-spacing: .1em;
     font-size: .6rem
 }
@@ -541,8 +546,8 @@ h2 {
     width: 1.35rem
 }
 .hero {
-    height: max(48rem,100svh);
-    min-height: 48rem;
+    height: max(42rem,92svh);
+    min-height: 42rem;
     color: var(--white);
     background: var(--forest-deep);
     place-items: end start;
@@ -752,8 +757,8 @@ h2 {
 }
 .hero__content {
     z-index: 1;
-    width: min(100% - 2rem,46rem);
-    margin: 0 1rem clamp(5.75rem,14vh,8.5rem);
+    width: var(--shell);
+    margin: 0 auto clamp(5rem,12vh,7rem);
     position: relative
 }
 .hero__event-copy {
@@ -769,16 +774,16 @@ h2 {
 .hero h1 {
     text-shadow: 0 .08em .28em #0a120d4d;
     text-wrap: balance;
-    max-width: min(17ch,100%);
-    font-size: clamp(2.75rem,13.5vw,4.25rem);
-    line-height: .88
+    max-width: min(18ch,100%);
+    font-size: clamp(2.5rem,11vw,3.5rem);
+    line-height: 1.05
 }
 .hero__lead {
     color: #ffffffe0;
     max-width: 39rem;
     margin-top: 1.5rem;
-    font-size: clamp(.94rem,3.8vw,1.08rem);
-    line-height: 1.65
+    font-size: clamp(1rem,3.8vw,1.125rem);
+    line-height: 1.625
 }
 .hero__actions {
     align-items: center;
@@ -818,7 +823,7 @@ h2 {
     display: none
 }
 .story {
-    padding-block: 6.5rem 5.25rem;
+    padding-block: var(--section-space);
     display: grid
 }
 .story__heading h2,.feature__content h2,.gallery__heading h2,.contact h2 {
@@ -828,7 +833,7 @@ h2 {
     margin-top: 1.25rem
 }
 .story__body {
-    margin-top: 2.5rem
+    margin-top: 3rem
 }
 .prose {
     color: var(--ink-soft)
@@ -840,21 +845,20 @@ h2 {
     font-size: 1.02rem
 }
 .story blockquote {
-    border-top: 1px solid var(--line);
-    border-left: 1px solid var(--line);
+    border-left: 2px solid var(--forest);
     color: var(--forest);
     font-family: var(--font-display), Georgia, serif;
     letter-spacing: -.025em;
-    margin-top: 2.1rem;
-    padding: 1.35rem 0 0 1.25rem;
-    font-size: 1.75rem;
+    margin-top: 2rem;
+    padding: 0 0 0 1.25rem;
+    font-size: 1.25rem;
     font-style: italic;
-    line-height: 1.15
+    line-height: 1.625
 }
 .story__stats {
     border-top: 1px solid var(--line);
     grid-template-columns: repeat(3,1fr);
-    margin-top: 3.5rem;
+    margin-top: 4rem;
     display: grid
 }
 .stat {
@@ -881,11 +885,11 @@ h2 {
     line-height: 1.45
 }
 .features {
-    padding-bottom: 6.5rem
+    padding-bottom: var(--section-space)
 }
 .feature {
-    gap: 2.25rem;
-    padding-block: 1.5rem 5rem;
+    gap: 3rem;
+    padding-block: 2rem var(--section-space-compact);
     display: grid
 }
 .feature__image-wrap {
@@ -928,9 +932,9 @@ h2 {
     font-family: var(--font-display), Georgia, serif;
     white-space: nowrap;
     align-items: center;
-    gap: 1.75rem;
-    padding: 1.15rem .875rem;
-    font-size: 1.8rem;
+    gap: 1.5rem;
+    padding: 1rem .75rem;
+    font-size: 1.5rem;
     font-style: italic;
     display: inline-flex
 }
@@ -949,7 +953,7 @@ h2 {
 }
 .offer {
     background: var(--sage);
-    padding-block: 6.5rem
+    padding-block: var(--section-space)
 }
 .offer__intro h2 {
     max-width: 28ch;
@@ -964,13 +968,13 @@ h2 {
 }
 .offer__list {
     border-top: 1px solid var(--line);
-    margin-top: 3.5rem
+    margin-top: 3rem
 }
 .offer-point {
     border-bottom: 1px solid var(--line);
     grid-template-columns: 2rem 1fr;
     gap: .55rem;
-    padding-block: 1.4rem;
+    padding-block: 1.75rem;
     display: grid
 }
 .offer-point>span {
@@ -980,8 +984,8 @@ h2 {
 }
 .offer-point h3 {
     color: var(--forest);
-    font-size: 1.24rem;
-    line-height: 1.05
+    font-size: 1.125rem;
+    line-height: 1.35
 }
 .offer-point p {
     color: var(--ink-soft);
@@ -990,7 +994,7 @@ h2 {
     line-height: 1.6
 }
 .gallery {
-    padding-block: 6.5rem
+    padding-block: var(--section-space)
 }
 .gallery__heading h2 {
     margin-top: 1.2rem
@@ -1002,7 +1006,7 @@ h2 {
 }
 .gallery__grid {
     gap: 1rem;
-    margin-top: 3.25rem;
+    margin-top: 3rem;
     display: grid
 }
 .gallery__item {
@@ -1026,7 +1030,7 @@ h2 {
 }
 .contact {
     background: var(--sand);
-    padding-block: 5rem
+    padding-block: var(--section-space)
 }
 .contact__inner {
     grid-template-columns: minmax(0,1fr);
@@ -1077,7 +1081,7 @@ h2 {
     display: block
 }
 .contact__details a:not(.text-link),.contact__details p {
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-sans);
     font-size: clamp(1.3rem, 4vw, 1.55rem);
     line-height: 1.2
 }
@@ -1143,27 +1147,26 @@ h2 {
 }
 @media (min-width:48rem) {
     :root {
-        --shell: min(100% - 4rem, 86rem);
+        --section-space: 7rem;
+        --section-space-compact: 5rem;
         --header-top: 1.25rem
     }
     h2 {
-        font-size: clamp(2.88rem,5.04vw,3.08rem);
+        font-size: 2.25rem;
         font-weight: 700;
-        line-height: 1.02
+        line-height: 1.11
     }
     .editorial-heading__sentence {
         text-wrap: balance
     }
     .hero h1 {
-        max-width: 17ch;
-        font-size: clamp(4.75rem,9vw,6.96rem);
-        line-height: .82
+        max-width: 18ch;
+        font-size: 3.5rem;
+        line-height: 1.05
     }
     .hero__content {
-        width: min(100% - 4rem,52rem);
-        margin-bottom: clamp(7rem,15vh,10rem);
-        margin-left: 2rem;
-        margin-right: 2rem
+        width: var(--shell);
+        margin-bottom: clamp(6rem,13vh,8rem)
     }
     .event-switcher-frame {
         width: 100%;
@@ -1187,12 +1190,12 @@ h2 {
     }
     .story {
         grid-template-columns: minmax(0,1.3fr) minmax(18rem,.7fr);
-        column-gap: 5rem;
-        padding-block: 9rem 7rem
+        column-gap: 4rem;
+        padding-block: var(--section-space)
     }
     .story__body {
         align-self: end;
-        margin-top: 5rem
+        margin-top: 3rem
     }
     .story__stats {
         grid-column: 1/-1;
@@ -1210,8 +1213,8 @@ h2 {
     .feature {
         grid-template-columns: minmax(0,1.2fr) minmax(18rem,.8fr);
         align-items: center;
-        gap: clamp(3.5rem,8vw,8rem);
-        padding-block: 3rem 8rem
+        gap: clamp(3rem,6vw,5rem);
+        padding-block: 3rem var(--section-space)
     }
     .feature--reverse {
         grid-template-columns: minmax(18rem,.8fr) minmax(0,1.2fr)
@@ -1229,12 +1232,12 @@ h2 {
         max-width: 31rem
     }
     .marquee__group span {
-        gap: 2.5rem;
-        padding: 1.5rem 1.25rem;
-        font-size: 2.6rem
+        gap: 2rem;
+        padding: 1.25rem 1rem;
+        font-size: 2rem
     }
     .offer,.gallery {
-        padding-block: 9rem
+        padding-block: var(--section-space)
     }
     .offer__inner {
         grid-template-columns: minmax(0,1.15fr) minmax(26rem,.85fr);
@@ -1249,7 +1252,7 @@ h2 {
         padding-block: 1.75rem
     }
     .offer-point h3 {
-        font-size: 1.52rem
+        font-size: 1.25rem
     }
     .gallery__heading {
         grid-template-columns: minmax(0,1.4fr) minmax(18rem,.6fr);
@@ -1266,7 +1269,7 @@ h2 {
     .gallery__grid {
         grid-template-columns: repeat(12,1fr);
         gap: 1.25rem;
-        margin-top: 5rem
+        margin-top: 4rem
     }
     .gallery__item {
         height: 38rem
@@ -1298,7 +1301,7 @@ h2 {
         margin-top: 6rem
     }
     .contact {
-        padding-block: 8rem
+        padding-block: var(--section-space)
     }
     .contact__image {
         aspect-ratio: 16/10
@@ -1343,16 +1346,16 @@ h2 {
 }
 @media (min-width:68rem) {
     :root {
-        --header-height: 5.5rem;
+        --header-height: 4rem;
         --header-top: 1.25rem;
         --event-switcher-height: 2.5rem;
-        --header-control-font-size: .72rem;
+        --header-control-font-size: .8125rem;
         --header-icon-size: 2.75rem
     }
     .site-header__inner {
-        grid-template-columns: 7.75rem minmax(0,1fr) 10rem 2.75rem;
-        column-gap: 2rem;
-        padding: 1.5rem 3.4375rem;
+        grid-template-columns: 7.5rem minmax(0,1fr) 9rem 2.75rem;
+        column-gap: 1.25rem;
+        padding: .75rem 1.5rem;
         display: grid
     }
     .site-header__logo {
@@ -1398,7 +1401,7 @@ h2 {
         z-index: 2;
         grid-template-columns: 10.75rem minmax(0,1fr);
         align-items: center;
-        gap: 2rem;
+        gap: 1.25rem;
         height: var(--event-switcher-height);
         display: grid;
         position: relative
@@ -1430,9 +1433,7 @@ h2 {
         padding-right: clamp(0rem,2vw,2rem)
     }
     .hero__content {
-        width: min(100% - 8rem,76rem);
-        margin-left: 4rem;
-        margin-right: 4rem
+        width: var(--shell)
     }
     .hero__veil {
         background: radial-gradient(72% 94% at 0 78%,#111b15b8 0%,#111b1570 40%,#111b151f 66%,#111b1500 84%)
@@ -1488,20 +1489,18 @@ h2 {
         transform: translateY(-50%)
     }
     .story {
-        padding-block: 11rem 8rem
+        padding-block: var(--section-space)
     }
     .features {
-        padding-bottom: 8rem
+        padding-bottom: var(--section-space)
     }
     .feature {
-        padding-block: 4rem 10rem
+        padding-block: 3rem var(--section-space)
     }
 }
 @media (min-width:90rem) {
     .hero__content {
-        width: min(100% - 12rem,86rem);
-        margin-left: 6rem;
-        margin-right: 6rem
+        width: var(--shell)
     }
 }
 @media (prefers-reduced-motion:reduce) {
