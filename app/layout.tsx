@@ -1,21 +1,27 @@
 import type { Metadata } from "next";
-import { Fraunces, Manrope } from "next/font/google";
+import { Cormorant_Garamond, Fraunces, Manrope } from "next/font/google";
 
 import { LOCALE_REDIRECT_SCRIPT } from "@/lib/i18n";
 import { SITE_ORIGIN } from "@/lib/site-metadata";
 
 import "./globals.css";
 
-const displayFont = Fraunces({
-  subsets: ["latin", "latin-ext"],
+const displayFont = Cormorant_Garamond({
+  subsets: ["cyrillic", "latin", "latin-ext"],
   variable: "--font-display",
+  weight: ["400", "500", "600"],
+});
+
+const accentFont = Fraunces({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-accent",
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
 
-const cyrillicFont = Manrope({
+const bodyFont = Manrope({
   subsets: ["cyrillic", "latin", "latin-ext"],
-  variable: "--font-cyrillic",
+  variable: "--font-body",
   weight: ["400", "500", "600"],
 });
 
@@ -34,7 +40,10 @@ const RootLayout = (props: RootLayoutProps) => {
   const { children } = props;
 
   return (
-    <html lang="pl" className={`${displayFont.variable} ${cyrillicFont.variable}`}>
+    <html
+      lang="pl"
+      className={`${displayFont.variable} ${accentFont.variable} ${bodyFont.variable}`}
+    >
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />

@@ -8,13 +8,19 @@ import {
   LayoutGroup,
   motion,
   useDragControls,
+  useInView,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useTransform,
 } from "motion/react";
 
-import type { EventPageProfile, FeatureContent, PageContent } from "@/lib/content";
+import type {
+  EventPageProfile,
+  FeatureContent,
+  PageContent,
+  TrackRecordContent,
+} from "@/lib/content";
 import { EVENT_KINDS } from "@/lib/event-kinds";
 import { getLocalePath, LOCALES, SUPPORTED_LOCALES } from "@/lib/i18n";
 import {
@@ -96,6 +102,14 @@ type FeatureSectionProps = {
   index: number;
 };
 
+type AnimatedStatProps = TrackRecordContent["stats"][number] & {
+  delay: number;
+};
+
+type TrackRecordSectionProps = {
+  trackRecord: TrackRecordContent;
+};
+
 type EventHeroProps = Pick<EventSelectionProps, "hero" | "selection"> & {
   contactHref: string;
   location: string;
@@ -120,6 +134,10 @@ const HEADER_SCROLL_THRESHOLD_PX = 100;
 const HEADER_SECTION_OFFSET_PX = 176;
 const PROGRAMMATIC_NAVIGATION_FALLBACK_MS = 1600;
 const MARQUEE_GROUPS = [0, 1] as const;
+const TRACK_RECORD_COUNT_DURATION_MS = 1400;
+const TRACK_RECORD_EASING_POWER = 3;
+const TRACK_RECORD_STAGGER_SECONDS = 0.09;
+const TRACK_RECORD_VIEWPORT_AMOUNT = 0.65;
 const SITE_TIME_ZONE = "Europe/Warsaw";
 const EDITORIAL_SENTENCE_BOUNDARY = /(?<=[.!?])\s+/u;
 const FLOATING_DROPDOWN_INITIAL = { opacity: 0, y: -8 } as const;
@@ -951,6 +969,88 @@ const FeatureSection = (props: FeatureSectionProps) => {
   );
 };
 
+const AnimatedStat = (props: AnimatedStatProps) => {
+  const reduceMotion = useReducedMotion();
+  const statRef = useRef<HTMLElement>(null);
+  const isInView = useInView(statRef, { once: true, amount: TRACK_RECORD_VIEWPORT_AMOUNT });
+  const [displayValue, setDisplayValue] = useState(0);
+  const resolvedValue = reduceMotion ? props.value : displayValue;
+
+  useEffect(() => {
+    if (reduceMotion || !isInView) {
+      return;
+    }
+
+    let frameId = 0;
+    const startedAt = performance.now();
+
+    const updateCounter = (timestamp: number) => {
+      const progress = Math.min((timestamp - startedAt) / TRACK_RECORD_COUNT_DURATION_MS, 1);
+      const easedProgress = 1 - (1 - progress) ** TRACK_RECORD_EASING_POWER;
+
+      setDisplayValue(Math.round(props.value * easedProgress));
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(updateCounter);
+      }
+    };
+
+    frameId = requestAnimationFrame(updateCounter);
+
+    return () => cancelAnimationFrame(frameId);
+  }, [isInView, props.value, reduceMotion]);
+
+  return (
+    <motion.article
+      className="track-record__stat"
+      ref={statRef}
+      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: TRACK_RECORD_VIEWPORT_AMOUNT }}
+      transition={{ duration: 0.7, delay: reduceMotion ? 0 : props.delay, ease: EASE }}
+    >
+      <strong>
+        <span>{resolvedValue}</span>
+        <sup>{props.suffix}</sup>
+      </strong>
+      <span>{props.label}</span>
+    </motion.article>
+  );
+};
+
+const TrackRecordSection = (props: TrackRecordSectionProps) => {
+  const { trackRecord } = props;
+
+  return (
+    <section className="track-record" id={trackRecord.id}>
+      <div className="track-record__heading shell">
+        <Reveal>
+          <p className="eyebrow">{trackRecord.eyebrow}</p>
+          <EditorialHeading level={2} text={trackRecord.title} />
+        </Reveal>
+      </div>
+
+      <div className="track-record__ticker" aria-hidden="true">
+        <div className="track-record__ticker-track">
+          {MARQUEE_GROUPS.map((group) => (
+            <div className="track-record__ticker-group" key={group}>
+              {trackRecord.ticker.map((label) => (
+                <span key={`${group}-${label}`}>{label}</span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="track-record__stats shell">
+        {trackRecord.stats.map((stat, index) => (
+          <AnimatedStat {...stat} delay={index * TRACK_RECORD_STAGGER_SECONDS} key={stat.label} />
+        ))}
+      </div>
+    </section>
+  );
+};
+
 export const VenuePage = (props: VenuePageProps) => {
   const { content } = props;
   const { site, hero, updatedAt } = content;
@@ -1101,6 +1201,8 @@ export const VenuePage = (props: VenuePageProps) => {
             ))}
           </div>
         </section>
+
+        <TrackRecordSection trackRecord={content.trackRecord} />
 
         <section className="contact" id={activeProfile.contact.id}>
           <div className="contact__inner shell">

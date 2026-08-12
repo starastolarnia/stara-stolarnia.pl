@@ -9,14 +9,12 @@
     --line: #20241f29;
     --white: #fff;
     --font-sans: "General Sans", sans-serif;
-    --shell: min(100% - 3rem, 72rem);
-    --section-space: 5rem;
-    --section-space-compact: 4rem;
+    --shell: min(100% - 2rem, 86rem);
     --header-height: clamp(3rem,13vw,3.5rem);
-    --header-top: .75rem;
-    --header-max-width: 72rem;
+    --header-top: clamp(.5rem,3vw,1.25rem);
+    --header-max-width: 80.5rem;
     --event-switcher-height: clamp(2.125rem,10vw,2.5rem);
-    --header-control-font-size: clamp(.75rem,2.7vw,.8125rem);
+    --header-control-font-size: clamp(.625rem,2.5vw,.72rem);
     --header-icon-size: clamp(2.125rem,9vw,2.5rem);
     --ease: cubic-bezier(.22, 1, .36, 1)
 }
@@ -38,8 +36,8 @@ body {
     line-height: 1.625
 }
 .venue-page[lang="uk"] {
-    --font-display: var(--font-cyrillic);
-    --font-sans: var(--font-cyrillic), sans-serif
+    --font-accent: var(--font-display);
+    --font-sans: var(--font-body), Arial, sans-serif
 }
 body[data-menu-open=true] {
     overflow: hidden
@@ -65,6 +63,9 @@ img {
 h1,h2,h3,p,blockquote,figure {
     margin: 0
 }
+p {
+    font-size: clamp(1.0625rem,.98rem + .35vw,1.125rem)
+}
 h1,h2,h3 {
     font-family: var(--font-sans);
     letter-spacing: -.025em;
@@ -73,9 +74,9 @@ h1,h2,h3 {
     line-height: 1.1
 }
 h2 {
-    font-size: clamp(2rem, 7.2vw, 2.25rem);
+    font-size: clamp(2.25rem,8.5vw,3.1rem);
     font-weight: 700;
-    line-height: 1.11;
+    line-height: 1.12;
 }
 .editorial-heading__sentence {
     text-wrap: pretty;
@@ -200,6 +201,7 @@ h2 {
     width: min(calc(100% - 1rem),var(--header-max-width));
     height: var(--header-height);
     color: var(--ink);
+    font-family: var(--font-body), Arial, sans-serif;
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
     background: #ffffffb3;
@@ -512,8 +514,8 @@ h2 {
 .mobile-nav__links a {
     border-bottom: 1px solid var(--line);
     min-height: 3.9rem;
-    font-family: var(--font-sans);
-    letter-spacing: -.025em;
+    font-family: var(--font-display), Georgia, serif;
+    letter-spacing: -.035em;
     align-items: baseline;
     gap: 1.15rem;
     font-size: clamp(2rem,9vw,3rem);
@@ -522,7 +524,7 @@ h2 {
 }
 .mobile-nav__links span {
     color: var(--ink-soft);
-    font-family: var(--font-sans);
+    font-family: var(--font-body), Arial, sans-serif;
     letter-spacing: .1em;
     font-size: .6rem
 }
@@ -546,8 +548,8 @@ h2 {
     width: 1.35rem
 }
 .hero {
-    height: max(42rem,92svh);
-    min-height: 42rem;
+    height: max(48rem,100svh);
+    min-height: 48rem;
     color: var(--white);
     background: var(--forest-deep);
     place-items: end start;
@@ -757,8 +759,8 @@ h2 {
 }
 .hero__content {
     z-index: 1;
-    width: var(--shell);
-    margin: 0 auto clamp(5rem,12vh,7rem);
+    width: min(100% - 2rem,46rem);
+    margin: 0 1rem clamp(5.75rem,14vh,8.5rem);
     position: relative
 }
 .hero__event-copy {
@@ -782,7 +784,7 @@ h2 {
     color: #ffffffe0;
     max-width: 39rem;
     margin-top: 1.5rem;
-    font-size: clamp(1rem,3.8vw,1.125rem);
+    font-size: clamp(1.0625rem,3.8vw,1.25rem);
     line-height: 1.625
 }
 .hero__actions {
@@ -823,7 +825,7 @@ h2 {
     display: none
 }
 .story {
-    padding-block: var(--section-space);
+    padding-block: 6.5rem 5.25rem;
     display: grid
 }
 .story__heading h2,.feature__content h2,.gallery__heading h2,.contact h2 {
@@ -833,7 +835,7 @@ h2 {
     margin-top: 1.25rem
 }
 .story__body {
-    margin-top: 3rem
+    margin-top: 2.5rem
 }
 .prose {
     color: var(--ink-soft)
@@ -844,21 +846,25 @@ h2 {
 .prose--large {
     font-size: 1.02rem
 }
+.prose--large p {
+    font-size: clamp(1.0825rem,1rem + .35vw,1.145rem)
+}
 .story blockquote {
-    border-left: 2px solid var(--forest);
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
     color: var(--forest);
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-accent), Georgia, serif;
     letter-spacing: -.025em;
-    margin-top: 2rem;
-    padding: 0 0 0 1.25rem;
-    font-size: 1.25rem;
+    margin-top: 2.1rem;
+    padding: 1.35rem 0 0 1.25rem;
+    font-size: 1.75rem;
     font-style: italic;
-    line-height: 1.625
+    line-height: 1.15
 }
 .story__stats {
     border-top: 1px solid var(--line);
     grid-template-columns: repeat(3,1fr);
-    margin-top: 4rem;
+    margin-top: 3.5rem;
     display: grid
 }
 .stat {
@@ -873,7 +879,7 @@ h2 {
 }
 .stat strong {
     color: var(--forest);
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-accent), Georgia, serif;
     font-size: clamp(1.5rem,7vw,2.25rem);
     font-weight: 500;
     line-height: 1
@@ -885,11 +891,11 @@ h2 {
     line-height: 1.45
 }
 .features {
-    padding-bottom: var(--section-space)
+    padding-bottom: 6.5rem
 }
 .feature {
-    gap: 3rem;
-    padding-block: 2rem var(--section-space-compact);
+    gap: 2.25rem;
+    padding-block: 1.5rem 5rem;
     display: grid
 }
 .feature__image-wrap {
@@ -929,12 +935,12 @@ h2 {
 }
 .marquee__group span {
     color: var(--forest);
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-accent), Georgia, serif;
     white-space: nowrap;
     align-items: center;
-    gap: 1.5rem;
-    padding: 1rem .75rem;
-    font-size: 1.5rem;
+    gap: 1.75rem;
+    padding: 1.15rem .875rem;
+    font-size: 1.8rem;
     font-style: italic;
     display: inline-flex
 }
@@ -953,7 +959,7 @@ h2 {
 }
 .offer {
     background: var(--sage);
-    padding-block: var(--section-space)
+    padding-block: 6.5rem
 }
 .offer__intro h2 {
     max-width: 28ch;
@@ -968,13 +974,13 @@ h2 {
 }
 .offer__list {
     border-top: 1px solid var(--line);
-    margin-top: 3rem
+    margin-top: 3.5rem
 }
 .offer-point {
     border-bottom: 1px solid var(--line);
     grid-template-columns: 2rem 1fr;
     gap: .55rem;
-    padding-block: 1.75rem;
+    padding-block: 1.4rem;
     display: grid
 }
 .offer-point>span {
@@ -984,17 +990,17 @@ h2 {
 }
 .offer-point h3 {
     color: var(--forest);
-    font-size: 1.125rem;
-    line-height: 1.35
+    font-size: 1.24rem;
+    line-height: 1.05
 }
 .offer-point p {
     color: var(--ink-soft);
     margin-top: .6rem;
-    font-size: .87rem;
+    font-size: 1rem;
     line-height: 1.6
 }
 .gallery {
-    padding-block: var(--section-space)
+    padding-block: 6.5rem
 }
 .gallery__heading h2 {
     margin-top: 1.2rem
@@ -1006,7 +1012,7 @@ h2 {
 }
 .gallery__grid {
     gap: 1rem;
-    margin-top: 3rem;
+    margin-top: 3.25rem;
     display: grid
 }
 .gallery__item {
@@ -1028,9 +1034,81 @@ h2 {
     height: 76vw;
     max-height: 27rem
 }
+.track-record {
+    color: #fffefbed;
+    background-color: #263029;
+    background-image: radial-gradient(#fffefb0d 1px,transparent 1px);
+    background-size: 24px 24px;
+    padding-block: 6.5rem;
+    overflow: hidden
+}
+.track-record .eyebrow {
+    color: #d99a5c
+}
+.track-record__heading h2 {
+    max-width: 20ch;
+    margin-top: 1.25rem
+}
+.track-record__ticker {
+    color: #fffefb80;
+    margin-top: 4rem;
+    overflow: hidden
+}
+.track-record__ticker-track {
+    will-change: transform;
+    width: max-content;
+    animation: 28s linear infinite track-record-ticker;
+    display: flex
+}
+.track-record__ticker-group {
+    flex-shrink: 0;
+    justify-content: space-around;
+    min-width: 100vw;
+    display: flex
+}
+.track-record__ticker-group span {
+    white-space: nowrap;
+    padding-inline: 1.5rem;
+    font-size: .875rem
+}
+.track-record__stats {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 2.5rem 1.5rem;
+    margin-top: 4.5rem;
+    display: grid
+}
+.track-record__stat {
+    min-width: 0;
+    display: grid
+}
+.track-record__stat strong {
+    color: #dfa063;
+    font-family: var(--font-accent), Georgia, serif;
+    letter-spacing: -.04em;
+    font-size: clamp(2.8rem,12vw,4rem);
+    font-weight: 500;
+    line-height: .95
+}
+.track-record__stat sup {
+    margin-left: .12em;
+    font-size: .55em;
+    font-weight: 500;
+    vertical-align: .38em
+}
+.track-record__stat>span {
+    color: #fffefb9e;
+    margin-top: .65rem;
+    font-size: .82rem;
+    line-height: 1.4
+}
+@keyframes track-record-ticker {
+    to {
+        transform: translateX(-50%)
+    }
+}
 .contact {
     background: var(--sand);
-    padding-block: var(--section-space)
+    padding-block: 5rem
 }
 .contact__inner {
     grid-template-columns: minmax(0,1fr);
@@ -1085,6 +1163,9 @@ h2 {
     font-size: clamp(1.3rem, 4vw, 1.55rem);
     line-height: 1.2
 }
+.contact__details p {
+    font-size: clamp(1.425rem,4vw,1.675rem)
+}
 .contact__details a:not(.text-link) {
     transition: color .25s
 }
@@ -1114,6 +1195,9 @@ h2 {
     text-transform: uppercase;
     font-size: .65rem
 }
+.footer__inner>p {
+    font-size: .775rem
+}
 .footer__links {
     flex-direction: column;
     gap: .55rem;
@@ -1142,19 +1226,18 @@ h2 {
     text-transform: uppercase;
     width: 100%;
     margin: .25rem 0 0;
-    font-size: .58rem;
+    font-size: .705rem;
     line-height: 1.4
 }
 @media (min-width:48rem) {
     :root {
-        --section-space: 7rem;
-        --section-space-compact: 5rem;
+        --shell: min(100% - 4rem, 86rem);
         --header-top: 1.25rem
     }
     h2 {
-        font-size: 2.25rem;
+        font-size: 3.1rem;
         font-weight: 700;
-        line-height: 1.11
+        line-height: 1.21
     }
     .editorial-heading__sentence {
         text-wrap: balance
@@ -1165,8 +1248,10 @@ h2 {
         line-height: 1.05
     }
     .hero__content {
-        width: var(--shell);
-        margin-bottom: clamp(6rem,13vh,8rem)
+        width: min(100% - 4rem,52rem);
+        margin-bottom: clamp(7rem,15vh,10rem);
+        margin-left: 2rem;
+        margin-right: 2rem
     }
     .event-switcher-frame {
         width: 100%;
@@ -1190,12 +1275,12 @@ h2 {
     }
     .story {
         grid-template-columns: minmax(0,1.3fr) minmax(18rem,.7fr);
-        column-gap: 4rem;
-        padding-block: var(--section-space)
+        column-gap: 5rem;
+        padding-block: 9rem 7rem
     }
     .story__body {
         align-self: end;
-        margin-top: 3rem
+        margin-top: 5rem
     }
     .story__stats {
         grid-column: 1/-1;
@@ -1213,8 +1298,8 @@ h2 {
     .feature {
         grid-template-columns: minmax(0,1.2fr) minmax(18rem,.8fr);
         align-items: center;
-        gap: clamp(3rem,6vw,5rem);
-        padding-block: 3rem var(--section-space)
+        gap: clamp(3.5rem,8vw,8rem);
+        padding-block: 3rem 8rem
     }
     .feature--reverse {
         grid-template-columns: minmax(18rem,.8fr) minmax(0,1.2fr)
@@ -1232,12 +1317,12 @@ h2 {
         max-width: 31rem
     }
     .marquee__group span {
-        gap: 2rem;
-        padding: 1.25rem 1rem;
-        font-size: 2rem
+        gap: 2.5rem;
+        padding: 1.5rem 1.25rem;
+        font-size: 2.6rem
     }
     .offer,.gallery {
-        padding-block: var(--section-space)
+        padding-block: 9rem
     }
     .offer__inner {
         grid-template-columns: minmax(0,1.15fr) minmax(26rem,.85fr);
@@ -1252,7 +1337,7 @@ h2 {
         padding-block: 1.75rem
     }
     .offer-point h3 {
-        font-size: 1.25rem
+        font-size: 1.52rem
     }
     .gallery__heading {
         grid-template-columns: minmax(0,1.4fr) minmax(18rem,.6fr);
@@ -1269,7 +1354,7 @@ h2 {
     .gallery__grid {
         grid-template-columns: repeat(12,1fr);
         gap: 1.25rem;
-        margin-top: 4rem
+        margin-top: 5rem
     }
     .gallery__item {
         height: 38rem
@@ -1301,7 +1386,7 @@ h2 {
         margin-top: 6rem
     }
     .contact {
-        padding-block: var(--section-space)
+        padding-block: 8rem
     }
     .contact__image {
         aspect-ratio: 16/10
@@ -1323,6 +1408,36 @@ h2 {
     .contact__details a:not(.text-link),.contact__details p {
         overflow-wrap: anywhere;
         font-size: clamp(1.2rem,1.45vw,1.45rem)
+    }
+    .contact__details p {
+        font-size: clamp(1.325rem,1.45vw,1.575rem)
+    }
+    .track-record {
+        padding-block: 8rem
+    }
+    .track-record__heading {
+        text-align: center
+    }
+    .track-record__heading .eyebrow {
+        justify-content: center
+    }
+    .track-record__heading h2 {
+        margin-inline: auto
+    }
+    .track-record__ticker {
+        margin-top: 4.5rem
+    }
+    .track-record__ticker-group span {
+        padding-inline: 2.5rem;
+        font-size: 1rem
+    }
+    .track-record__stats {
+        grid-template-columns: repeat(4,minmax(0,1fr));
+        gap: 3rem;
+        margin-top: 5rem
+    }
+    .track-record__stat strong {
+        font-size: clamp(3.25rem,4.2vw,4.5rem)
     }
     .footer {
         padding-block: 3rem
@@ -1346,16 +1461,16 @@ h2 {
 }
 @media (min-width:68rem) {
     :root {
-        --header-height: 4rem;
+        --header-height: 5.5rem;
         --header-top: 1.25rem;
         --event-switcher-height: 2.5rem;
-        --header-control-font-size: .8125rem;
+        --header-control-font-size: .72rem;
         --header-icon-size: 2.75rem
     }
     .site-header__inner {
-        grid-template-columns: 7.5rem minmax(0,1fr) 9rem 2.75rem;
-        column-gap: 1.25rem;
-        padding: .75rem 1.5rem;
+        grid-template-columns: 7.75rem minmax(0,1fr) 10rem 2.75rem;
+        column-gap: 2rem;
+        padding: 1.5rem 3.4375rem;
         display: grid
     }
     .site-header__logo {
@@ -1401,7 +1516,7 @@ h2 {
         z-index: 2;
         grid-template-columns: 10.75rem minmax(0,1fr);
         align-items: center;
-        gap: 1.25rem;
+        gap: 2rem;
         height: var(--event-switcher-height);
         display: grid;
         position: relative
@@ -1433,7 +1548,9 @@ h2 {
         padding-right: clamp(0rem,2vw,2rem)
     }
     .hero__content {
-        width: var(--shell)
+        width: min(100% - 8rem,76rem);
+        margin-left: 4rem;
+        margin-right: 4rem
     }
     .hero__veil {
         background: radial-gradient(72% 94% at 0 78%,#111b15b8 0%,#111b1570 40%,#111b151f 66%,#111b1500 84%)
@@ -1489,18 +1606,20 @@ h2 {
         transform: translateY(-50%)
     }
     .story {
-        padding-block: var(--section-space)
+        padding-block: 11rem 8rem
     }
     .features {
-        padding-bottom: var(--section-space)
+        padding-bottom: 8rem
     }
     .feature {
-        padding-block: 3rem var(--section-space)
+        padding-block: 4rem 10rem
     }
 }
 @media (min-width:90rem) {
     .hero__content {
-        width: var(--shell)
+        width: min(100% - 12rem,86rem);
+        margin-left: 6rem;
+        margin-right: 6rem
     }
 }
 @media (prefers-reduced-motion:reduce) {
@@ -1512,5 +1631,8 @@ h2 {
         transition-duration: .01ms !important;
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important
+    }
+    .track-record__ticker-track {
+        animation: none
     }
 }
