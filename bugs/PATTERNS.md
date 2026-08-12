@@ -34,3 +34,10 @@
 - **Sygnatura:** tekst menu jest czytelny tylko nad wybranymi fragmentami zdjęcia, a computed `rowGap` wynosi `normal`/0 px.
 - **Reguła naprawy:** ustalać materiał w jednej wspólnej regule, weryfikować computed alpha na zróżnicowanym tle i deklarować jawny odstęp między pozycjami, zachowując lokalne geometrie wariantów.
 - **Raporty:** [Bug 006 — Nieczytelny dropdown](./006-nieczytelny-dropdown.md)
+
+## Zielony test przepisany na wartość z regresji
+
+- **Mechanizm:** zmiana produkcyjna narusza wcześniejszy kontrakt, ale w tym samym commicie asercja regresyjna zostaje dostosowana do nowej, błędnej wartości. Test pozostaje zielony, ponieważ dokumentuje implementację zamiast chronić zatwierdzone zachowanie.
+- **Sygnatura:** użytkownik widzi powrót wcześniej naprawionego objawu, podczas gdy historyczny test nadal przechodzi; diff pokazuje równoległą zmianę wartości w kodzie i w oczekiwaniu testu bez udokumentowanej zmiany kontraktu.
+- **Reguła naprawy:** oczekiwania wiązać z kryterium akceptacji lub pomiarem finalnego UI, a zmianę historycznego kontraktu dopuszczać wyłącznie z jawną notą w raporcie. Przy regresji najpierw przywrócić asercję zatwierdzonego zachowania i potwierdzić uczciwe RED.
+- **Raporty:** [Bug 005 regresja 1 — Zwężony desktop po zmianie typografii](./005-absurdalne-lamanie-naglowkow-regresja-1.md)
