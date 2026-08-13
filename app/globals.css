@@ -8,6 +8,10 @@
     --paper: #fffefb;
     --line: #20241f29;
     --white: #fff;
+    --track-record-background: #263029;
+    --track-record-pattern: radial-gradient(#fffefb0d 1px,transparent 1px);
+    --track-record-pattern-size: 24px 24px;
+    --track-record-gold: #dfa063;
     --font-sans: "General Sans", sans-serif;
     --shell: min(100% - 2rem, 86rem);
     --header-height: clamp(3rem,13vw,3.5rem);
@@ -1030,9 +1034,9 @@ h2 {
 }
 .track-record {
     color: #fffefbed;
-    background-color: #263029;
-    background-image: radial-gradient(#fffefb0d 1px,transparent 1px);
-    background-size: 24px 24px;
+    background-color: var(--track-record-background);
+    background-image: var(--track-record-pattern);
+    background-size: var(--track-record-pattern-size);
     padding-block: 6.5rem;
     overflow: hidden
 }
@@ -1042,28 +1046,6 @@ h2 {
 .track-record__heading h2 {
     max-width: 20ch;
     margin-top: 1.25rem
-}
-.track-record__ticker {
-    color: #fffefb80;
-    margin-top: 4rem;
-    overflow: hidden
-}
-.track-record__ticker-track {
-    will-change: transform;
-    width: max-content;
-    animation: 28s linear infinite track-record-ticker;
-    display: flex
-}
-.track-record__ticker-group {
-    flex-shrink: 0;
-    justify-content: space-around;
-    min-width: 100vw;
-    display: flex
-}
-.track-record__ticker-group span {
-    white-space: nowrap;
-    padding-inline: 1.5rem;
-    font-size: .875rem
 }
 .track-record__stats {
     grid-template-columns: repeat(2,minmax(0,1fr));
@@ -1076,7 +1058,7 @@ h2 {
     display: grid
 }
 .track-record__stat strong {
-    color: #dfa063;
+    color: var(--track-record-gold);
     font-family: var(--font-accent), Georgia, serif;
     letter-spacing: -.04em;
     font-size: clamp(2.8rem,12vw,4rem);
@@ -1094,11 +1076,6 @@ h2 {
     margin-top: .65rem;
     font-size: .82rem;
     line-height: 1.4
-}
-@keyframes track-record-ticker {
-    to {
-        transform: translateX(-50%)
-    }
 }
 .contact {
     background: var(--sand);
@@ -1171,9 +1148,11 @@ h2 {
     font-size: 0.8rem;
 }
 .footer {
-    color: #ffffffc2;
-    background: var(--forest-deep);
-    padding-block: 3.5rem 2rem
+    color: var(--track-record-gold);
+    background-color: var(--track-record-background);
+    background-image: var(--track-record-pattern);
+    background-size: var(--track-record-pattern-size);
+    padding-block: calc(3.5rem + 50px) calc(2rem + 50px)
 }
 .footer__inner {
     gap: 2rem;
@@ -1181,7 +1160,7 @@ h2 {
 }
 .footer .logo {
     width: fit-content;
-    color: var(--white);
+    color: inherit;
     text-align: left
 }
 .footer__inner>p,.footer__links {
@@ -1214,7 +1193,7 @@ h2 {
     height: 3.6rem
 }
 .footer__updated {
-    color: #ffffff7a;
+    color: inherit;
     letter-spacing: .08em;
     text-align: center;
     text-transform: uppercase;
@@ -1418,13 +1397,6 @@ h2 {
     .track-record__heading h2 {
         margin-inline: auto
     }
-    .track-record__ticker {
-        margin-top: 4.5rem
-    }
-    .track-record__ticker-group span {
-        padding-inline: 2.5rem;
-        font-size: 1rem
-    }
     .track-record__stats {
         grid-template-columns: repeat(4,minmax(0,1fr));
         gap: 3rem;
@@ -1434,7 +1406,7 @@ h2 {
         font-size: clamp(3.25rem,4.2vw,4.5rem)
     }
     .footer {
-        padding-block: 3rem
+        padding-block: calc(3rem + 50px)
     }
     .footer__inner {
         grid-template-columns: minmax(0,1fr) minmax(0,2fr) minmax(0,1fr);
@@ -1625,8 +1597,5 @@ h2 {
         transition-duration: .01ms !important;
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important
-    }
-    .track-record__ticker-track {
-        animation: none
     }
 }

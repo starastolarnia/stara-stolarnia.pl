@@ -108,6 +108,7 @@ type FeatureSectionProps = {
 
 type AnimatedStatProps = TrackRecordContent["stats"][number] & {
   delay: number;
+  isActive: boolean;
 };
 
 type TrackRecordSectionProps = {
@@ -139,8 +140,8 @@ const HEADER_SECTION_OFFSET_PX = 176;
 const PROGRAMMATIC_NAVIGATION_FALLBACK_MS = 1600;
 const MARQUEE_GROUPS = [0, 1] as const;
 const TRACK_RECORD_COUNT_DURATION_SECONDS = 1.4;
-const TRACK_RECORD_STAGGER_SECONDS = 0.09;
-const TRACK_RECORD_VIEWPORT_AMOUNT = 0.65;
+const TRACK_RECORD_STAGGER_SECONDS = 0.18;
+const TRACK_RECORD_VIEWPORT_AMOUNT = 0.2;
 const SITE_TIME_ZONE = "Europe/Warsaw";
 const EDITORIAL_SENTENCE_BOUNDARY = /(?<=[.!?])\s+/u;
 const FLOATING_DROPDOWN_INITIAL = { opacity: 0, y: -8 } as const;
@@ -1017,8 +1018,6 @@ const FeatureSection = (props: FeatureSectionProps) => {
 
 const AnimatedStat = (props: AnimatedStatProps) => {
   const reduceMotion = useReducedMotion();
-  const statRef = useRef<HTMLElement>(null);
-  const isInView = useInView(statRef, { once: true, amount: TRACK_RECORD_VIEWPORT_AMOUNT });
   const count = useMotionValue(reduceMotion ? props.value : 0);
   const displayValue = useTransform(count, (latest) => Math.round(latest));
 
@@ -1028,26 +1027,33 @@ const AnimatedStat = (props: AnimatedStatProps) => {
       return;
     }
 
-    if (!isInView) {
+    if (!props.isActive) {
+      count.set(0);
       return;
     }
 
+    count.set(0);
     const controls = animate(count, props.value, {
+      delay: props.delay,
       duration: TRACK_RECORD_COUNT_DURATION_SECONDS,
       ease: EASE,
     });
 
     return () => controls.stop();
-  }, [count, isInView, props.value, reduceMotion]);
+  }, [count, props.delay, props.isActive, props.value, reduceMotion]);
 
   return (
     <motion.article
       className="track-record__stat"
-      ref={statRef}
-      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: TRACK_RECORD_VIEWPORT_AMOUNT }}
-      transition={{ duration: 0.7, delay: reduceMotion ? 0 : props.delay, ease: EASE }}
+      initial={false}
+      animate={
+        reduceMotion || props.isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }
+      }
+      transition={{
+        duration: reduceMotion ? 0 : 0.7,
+        delay: reduceMotion || !props.isActive ? 0 : props.delay,
+        ease: EASE,
+      }}
     >
       <strong>
         <motion.span>{displayValue}</motion.span>
@@ -1060,9 +1066,14 @@ const AnimatedStat = (props: AnimatedStatProps) => {
 
 const TrackRecordSection = (props: TrackRecordSectionProps) => {
   const { trackRecord } = props;
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, {
+    once: false,
+    amount: TRACK_RECORD_VIEWPORT_AMOUNT,
+  });
 
   return (
-    <section className="track-record" id={trackRecord.id}>
+    <section className="track-record" id={trackRecord.id} ref={sectionRef}>
       <div className="track-record__heading shell">
         <Reveal>
           <p className="eyebrow">{trackRecord.eyebrow}</p>
@@ -1070,21 +1081,14 @@ const TrackRecordSection = (props: TrackRecordSectionProps) => {
         </Reveal>
       </div>
 
-      <div className="track-record__ticker" aria-hidden="true">
-        <div className="track-record__ticker-track">
-          {MARQUEE_GROUPS.map((group) => (
-            <div className="track-record__ticker-group" key={group}>
-              {trackRecord.ticker.map((label) => (
-                <span key={`${group}-${label}`}>{label}</span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
       <div className="track-record__stats shell">
         {trackRecord.stats.map((stat, index) => (
-          <AnimatedStat {...stat} delay={index * TRACK_RECORD_STAGGER_SECONDS} key={stat.label} />
+          <AnimatedStat
+            {...stat}
+            delay={index * TRACK_RECORD_STAGGER_SECONDS}
+            isActive={isInView}
+            key={stat.label}
+          />
         ))}
       </div>
     </section>

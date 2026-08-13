@@ -2,11 +2,6 @@
 id: doswiadczenie
 eyebrow: Unsere Erfahrung
 title: Hunderte Feiern. Jede mit ihrem eigenen Charakter.
-ticker:
-  - Hochzeiten
-  - Erstkommunionen
-  - Firmenfeiern
-  - Familienfeiern
 stats:
   - value: 120
     suffix: "+"

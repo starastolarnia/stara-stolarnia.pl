@@ -2,11 +2,6 @@
 id: doswiadczenie
 eyebrow: Nasze doświadczenie
 title: Setki uroczystości. Każda z własnym charakterem.
-ticker:
-  - Wesela
-  - Komunie
-  - Imprezy firmowe
-  - Uroczystości rodzinne
 stats:
   - value: 120
     suffix: "+"

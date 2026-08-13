@@ -133,7 +133,6 @@ const trackRecordSchema = z.object({
   id: z.string(),
   eyebrow: copySchema,
   title: copySchema,
-  ticker: z.array(copySchema).min(4),
   stats: z
     .array(
       z.object({
