@@ -31,6 +31,7 @@ import {
   HERO_LIGHT_MASK,
   HERO_LIGHTS,
 } from "@/components/hero-lights";
+import { type VenueScroll, useVenueScrollModel } from "@/components/venue-scroll.model";
 
 type VenuePageProps = {
   content: PageContent;
@@ -43,6 +44,7 @@ type EventSelectionProps = Pick<PageContent, "hero"> & {
 
 type HeaderProps = EventSelectionProps & {
   navigation: EventPageProfile["navigation"];
+  onScrollTo: VenueScroll;
   site: PageContent["site"];
 };
 
@@ -828,7 +830,7 @@ const Header = (props: HeaderProps) => {
     }
     closePanels();
     window.history.replaceState(null, "", item.href);
-    section.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    props.onScrollTo(section, { immediate: Boolean(reduceMotion) });
   };
 
   return (
@@ -1093,6 +1095,7 @@ export const VenuePage = (props: VenuePageProps) => {
   const { content } = props;
   const { site, hero, updatedAt } = content;
   const reduceMotion = useReducedMotion();
+  const { scrollTo } = useVenueScrollModel();
   const [selection, setSelection] = useState<HeroSelection>({ activeIndex: 0, direction: 1 });
   const activeKind = EVENT_KINDS[selection.activeIndex] ?? EVENT_KINDS[0];
   const activeProfile = content.eventProfiles[activeKind];
@@ -1111,11 +1114,7 @@ export const VenuePage = (props: VenuePageProps) => {
       activeIndex: nextIndex,
       direction: Math.sign(nextIndex - selection.activeIndex),
     });
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: reduceMotion ? "auto" : "smooth",
-    });
+    scrollTo(0, { immediate: Boolean(reduceMotion) });
   };
 
   return (
@@ -1127,6 +1126,7 @@ export const VenuePage = (props: VenuePageProps) => {
         hero={hero}
         navigation={activeProfile.navigation}
         onSelect={selectEvent}
+        onScrollTo={scrollTo}
         selection={selection}
         site={site}
       />

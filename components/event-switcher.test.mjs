@@ -395,16 +395,40 @@ test("the fixed header keeps one backdrop blur instead of stacking compositor pa
   }
 });
 
+test("wheel and programmatic scrolling share one reduced-motion-aware smooth-scroll model", () => {
+  const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
+  const layout = readFileSync(new URL("../app/layout.tsx", import.meta.url), "utf8");
+  const packageJson = JSON.parse(
+    readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+  );
+  const scrollModelUrl = new URL("./venue-scroll.model.ts", import.meta.url);
+
+  assert.equal(packageJson.dependencies.lenis, "^1.3.26");
+  assert.equal(existsSync(scrollModelUrl), true, "the page should own one smooth-scroll model");
+
+  const scrollModel = readFileSync(scrollModelUrl, "utf8");
+
+  assert.match(layout, /import "lenis\/dist\/lenis\.css";/);
+  assert.match(scrollModel, /new Lenis\(VENUE_SCROLL_OPTIONS\)/);
+  assert.match(scrollModel, /autoRaf:\s*true/);
+  assert.match(scrollModel, /anchors:\s*true/);
+  assert.match(scrollModel, /respectReducedMotion:\s*true/);
+  assert.match(scrollModel, /smoothWheel:\s*true/);
+  assert.match(scrollModel, /syncTouch:\s*false/);
+  assert.match(scrollModel, /lenis\.scrollTo\(target, options\)/);
+  assert.match(component, /useVenueScrollModel/);
+  assert.match(component, /onScrollTo=\{scrollTo\}/);
+  assert.doesNotMatch(component, /section\.scrollIntoView/);
+  assert.doesNotMatch(component, /window\.scrollTo/);
+});
+
 test("changing an event scrolls to page top with the user's motion preference", () => {
   const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
   const selectEvent = component.match(/const selectEvent = [\s\S]*?(?=\n\n  return \()/)?.[0];
 
   assert.ok(selectEvent, "the event selection handler should exist");
   assert.match(selectEvent, /if \(selection\.activeIndex === nextIndex\) return;/);
-  assert.match(selectEvent, /window\.scrollTo\(\{/);
-  assert.match(selectEvent, /top:\s*0/);
-  assert.match(selectEvent, /left:\s*0/);
-  assert.match(selectEvent, /behavior:\s*reduceMotion \? "auto" : "smooth"/);
+  assert.match(selectEvent, /scrollTo\(0, \{ immediate: Boolean\(reduceMotion\) \}\)/);
 });
 
 test("the desktop header follows the reference geometry and sequences both draggable menus", () => {

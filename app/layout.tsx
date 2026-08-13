@@ -4,6 +4,7 @@ import { Cormorant_Garamond, Fraunces, Manrope } from "next/font/google";
 import { LOCALE_REDIRECT_SCRIPT } from "@/lib/i18n";
 import { SITE_ORIGIN } from "@/lib/site-metadata";
 
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const displayFont = Cormorant_Garamond({
