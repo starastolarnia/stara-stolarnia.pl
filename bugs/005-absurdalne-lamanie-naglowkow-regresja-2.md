@@ -2,7 +2,8 @@
 
 > Start pracy: 2026-08-13 13:54
 > Koniec pracy: 2026-08-13 14:07
-> Status: zweryfikowany
+> Status: regresja: 3
+> Regresja: [Nadal występuje przeskok między sekcjami](./005-absurdalne-lamanie-naglowkow-regresja-3.md)
 > Zgłoszenie: „coś to rwie przy scrollowaniu, coś zepsułeś”
 > Raport bazowy: ./005-absurdalne-lamanie-naglowkow.md
 > Klasyfikacja: klient-lokalny

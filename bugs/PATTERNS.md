@@ -48,3 +48,10 @@
 - **Sygnatura:** strona zaczyna szarpać dokładnie przy wejściu animowanych liczników lub podobnej sekcji w viewport, choć same transformacje CSS są kompozytorowe, a test końcowych wartości pozostaje zielony.
 - **Reguła naprawy:** wartości zmieniane co klatkę prowadzić przez `MotionValue`, CSS lub bezpośrednią warstwę DOM poza cyklem renderowania Reacta; test ma zabraniać ręcznego RAF + `setState`, a efekt czasowy chronić nagraniem finalnego compositora.
 - **Raporty:** [Bug 005 regresja 2 — Szarpanie strony podczas scrollowania](./005-absurdalne-lamanie-naglowkow-regresja-2.md)
+
+## Synchroniczny odczyt layoutu w ścieżce scrolla
+
+- **Mechanizm:** callback uruchamiany dla każdej zmiany pozycji scrolla odpytuje geometrię wielu elementów przez `getBoundingClientRect()` i bezwarunkowo kolejkuje aktualizacje stanu, dokładnie gdy przeglądarka powinna składać następną klatkę.
+- **Sygnatura:** geometria sekcji i `scrollHeight` pozostają stałe, ale przewijanie szarpie w pobliżu progów aktywnej nawigacji; profil pokazuje odczyty layoutu w callbacku scrolla, mimo że faktyczna wartość stanu zmienia się tylko kilka razy podczas całej strony.
+- **Reguła naprawy:** mierzyć absolutne offsety poza gorącą ścieżką (po montażu, zmianie danych, `load` i `resize`), podczas scrolla porównywać wyłącznie liczby z cache, a settery przepuszczać przez ref ostatnio zatwierdzonej wartości. Kontrakt źródłowy uzupełnić nagraniem finalnego compositora.
+- **Raporty:** [Bug 005 regresja 3 — Przeskok między sekcjami podczas scrollowania](./005-absurdalne-lamanie-naglowkow-regresja-3.md)
