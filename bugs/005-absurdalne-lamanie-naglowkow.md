@@ -2,8 +2,8 @@
 
 > Start pracy: 2026-08-11 18:32
 > Koniec pracy: 2026-08-11 18:54
-> Status: regresja: 1
-> Regresja: [Zmiana typografii zwęziła desktop i naruszyła zachowywany top bar](./005-absurdalne-lamanie-naglowkow-regresja-1.md)
+> Status: regresja: 2
+> Regresja: [Po naprawie geometrii strona szarpie podczas scrollowania](./005-absurdalne-lamanie-naglowkow-regresja-2.md)
 > Zgłoszenie: „co to kurwa jest? jak to przechodzi jaką kolwiek kontrole jakości?” ([zrzut sekcji galerii](assets/005-absurdalne-lamanie-naglowkow/before-gallery.png))
 > Uzupełnienie 1: „czemu tu jest taka dziura?” ([zrzut sekcji o miejscu](assets/005-absurdalne-lamanie-naglowkow/before-story.png))
 > Uzupełnienie 2: „wszędzie te nagłówki maja jakies rozjebany rytm i za dużo linijek, wtf?”

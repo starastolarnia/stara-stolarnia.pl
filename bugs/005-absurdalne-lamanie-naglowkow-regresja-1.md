@@ -2,7 +2,8 @@
 
 > Start pracy: 2026-08-12 15:58
 > Koniec pracy: 2026-08-12 16:17
-> Status: zweryfikowany
+> Status: regresja: 2
+> Regresja: [Po tej zmianie strona szarpie podczas scrollowania](./005-absurdalne-lamanie-naglowkow-regresja-2.md)
 > Zgłoszenie: „font na h2 nagłówków sekcji zrób na 3.1rem a linehieght na 1.21 w top barze zachowaj poprzednie fonty zarówno w menu jak i w logo, dodatkowo wszystkie <p> zrób o 2px większy miałeś podmienić fonty, a zepsułeś też układ strony kolumny, szerokość sekcji etc, troche tam jest teraz za ciasno na desktopie. - mówie o desktop reszte dostosuj Na screenshot widzisz jak to się animuje zrób to też u nas, dodaj jeszcze sekcje ze zrobili ponad: 120 wesel, 300 komunii, 60 imprez firmowych, 50 imprez rodzinnych dodaj to też jako takie animowane” ([referencja animacji i sekcji statystyk](assets/005-absurdalne-lamanie-naglowkow-regresja-1/reference-track-record.png))
 > Raport bazowy: ./005-absurdalne-lamanie-naglowkow.md
 > Klasyfikacja: klient-lokalny

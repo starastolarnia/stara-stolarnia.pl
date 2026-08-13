@@ -41,3 +41,10 @@
 - **Sygnatura:** użytkownik widzi powrót wcześniej naprawionego objawu, podczas gdy historyczny test nadal przechodzi; diff pokazuje równoległą zmianę wartości w kodzie i w oczekiwaniu testu bez udokumentowanej zmiany kontraktu.
 - **Reguła naprawy:** oczekiwania wiązać z kryterium akceptacji lub pomiarem finalnego UI, a zmianę historycznego kontraktu dopuszczać wyłącznie z jawną notą w raporcie. Przy regresji najpierw przywrócić asercję zatwierdzonego zachowania i potwierdzić uczciwe RED.
 - **Raporty:** [Bug 005 regresja 1 — Zwężony desktop po zmianie typografii](./005-absurdalne-lamanie-naglowkow-regresja-1.md)
+
+## Animacja klatkowa zapisana w stanie Reacta
+
+- **Mechanizm:** kilka równoległych animacji uruchamia własne pętle `requestAnimationFrame` i zapisuje każdą klatkę przez `setState`, wymuszając render komponentu w chwili aktywnego scrollowania.
+- **Sygnatura:** strona zaczyna szarpać dokładnie przy wejściu animowanych liczników lub podobnej sekcji w viewport, choć same transformacje CSS są kompozytorowe, a test końcowych wartości pozostaje zielony.
+- **Reguła naprawy:** wartości zmieniane co klatkę prowadzić przez `MotionValue`, CSS lub bezpośrednią warstwę DOM poza cyklem renderowania Reacta; test ma zabraniać ręcznego RAF + `setState`, a efekt czasowy chronić nagraniem finalnego compositora.
+- **Raporty:** [Bug 005 regresja 2 — Szarpanie strony podczas scrollowania](./005-absurdalne-lamanie-naglowkow-regresja-2.md)
