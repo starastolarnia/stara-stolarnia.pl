@@ -3,6 +3,7 @@
 > Start pracy: 2026-08-11 18:33
 > Koniec pracy: 2026-08-11 18:54
 > Status: zweryfikowany
+> Regresja: [Dropdown języka nadal ma inną geometrię i aktywny znacznik niż dropdown wydarzeń](./006-nieczytelny-dropdown-regresja-1.md)
 > Zgłoszenie: „menu dropdown ma za duża przeźroczystość jest nieczytelen i musi być margin między elementami np na 2px”
 > Klasyfikacja: klient-lokalny
 > Rodzaj dowodu: wizualny-statyczny
@@ -10,6 +11,8 @@
 > Commit builda nagrania przed: —
 > Commit builda nagrania po: —
 > Wynik obserwacji compositora: —
+
+> Zamknięcie regresji 1: historyczne AC-4 zostało jawnie zastąpione nowym wymaganiem użytkownika, aby oba panele korzystały z identycznego zaokrąglenia; pozostałe kryteria bazowego raportu nadal obowiązują.
 
 ## TL;DR
 

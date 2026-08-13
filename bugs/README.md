@@ -14,4 +14,6 @@ Generowany z nagłówków raportów — nie edytuj ręcznie. Regeneracja: patrz 
 | [Bug 005 regresja 4 — Nadal rwące przewijanie między sekcjami](./005-absurdalne-lamanie-naglowkow-regresja-4.md) | regresja: 5 | klient-lokalny |
 | [Bug 005 regresja 5 — scroll nadal rwie](./005-absurdalne-lamanie-naglowkow-regresja-5.md) | zablokowany: brak dowodu końcowego compositora | klient-lokalny |
 | [Bug 005 — Absurdalne łamanie nagłówków](./005-absurdalne-lamanie-naglowkow.md) | regresja: 5 | klient-lokalny |
+| [Bug 006 regresja 1 — Niespójny dropdown języka](./006-nieczytelny-dropdown-regresja-1.md) | zweryfikowany | klient-lokalny |
 | [Bug 006 — Nieczytelny dropdown](./006-nieczytelny-dropdown.md) | zweryfikowany | klient-lokalny |
+| [Bug 007 — Miganie i błędna nawigacja galerii](./007-miganie-i-bledna-nawigacja-galerii.md) | zweryfikowany | klient-lokalny |
