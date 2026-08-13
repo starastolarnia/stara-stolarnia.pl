@@ -82,7 +82,13 @@ Do `components/event-switcher.test.mjs` dodać kontrakt blokujący powrót zagni
 - Karta Chrome sfinalizowana bez zachowanych kart, a tymczasowy viewport 1582×1074/1024×768/390×844 zresetowany.
 - Robocze katalogi 202 klatek, 8 arkuszy czasowych, 2 arkusze kontaktowe i ślad vidstab usunięte z `bugs/assets/005-absurdalne-lamanie-naglowkow-regresja-4/`; katalog zmniejszony z 92 MB do 31 MB.
 - Ignorowane nagrania `user-report.mov` i `after-browser.mov` (łącznie 31 MB) zachowane do 2026-08-18 20:18 zgodnie z pięciodniową retencją dowodu.
-- Worktree `/Users/gmm/tmp/codex/bug-005-regresja-4` oraz branch `bug/005-absurdalne-lamanie-naglowkow-regresja-4` usunąć po potwierdzeniu taga i commita raportu; branch SHA przed usunięciem: `eb7692d3010eb97809d25744d11f0350dc9a998b`.
+- Worktree `/Users/gmm/tmp/codex/bug-005-regresja-4` (630 MB) usunięty przez `git worktree remove`; branch `bug/005-absurdalne-lamanie-naglowkow-regresja-4` usunięty po potwierdzeniu identycznego patch-id `28c19dfb6aae72fa910511fbef5ef76989c99368`. Branch SHA przed usunięciem: `eb7692d3010eb97809d25744d11f0350dc9a998b`; `git worktree prune` wykonany, pozostał tylko główny worktree.
+- Globalny sweep `/Users/gmm/tmp`: 227 katalogów `TemporaryDirectory.*`, 0 z całym drzewem starszym niż 4 h; `screenshot*.jpg`: 0. Wykryto 11 socketów, 8 starszych niż 4 h: 7 aktywnych według `lsof` zachowano, 1 nieużywany `vscode-ah-89805ef1000e/Qf5Rn_wRLBpln2fGNP-6bg.sock` usunięto (0 B).
+- Dwa taskowe logi ffmpeg spod `/tmp/bug005-*` oraz bieżący log paniki Next usunięto; dodatkowo usunięto jeden nieużywany log paniki Next z 2026-08-10 po sprawdzeniu `lsof`. Rozpoznawalnych artefaktów `bug*.mp4/png/jpg`, `bug*.mov` lub `codex-*` bezpośrednio w `/tmp`: 0.
+- Retencja `bugs/assets`: 10 katalogów sprawdzonych, 0 terminalnych dowodów starszych niż pięć dni, 0 usuniętych. Bieżące dwa MOV pozostają przez wymagane pięć dni.
+- Dwa poprzednie numery: `/Users/gmm/tmp/codex/bug-003` nie istnieje, a raport 003 jest zweryfikowany; `/Users/gmm/tmp/codex/bug-004` ma 15 MB i został zachowany, bo raport 004 nadal ma status `test czerwony`.
+- Obce katalogi `/Users/gmm/tmp/codex/menimals-appstore-1.0.2-screenshots` (19 MB), `task-testflight-1.0.5` (3,1 MB) oraz `task-testflight-1.0.5-1286-release-qa` (7,7 GB) zachowano: nie należą do tego repozytorium i brak prawa do usunięcia niedostarczonej pracy.
+- Xcode/XcodeBuildMCP nie były używane. Audyt końcowy: `/Users/gmm/tmp` 8,0 GB, `/Users/gmm/.codex` 23 GB, globalny `DerivedData` 3,8 GB; wolne miejsce 31 GiB (93% zajęte).
 
 ## Dowód końcowego compositora
 
