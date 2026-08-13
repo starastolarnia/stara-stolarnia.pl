@@ -2,8 +2,8 @@
 
 > Start pracy: 2026-08-11 18:32
 > Koniec pracy: 2026-08-11 18:54
-> Status: regresja: 3
-> Regresja: [Po dwóch naprawach nadal występuje przeskok między sekcjami](./005-absurdalne-lamanie-naglowkow-regresja-3.md)
+> Status: regresja: 4
+> Regresja: [Po trzech naprawach nagranie nadal pokazuje rwące przewijanie](./005-absurdalne-lamanie-naglowkow-regresja-4.md)
 > Zgłoszenie: „co to kurwa jest? jak to przechodzi jaką kolwiek kontrole jakości?” ([zrzut sekcji galerii](assets/005-absurdalne-lamanie-naglowkow/before-gallery.png))
 > Uzupełnienie 1: „czemu tu jest taka dziura?” ([zrzut sekcji o miejscu](assets/005-absurdalne-lamanie-naglowkow/before-story.png))
 > Uzupełnienie 2: „wszędzie te nagłówki maja jakies rozjebany rytm i za dużo linijek, wtf?”

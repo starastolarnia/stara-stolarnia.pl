@@ -2,7 +2,8 @@
 
 > Start pracy: 2026-08-13 19:21
 > Koniec pracy: 2026-08-13 19:49
-> Status: zweryfikowany
+> Status: regresja: 4
+> Regresja: [Nagranie użytkownika nadal pokazuje rwące przewijanie](./005-absurdalne-lamanie-naglowkow-regresja-4.md)
 > Zgłoszenie: „i tak przy scrollu między sekcjami jest przeskok coś masz zwalone jest jakiś rerender i to nie jest super smooth scroll”
 > Uzupełnienie 1: „dodatkowo jak zmienie impreze to powinno mnie animacją przescrollować do góry”
 > Raport bazowy: ./005-absurdalne-lamanie-naglowkow.md

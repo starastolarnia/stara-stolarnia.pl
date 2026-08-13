@@ -55,3 +55,10 @@
 - **Sygnatura:** geometria sekcji i `scrollHeight` pozostają stałe, ale przewijanie szarpie w pobliżu progów aktywnej nawigacji; profil pokazuje odczyty layoutu w callbacku scrolla, mimo że faktyczna wartość stanu zmienia się tylko kilka razy podczas całej strony.
 - **Reguła naprawy:** mierzyć absolutne offsety poza gorącą ścieżką (po montażu, zmianie danych, `load` i `resize`), podczas scrolla porównywać wyłącznie liczby z cache, a settery przepuszczać przez ref ostatnio zatwierdzonej wartości. Kontrakt źródłowy uzupełnić nagraniem finalnego compositora.
 - **Raporty:** [Bug 005 regresja 3 — Przeskok między sekcjami podczas scrollowania](./005-absurdalne-lamanie-naglowkow-regresja-3.md)
+
+## Zagnieżdżone rozmycia w stałej warstwie nad scrollem
+
+- **Mechanizm:** duży element `position: fixed` rozmywa tło całego top bara, a kilka jego półprzezroczystych dzieci nakłada własne `backdrop-filter`; podczas każdej klatki scrolla compositor ponownie rasteruje ten sam zmienny obszar dla każdej warstwy.
+- **Sygnatura:** główny wątek i geometria pozostają stabilne, ale nagranie finalnego obrazu gubi ciągłość podczas ruchu; koszt występuje także po ponownym przejściu przez już załadowane sekcje.
+- **Reguła naprawy:** na stałej powierzchni zachować jeden wspólny blur, a zamknięte kontrolki budować kolorem, obramowaniem i cieniem bez kolejnych backdropów; chronić liczbę warstw testem CSS i weryfikować rzeczywistym gestem na finalnym compositorze.
+- **Raporty:** [Bug 005 regresja 4 — Nadal rwące przewijanie między sekcjami](./005-absurdalne-lamanie-naglowkow-regresja-4.md)
