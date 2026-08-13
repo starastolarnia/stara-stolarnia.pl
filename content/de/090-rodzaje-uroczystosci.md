@@ -32,7 +32,7 @@ profiles:
         - value: ebenerdig
           label: bequem für jede Generation
       body:
-        - Die Erstkommunion ist ein besonderer Moment für Euer Kind und zugleich einer der Tage, an denen die ganze Familie an einem Tisch zusammenkommt. Die Stara Stolarnia gibt diesem Anlass einen festlichen, aber ungezwungenen Rahmen — mit einem hellen Holzinterieur und ruhiger Lage direkt am Wald.
+        - Die Erstkommunion ist ein besonderer Moment für Euer Kind und zugleich einer der Tage, an denen die ganze Familie an einem Tisch zusammenkommt. Die Stara Stolarnia gibt diesem Anlass einen festlichen, aber ungezwungenen Rahmen mit einem hellen Holzinterieur und ruhiger Lage direkt am Wald.
         - Im Mai lädt der Garten nach dem Essen zu Familienfotos, frischer Luft und Spielen ein. Abseits einer stark befahrenen Straße haben Kinder mehr Freiraum, während die Erwachsenen ihre gemeinsame Zeit genießen.
     features:
       - id: sala
@@ -44,10 +44,10 @@ profiles:
         reverse: false
         body:
           - Die Tische richten wir nach Eurer Gästezahl und dem familiären Charakter des Tages aus. Holz, große Fenster und eine zurückhaltende Dekoration schaffen einen festlichen Rahmen, ohne das Kommunionskind aus dem Mittelpunkt zu rücken.
-          - Es gibt genügend Platz für das gemeinsame Essen, die Torte, Fotos und entspannte Gespräche — ohne Enge und ohne Eile.
+          - Es gibt genügend Platz für das gemeinsame Essen, die Torte, Fotos und entspannte Gespräche, ohne Enge und ohne Eile.
       - id: dzieci
         eyebrow: Für die jüngeren Gäste
-        title: Nach dem Essen geht es in den Garten — einfach raus und spielen.
+        title: "Nach dem Essen geht es in den Garten: einfach raus und spielen."
         image: /images/exterior.webp
         imageAlt: Garten und grüne Umgebung der Stara Stolarnia
         imagePosition: center
@@ -180,7 +180,7 @@ profiles:
       id: oferta
       eyebrow: Passend zu Eurem Unternehmen
       title: Ein Team, ein Plan und kein fertiges Standardpaket.
-      lead: Den Umfang stimmen wir individuell ab — von Tischaufteilung und Menü bis zum Rhythmus des offiziellen Teils und der anschließenden Feier.
+      lead: Den Umfang stimmen wir individuell ab, von Tischaufteilung und Menü bis zum Rhythmus des offiziellen Teils und der anschließenden Feier.
       ctaLabel: Über das Firmenevent sprechen
       ctaHref: "#kontakt"
       points:
@@ -200,7 +200,7 @@ profiles:
       id: galeria
       eyebrow: Ein Firmenevent nach Eurem Plan
       title: Offiziell, ungezwungen oder beides an einem Abend.
-      lead: Der Raum verändert seinen Charakter mit dem Programm — von gedeckten Tischen und Auszeichnungen bis zu Bar, Musik und entspannter gemeinsamer Zeit.
+      lead: Der Raum verändert seinen Charakter mit dem Programm, von gedeckten Tischen und Auszeichnungen bis zu Bar, Musik und entspannter gemeinsamer Zeit.
       images:
         - src: /images/event-corporate.webp
           alt: Geräumiger Saal, vorbereitet für eine Firmenveranstaltung
@@ -244,7 +244,7 @@ profiles:
     story:
       id: miejsce
       eyebrow: Familienfeiern und Familientreffen
-      title: Ein Ort für Eure Liebsten — ganz gleich, was Euch zusammenführt.
+      title: Ein Ort für Eure Liebsten, ganz gleich, was Euch zusammenführt.
       quote: Jedes Familientreffen hat seinen eigenen Ton. Wir stimmen Raum, Menü und Service darauf ab.
       stats:
         - value: bis zu 180
@@ -259,7 +259,7 @@ profiles:
     features:
       - id: rodzinny-stol
         eyebrow: Freudige Anlässe
-        title: Taufe, Geburtstag und Jubiläum — mit Nähe und gutem Essen im Mittelpunkt.
+        title: Taufe, Geburtstag und Jubiläum mit Nähe und gutem Essen im Mittelpunkt.
         image: /images/event-family.webp
         imageAlt: Persönlich gedeckte Tische für eine Familienfeier
         imagePosition: center
@@ -298,7 +298,7 @@ profiles:
         - title: Taufen
           text: Persönliche oder größere Feiern mit Platz für mehrere Generationen und einem ruhigen Rahmen für den Familientag.
         - title: Runde Geburtstage
-          text: Festliches Essen, Torte, Musik und Raum für Gespräche oder Tanz — passend zum Geburtstagskind.
+          text: Festliches Essen, Torte, Musik und Raum für Gespräche oder Tanz, passend zum Geburtstagskind.
         - title: Hochzeitstage und Jubiläen
           text: Vom Familienessen bis zum größeren Jubiläum, das die Liebsten wieder an einem Tisch versammelt.
         - title: Trauerfeiern und Abschiedstreffen

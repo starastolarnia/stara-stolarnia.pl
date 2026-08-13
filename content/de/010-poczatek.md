@@ -9,7 +9,7 @@ events:
     title: Hier beginnt alles ganz natürlich.
     lead: >-
       Warme Holzinterieurs, Licht, das durch große Fenster fällt, und der Wald
-      direkt vor der Tür. Ein Hochzeitsort mit eigenem Charakter – nah bei
+      direkt vor der Tür. Ein Hochzeitsort mit eigenem Charakter, nah bei
       Breslau und doch weit weg vom Trubel der Stadt.
     primaryLabel: Hochzeitstermin anfragen
     desktopImage: /images/hero-forest.webp
@@ -48,7 +48,7 @@ events:
     title: Ein Ort für die Familie.
     lead: >-
       Taufe, runder Geburtstag, Hochzeitstag oder ein stilles Beisammensein nach
-      dem Abschied. Wir stimmen den Rahmen auf den Ton des Tages ab – freudig,
+      dem Abschied. Wir stimmen den Rahmen auf den Ton des Tages ab: freudig,
       festlich oder diskret.
     primaryLabel: Familientreffen anfragen
     desktopImage: /images/event-family.webp

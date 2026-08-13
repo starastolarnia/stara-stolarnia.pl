@@ -7,6 +7,10 @@ menuOpenLabel: Open menu
 menuCloseLabel: Close menu
 navigationLabel: Main navigation
 languageLabel: Change language
+galleryOpenLabel: Open image in full screen
+galleryCloseLabel: Close gallery
+galleryPreviousLabel: Previous image
+galleryNextLabel: Next image
 updatedLabel: Last updated
 metaTitle: Stara Stolarnia | woodland wedding venue near Wrocław
 metaDescription: An intimate timber wedding venue in Byków near Wrocław. Celebrations for up to 180 guests, ceremonies in the forest and warm, family-run hospitality.

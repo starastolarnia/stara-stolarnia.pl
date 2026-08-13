@@ -358,29 +358,32 @@ h2 {
 .event-dropdown__trigger[aria-expanded=true] svg {
     transform: rotate(180deg)
 }
-.event-dropdown__trigger:focus-visible,.event-dropdown__option:focus-visible {
+.event-dropdown__trigger:focus-visible,.dropdown-menu__option:focus-visible {
     outline-offset: 2px;
     outline: 2px solid
 }
 .event-dropdown__menu,.language-switcher__menu {
     color: var(--ink);
+    --dropdown-menu-radius: .875rem;
+    position: absolute;
+    top: calc(100% + clamp(.5rem,2vw,1rem))
+}
+.dropdown-menu__surface {
+    border-radius: var(--dropdown-menu-radius);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
     background: #fffffff2;
     padding: clamp(.35rem,1.6vw,.5rem);
     gap: 2px;
     display: grid;
-    position: absolute;
-    top: calc(100% + clamp(.5rem,2vw,1rem));
     overflow: hidden;
     box-shadow: 0 .75rem 2.5rem #10161012
 }
 .event-dropdown__menu {
     width: max(100%,13rem);
-    border-radius: .875rem;
     left: 0
 }
-.event-dropdown__option,.language-switcher__menu a {
+.dropdown-menu__option {
     width: 100%;
     min-height: clamp(2.5rem,11vw,3rem);
     color: inherit;
@@ -388,18 +391,16 @@ h2 {
     cursor: pointer;
     background: 0 0;
     border: 0;
+    border-radius: var(--dropdown-menu-radius);
     padding: clamp(.55rem,2.5vw,.75rem) clamp(.8rem,3.5vw,1.1875rem);
     font-size: var(--header-control-font-size);
     font-weight: 650
 }
-.event-dropdown__option {
-    border-radius: .875rem
-}
-.event-dropdown__option:hover,.language-switcher__menu a:hover,.language-switcher__menu a:focus-visible {
+.dropdown-menu__option:hover,.dropdown-menu__option:focus-visible {
     color: var(--forest);
     background: #33463a0a
 }
-.event-dropdown__option.event-dropdown__option--active,.language-switcher__menu .language-switcher__option--active {
+.dropdown-menu__option.dropdown-menu__option--active {
     color: var(--forest);
     background: #33463a12
 }
@@ -428,26 +429,16 @@ h2 {
 }
 .language-switcher__menu {
     width: 10.5rem;
-    border-radius: 0;
+    --dropdown-menu-radius: calc(var(--header-height)/2);
     right: 0;
     left: auto
 }
-.language-switcher__menu a {
-    border-radius: 0;
+.language-switcher__option {
     letter-spacing: .04em;
-    grid-template-columns: 1.5rem 1fr .4rem;
+    grid-template-columns: 1.5rem 1fr;
     align-items: center;
     gap: .55rem;
     display: grid
-}
-.language-switcher__menu i {
-    background: 0 0;
-    border-radius: 50%;
-    width: .28rem;
-    height: .28rem
-}
-.language-switcher__option--active i {
-    background: var(--forest)
 }
 .menu-button {
     z-index: 2;
@@ -490,10 +481,7 @@ h2 {
 }
 .site-header__mobile-event-selector .event-dropdown__menu {
     width: min(15rem,calc(100vw - 1rem));
-    border-radius: calc(var(--header-height)/2)
-}
-.site-header__mobile-event-selector .event-dropdown__option {
-    border-radius: calc(var(--header-height)/2)
+    --dropdown-menu-radius: calc(var(--header-height)/2)
 }
 .mobile-nav {
     z-index: 1;
@@ -905,7 +893,8 @@ h2 {
 .feature__image {
     object-fit: cover;
     width: 100%;
-    height: 100%
+    height: 100%;
+    will-change: transform
 }
 .feature__content h2 {
     margin-top: 1.15rem
@@ -984,7 +973,9 @@ h2 {
 .offer-point>span {
     color: var(--ink-soft);
     letter-spacing: .08em;
-    font-size: .58rem
+    font-size: 1rem;
+    font-weight: 900;
+    opacity: .5
 }
 .offer-point h3 {
     color: var(--forest);
@@ -1014,23 +1005,111 @@ h2 {
     display: grid
 }
 .gallery__item {
+    color: inherit;
+    cursor: zoom-in;
     background: var(--sand);
+    border: 0;
+    padding: 0;
     height: 118vw;
     max-height: 37rem;
+    display: block;
     overflow: hidden
 }
 .gallery__item img {
     object-fit: cover;
     width: 100%;
     height: 100%;
-    transition: transform .9s var(--ease)
-}
-.gallery__item:hover img {
-    transform: scale(1.025)
+    will-change: transform
 }
 .gallery__item--2,.gallery__item--4 {
     height: 76vw;
     max-height: 27rem
+}
+.gallery-lightbox {
+    z-index: 100;
+    background: #101610e8;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    place-items: center;
+    padding: clamp(.75rem,3vw,2rem);
+    display: grid;
+    position: fixed;
+    inset: 0
+}
+.gallery-lightbox__stage {
+    width: min(94vw,96rem);
+    height: min(88svh,60rem);
+    place-items: center;
+    display: grid;
+    position: relative
+}
+.gallery-lightbox__image {
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto
+}
+.gallery-lightbox__control {
+    z-index: 2;
+    width: clamp(2.75rem,10vw,3.4rem);
+    height: clamp(2.75rem,10vw,3.4rem);
+    color: #fff;
+    cursor: pointer;
+    background: #101610a6;
+    border: 1px solid #ffffff42;
+    border-radius: 50%;
+    place-items: center;
+    transition: background .2s ease,border-color .2s ease,transform .2s var(--ease);
+    display: grid;
+    position: absolute
+}
+.gallery-lightbox__control:hover {
+    background: #101610d9;
+    border-color: #ffffff8a;
+    transform: scale(1.04)
+}
+.gallery-lightbox__control:focus-visible {
+    outline-offset: 3px;
+    outline: 2px solid var(--track-record-gold)
+}
+.gallery-lightbox__control svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5px;
+    width: 1.25rem
+}
+.gallery-lightbox__close {
+    top: 0;
+    right: 0
+}
+.gallery-lightbox__previous {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%)
+}
+.gallery-lightbox__next {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%)
+}
+.gallery-lightbox__previous:hover,.gallery-lightbox__next:hover {
+    transform: translateY(-50%) scale(1.04)
+}
+.gallery-lightbox__counter {
+    color: #fff;
+    letter-spacing: .12em;
+    background: #101610a6;
+    border-radius: 999px;
+    padding: .55rem .8rem;
+    font-size: .68rem;
+    font-weight: 700;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%)
 }
 .track-record {
     color: #fffefbed;
@@ -1096,7 +1175,8 @@ h2 {
 .contact__image img {
     object-fit: cover;
     width: 100%;
-    height: 100%
+    height: 100%;
+    will-change: transform
 }
 .contact__panel {
     min-width: 0
@@ -1132,6 +1212,7 @@ h2 {
 .contact__details a:not(.text-link),.contact__details p {
     font-family: var(--font-sans);
     font-size: clamp(1.3rem, 4vw, 1.55rem);
+    font-weight: 900;
     line-height: 1.2
 }
 .contact__details p {
@@ -1470,6 +1551,9 @@ h2 {
     }
     .site-header__mobile-event-selector {
         display: none
+    }
+    .language-switcher__menu {
+        --dropdown-menu-radius: .875rem
     }
     .site-header__desktop-event-selector {
         display: block

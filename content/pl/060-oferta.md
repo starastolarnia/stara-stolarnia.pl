@@ -2,7 +2,7 @@
 id: oferta
 eyebrow: Wasze przyjęcie
 title: Wszystko, czego potrzeba. Bez niepotrzebnego komplikowania.
-lead: Każde wesele układamy indywidualnie. Poniżej znajdziecie najważniejsze elementy, które możemy połączyć w spójną całość. Szczegółową ofertę przygotujemy po rozmowie.
+lead: Każde wesele układamy indywidualnie. Tutaj prezentujemy najważniejsze elementy, które możemy połączyć w spójną całość. Szczegółową ofertę przygotujemy po rozmowie.
 ctaLabel: Porozmawiajmy o Waszym weselu
 ctaHref: "#kontakt"
 points:

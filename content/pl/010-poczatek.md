@@ -48,7 +48,7 @@ events:
     title: Miejsce dla bliskich.
     lead: >-
       Chrzciny, okrągłe urodziny, rocznice ślubu, ale także spokojne spotkanie
-      po pożegnaniu. Dopasujemy oprawę do charakteru dnia — radośnie, uroczyście
+      po pożegnaniu. Dopasujemy oprawę do charakteru dnia: radośnie, uroczyście
       albo dyskretnie.
     primaryLabel: Zapytaj o rodzinne spotkanie
     desktopImage: /images/event-family.webp

@@ -2,7 +2,7 @@
 id: oferta
 eyebrow: Your celebration
 title: Everything you need. Nothing needlessly complicated.
-lead: Every wedding is tailored to the couple. Below are the essential elements we can bring together into one seamless celebration. We will prepare a detailed proposal after getting to know your plans.
+lead: Every wedding is tailored to the couple. Here we present the essential elements we can bring together into one seamless celebration. We will prepare a detailed proposal after getting to know your plans.
 ctaLabel: Tell us about your wedding
 ctaHref: "#kontakt"
 points:

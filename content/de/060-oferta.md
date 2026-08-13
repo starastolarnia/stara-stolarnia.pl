@@ -2,7 +2,7 @@
 id: oferta
 eyebrow: Eure Feier
 title: Alles, was es braucht. Ohne unnötige Komplikationen.
-lead: Jede Hochzeit gestalten wir individuell. Hier findet Ihr die wichtigsten Bausteine, die wir zu einem stimmigen Ganzen verbinden können. Ein ausführliches Angebot erstellen wir nach einem persönlichen Gespräch.
+lead: Jede Hochzeit gestalten wir individuell. Hier stellen wir Euch die wichtigsten Bausteine vor, die wir zu einem stimmigen Ganzen verbinden können. Ein ausführliches Angebot erstellen wir nach einem persönlichen Gespräch.
 ctaLabel: Erzählt uns von Eurer Hochzeit
 ctaHref: "#kontakt"
 points:

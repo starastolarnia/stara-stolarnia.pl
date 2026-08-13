@@ -23,19 +23,19 @@ const originalWeddingCopy = {
     eyebrow: "A wedding venue at the edge of the forest",
     title: "Where everything begins naturally.",
     lead:
-      "Timber interiors, daylight streaming through generous windows and the forest just beyond the door. A wedding venue with a character of its own—close to Wrocław, yet far from the rush of the city.",
+      "Timber interiors, daylight streaming through generous windows and the forest just beyond the door. A wedding venue with a character of its own, close to Wrocław yet far from the rush of the city.",
   },
   de: {
     eyebrow: "Hochzeitslocation am Waldrand",
     title: "Hier beginnt alles ganz natürlich.",
     lead:
-      "Warme Holzinterieurs, Licht, das durch große Fenster fällt, und der Wald direkt vor der Tür. Ein Hochzeitsort mit eigenem Charakter – nah bei Breslau und doch weit weg vom Trubel der Stadt.",
+      "Warme Holzinterieurs, Licht, das durch große Fenster fällt, und der Wald direkt vor der Tür. Ein Hochzeitsort mit eigenem Charakter, nah bei Breslau und doch weit weg vom Trubel der Stadt.",
   },
   uk: {
     eyebrow: "Весільна зала на узліссі",
     title: "Тут усе починається природно.",
     lead:
-      "Дерев’яний інтер’єр, світло з великих вікон і ліс одразу за порогом. Весільний простір із власним характером — поруч із Вроцлавом і далеко від міського гамору.",
+      "Дерев’яний інтер’єр, світло з великих вікон і ліс одразу за порогом. Весільний простір із власним характером, поруч із Вроцлавом і далеко від міського гамору.",
   },
 };
 const readHero = (locale) => {
@@ -54,6 +54,10 @@ const readEventProfiles = (locale) => {
 
   return matter(source).data.profiles;
 };
+const readContentData = (locale, fileName) =>
+  matter(
+    readFileSync(new URL(`../content/${locale}/${fileName}`, import.meta.url), "utf8"),
+  ).data;
 const getValueShape = (value) => {
   if (Array.isArray(value)) {
     return value.map(getValueShape);
@@ -165,6 +169,24 @@ test("weddings preserve the original hero copy in every locale", () => {
   }
 });
 
+test("localized content avoids long dashes and keeps the corrected positional copy", () => {
+  for (const locale of locales) {
+    const localeDirectory = new URL(`../content/${locale}/`, import.meta.url);
+
+    for (const file of readdirSync(localeDirectory).filter((name) => name.endsWith(".md"))) {
+      const source = readFileSync(new URL(file, localeDirectory), "utf8");
+
+      assert.doesNotMatch(source, /[—–]/u, `${locale}/${file} should not contain a long dash`);
+    }
+  }
+
+  assert.equal(readContentData("pl", "020-o-miejscu.md").stats[1].label, "pokoi na miejscu");
+  assert.match(readContentData("pl", "060-oferta.md").lead, /Tutaj prezentujemy/u);
+  assert.match(readContentData("en", "060-oferta.md").lead, /Here we present/u);
+  assert.match(readContentData("de", "060-oferta.md").lead, /Hier stellen wir Euch/u);
+  assert.match(readContentData("uk", "060-oferta.md").lead, /Тут ми представляємо/u);
+});
+
 test("the event selector uses one draggable CSS capsule inside the header surface", () => {
   const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
   const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
@@ -239,7 +261,7 @@ test("section heading measures follow their grid columns instead of arbitrary ch
   assert.match(styles, /\.offer__intro h2\s*\{[^}]*max-width:\s*28ch;/s);
 });
 
-test("both dropdowns share materials and motion while keeping their approved corner treatment", () => {
+test("both dropdowns share one approved menu surface and motion", () => {
   const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
   const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
 
@@ -248,20 +270,35 @@ test("both dropdowns share materials and motion while keeping their approved cor
   assert.equal(component.match(/exit=\{FLOATING_DROPDOWN_EXIT\}/g)?.length, 2);
   assert.equal(component.match(/transition=\{FLOATING_DROPDOWN_TRANSITION\}/g)?.length, 2);
   assert.match(component, /<motion\.nav[\s\S]*?className="language-switcher__menu"/);
-  assert.match(styles, /\.event-dropdown__menu,\.language-switcher__menu\s*\{[^}]*backdrop-filter:\s*blur\(14px\);[^}]*background:\s*#fffffff2;[^}]*padding:\s*clamp\(\.35rem,1\.6vw,\.5rem\);[^}]*gap:\s*2px;[^}]*top:\s*calc\(100% \+ clamp\(\.5rem,2vw,1rem\)\);[^}]*box-shadow:\s*0 \.75rem 2\.5rem #10161012/s);
-  assert.match(styles, /\.event-dropdown__option,\.language-switcher__menu a\s*\{[^}]*min-height:\s*clamp\(2\.5rem,11vw,3rem\);[^}]*padding:\s*clamp\(\.55rem,2\.5vw,\.75rem\) clamp\(\.8rem,3\.5vw,1\.1875rem\);[^}]*font-size:\s*var\(--header-control-font-size\);[^}]*font-weight:\s*650/s);
+  assert.equal(component.match(/<DropdownMenuSurface>/g)?.length, 2);
+  assert.match(styles, /\.dropdown-menu__surface\s*\{[^}]*backdrop-filter:\s*blur\(14px\);[^}]*background:\s*#fffffff2;[^}]*padding:\s*clamp\(\.35rem,1\.6vw,\.5rem\);[^}]*gap:\s*2px;[^}]*box-shadow:\s*0 \.75rem 2\.5rem #10161012/s);
+  assert.match(styles, /\.dropdown-menu__option\s*\{[^}]*min-height:\s*clamp\(2\.5rem,11vw,3rem\);[^}]*padding:\s*clamp\(\.55rem,2\.5vw,\.75rem\) clamp\(\.8rem,3\.5vw,1\.1875rem\);[^}]*font-size:\s*var\(--header-control-font-size\);[^}]*font-weight:\s*650/s);
   assert.match(styles, /\.event-dropdown__trigger-shell\s*\{[^}]*border-radius:\s*\.875rem;/s);
-  assert.match(styles, /\.event-dropdown__menu\s*\{[^}]*border-radius:\s*\.875rem;/s);
-  assert.match(styles, /\.event-dropdown__option\s*\{[^}]*border-radius:\s*\.875rem/s);
-  assert.match(styles, /\.language-switcher__menu\s*\{[^}]*border-radius:\s*0;/s);
-  assert.match(styles, /\.language-switcher__menu a\s*\{[^}]*border-radius:\s*0;/s);
-  assert.match(styles, /\.event-dropdown__option\.event-dropdown__option--active,\.language-switcher__menu \.language-switcher__option--active\s*\{[^}]*background:\s*#33463a12/s);
+  assert.match(styles, /\.event-dropdown__menu,\.language-switcher__menu\s*\{[^}]*--dropdown-menu-radius:\s*\.875rem;[^}]*top:\s*calc\(100% \+ clamp\(\.5rem,2vw,1rem\)\)/s);
+  assert.match(styles, /\.dropdown-menu__surface\s*\{[^}]*border-radius:\s*var\(--dropdown-menu-radius\)/s);
+  assert.match(styles, /\.dropdown-menu__option\.dropdown-menu__option--active\s*\{[^}]*background:\s*#33463a12/s);
+});
+
+test("language dropdown reuses the event menu surface without a separate active marker", () => {
+  const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
+  const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(component, /const DropdownMenuSurface =/);
+  assert.equal(component.match(/<DropdownMenuSurface>/g)?.length, 2);
+  assert.match(component, /className=\{isActive \? "dropdown-menu__option dropdown-menu__option--active" : "dropdown-menu__option"\}/);
+  assert.match(component, /className=\{\s*locale === props\.currentLocale\s*\? "dropdown-menu__option dropdown-menu__option--active language-switcher__option"/s);
+  assert.doesNotMatch(component, /<i aria-hidden="true" \/>/);
+  assert.match(styles, /\.dropdown-menu__surface\s*\{[^}]*border-radius:\s*var\(--dropdown-menu-radius\);[^}]*background:\s*#fffffff2;/s);
+  assert.match(styles, /\.dropdown-menu__option\s*\{[^}]*border-radius:\s*var\(--dropdown-menu-radius\);/s);
+  assert.match(styles, /\.language-switcher__option\s*\{[^}]*grid-template-columns:\s*1\.5rem 1fr;/s);
+  assert.match(styles, /\.language-switcher__menu\s*\{[^}]*--dropdown-menu-radius:\s*calc\(var\(--header-height\)\/2\)/s);
+  assert.match(styles, /@media \(min-width:68rem\)[\s\S]*?\.language-switcher__menu\s*\{[^}]*--dropdown-menu-radius:\s*\.875rem/s);
 });
 
 test("dropdown panels prioritize legibility and two-pixel row separation", () => {
   const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
   const sharedDropdownRule =
-    styles.match(/\.event-dropdown__menu,\.language-switcher__menu\s*\{[^}]*\}/s)?.[0] ?? "";
+    styles.match(/\.dropdown-menu__surface\s*\{[^}]*\}/s)?.[0] ?? "";
   const mobileDropdownRule =
     styles.match(/\.site-header__mobile-event-selector \.event-dropdown__menu\s*\{[^}]*\}/s)?.[0] ??
     "";
@@ -278,7 +315,7 @@ test("reviewed translations avoid known literal calques and colloquial farewell 
 
   assert.doesNotMatch(polishProfiles, /styp/iu);
   assert.doesNotMatch(englishProfiles, /team integration|integration events/iu);
-  assert.doesNotMatch(germanProfiles, /zugänglich für Generationen|ab—/iu);
+  assert.doesNotMatch(germanProfiles, /zugänglich für Generationen/iu);
 });
 
 test("every non-wedding event has a complete, translated page profile", () => {
@@ -509,7 +546,7 @@ test("small screens use a scaled top bar with an event dropdown and a three-line
   assert.match(styles, /--header-control-font-size:\s*clamp\(\.625rem,2\.5vw,\.72rem\);/);
   assert.match(styles, /\.site-header__desktop-event-selector\s*\{[^}]*display:\s*none/s);
   assert.match(styles, /\.site-header__mobile-event-selector \.event-dropdown__trigger-shell\s*\{[^}]*background:\s*transparent;[^}]*border:\s*0;[^}]*border-radius:\s*calc\(var\(--header-height\)\/2\);[^}]*box-shadow:\s*none/s);
-  assert.match(styles, /\.site-header__mobile-event-selector \.event-dropdown__menu\s*\{[^}]*width:\s*min\(15rem,calc\(100vw - 1rem\)\);[^}]*border-radius:\s*calc\(var\(--header-height\)\/2\)/s);
+  assert.match(styles, /\.site-header__mobile-event-selector \.event-dropdown__menu\s*\{[^}]*width:\s*min\(15rem,calc\(100vw - 1rem\)\);[^}]*--dropdown-menu-radius:\s*calc\(var\(--header-height\)\/2\)/s);
   assert.match(styles, /\.site-header--open \.menu-button span:nth-child\(2\)\s*\{[^}]*opacity:\s*0/s);
   assert.match(styles, /@media \(min-width:68rem\)[\s\S]*?\.site-header__mobile-event-selector\s*\{[^}]*display:\s*none[\s\S]*?\.site-header__desktop-event-selector\s*\{[^}]*display:\s*block/s);
 });
@@ -524,7 +561,7 @@ test("the contact section uses an inset balanced layout with a wider headline an
   assert.match(styles, /\.contact__image\s*\{[^}]*aspect-ratio:/s);
   assert.match(styles, /\.contact__details\s*\{[^}]*grid-template-columns:\s*repeat\(3,/s);
   assert.match(styles, /\.contact__details span\s*\{[^}]*font-size:\s*0\.7rem;/s);
-  assert.match(styles, /\.contact__details a:not\(\.text-link\),[\s\S]*?\.contact__details p\s*\{[^}]*font-size:\s*clamp\(1\.3rem, 4vw, 1\.55rem\);/s);
+  assert.match(styles, /\.contact__details a:not\(\.text-link\),[\s\S]*?\.contact__details p\s*\{[^}]*font-size:\s*clamp\(1\.3rem, 4vw, 1\.55rem\);[^}]*font-weight:\s*900;/s);
   assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.contact__details a:not\(\.text-link\),[\s\S]*?font-size:\s*clamp\(1\.2rem,\s*1\.45vw,\s*1\.45rem\);?/s);
   assert.match(styles, /\.contact__details \.text-link\s*\{[^}]*font-size:\s*0\.8rem;/s);
 });
@@ -535,11 +572,34 @@ test("semantic heading scales use the requested desktop values", () => {
   assert.match(styles, /h2\s*\{[^}]*font-size:\s*clamp\([^;]+,\s*3\.1rem\);[^}]*font-weight:\s*700;/s);
   assert.match(styles, /\.hero h1\s*\{[^}]*max-width:\s*min\(18ch,100%\);[^}]*font-size:\s*clamp\(2\.5rem,11vw,3\.5rem\);[^}]*line-height:\s*1\.05/s);
   assert.match(styles, /\.offer-point h3\s*\{[^}]*font-size:\s*1\.24rem;/s);
+  assert.match(styles, /\.offer-point>span\s*\{[^}]*font-size:\s*1rem;[^}]*font-weight:\s*900;[^}]*opacity:\s*\.5/s);
+  assert.match(
+    readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8"),
+    /<p className="eyebrow">\{feature\.eyebrow\}<\/p>/,
+  );
   assert.match(styles, /\.offer__intro h2\s*\{[^}]*max-width:\s*28ch;/s);
   assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?h2\s*\{[^}]*font-size:\s*3\.1rem;[^}]*font-weight:\s*700;[^}]*line-height:\s*1\.21/s);
   assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.hero h1\s*\{[^}]*font-size:\s*3\.5rem;[^}]*line-height:\s*1\.05/s);
   assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.offer-point h3\s*\{[^}]*font-size:\s*1\.52rem;?/s);
   assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.offer__inner\s*\{[^}]*grid-template-columns:\s*minmax\(0,1\.15fr\) minmax\(26rem,\.85fr\);/s);
+});
+
+test("content photos use subtle Motion zoom and gallery images expand into an accessible lightbox", () => {
+  const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
+  const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(component, /const CONTENT_IMAGE_HOVER_SCALE = 1\.035;/);
+  assert.equal(component.match(/whileHover=\{reduceMotion \? undefined : \{ scale: CONTENT_IMAGE_HOVER_SCALE \}\}/g)?.length, 3);
+  assert.match(component, /const GalleryLightbox =/);
+  assert.match(component, /role="dialog"\s*aria-modal="true"/s);
+  assert.match(component, /layoutId=\{getGalleryImageLayoutId\(item\.src\)\}/);
+  assert.match(component, /layoutId=\{getGalleryImageLayoutId\(image\.src\)\}/);
+  assert.match(component, /event\.key === "Escape"/);
+  assert.match(component, /event\.key === "ArrowLeft"/);
+  assert.match(component, /event\.key === "ArrowRight"/);
+  assert.match(styles, /\.gallery-lightbox\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*0/s);
+  assert.match(styles, /\.gallery__item\s*\{[^}]*cursor:\s*zoom-in;/s);
+  assert.doesNotMatch(component, /className="hero__media"[\s\S]{0,300}whileHover=/s);
 });
 
 test("the typography system keeps the restored top-bar fonts and Central European coverage", () => {

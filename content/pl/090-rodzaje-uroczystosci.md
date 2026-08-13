@@ -32,7 +32,7 @@ profiles:
         - value: parter
           label: wygodny dla całej rodziny
       body:
-        - Pierwsza Komunia to ważne przeżycie dla dziecka, ale też dzień, w którym przy jednym stole spotyka się cała rodzina. Stara Stolarnia daje mu odświętną oprawę bez nadmiaru formalności — w jasnym, drewnianym wnętrzu i spokojnym otoczeniu na skraju lasu.
+        - Pierwsza Komunia to ważne przeżycie dla dziecka, ale też dzień, w którym przy jednym stole spotyka się cała rodzina. Stara Stolarnia daje mu odświętną oprawę bez nadmiaru formalności, w jasnym, drewnianym wnętrzu i spokojnym otoczeniu na skraju lasu.
         - Maj sprzyja wyjściu do ogrodu, wspólnym zdjęciom i zabawie na świeżym powietrzu. Z dala od ruchliwej drogi dzieci mają więcej swobody, a dorośli mogą naprawdę pobyć razem.
     features:
       - id: sala
@@ -44,7 +44,7 @@ profiles:
         reverse: false
         body:
           - Układ stołów dopasujemy do liczby Gości i rodzinnego charakteru spotkania. Naturalne drewno, duże okna i spokojna dekoracja tworzą odświętne tło, które nie przytłacza najważniejszej osoby tego dnia.
-          - Jest miejsce na wspólny obiad, tort, zdjęcia i swobodne rozmowy — bez ścisku i bez pośpiechu.
+          - Jest miejsce na wspólny obiad, tort, zdjęcia i swobodne rozmowy, bez ścisku i bez pośpiechu.
       - id: dzieci
         eyebrow: Dla młodszych Gości
         title: Po obiedzie można wyjść do ogrodu i po prostu się pobawić.
@@ -164,7 +164,7 @@ profiles:
         imagePosition: center
         reverse: true
         body:
-          - Każdy format wymaga innego tempa. Przy jubileuszu ważne są przemówienia i wyróżnienia, przy Wigilii firmowej — wspólny stół, a przy integracji — swoboda rozmowy i miejsce na zabawę.
+          - Każdy format wymaga innego tempa. Przy jubileuszu ważne są przemówienia i wyróżnienia, przy Wigilii firmowej liczy się wspólny stół, a przy integracji swoboda rozmowy i miejsce na zabawę.
           - Nie wciskamy wydarzeń w jeden schemat. Ustalamy kolejność punktów, serwis posiłków i układ sali wokół tego, co firma chce osiągnąć.
       - id: organizacja
         eyebrow: Plan i gościnność
@@ -180,7 +180,7 @@ profiles:
       id: oferta
       eyebrow: Spotkanie dopasowane do firmy
       title: Jeden zespół, jeden plan i żadnego gotowego szablonu.
-      lead: Zakres wydarzenia ustalamy indywidualnie — od układu sali i menu po rytm części oficjalnej oraz wieczornej integracji.
+      lead: Zakres wydarzenia ustalamy indywidualnie, od układu sali i menu po rytm części oficjalnej oraz wieczornej integracji.
       ctaLabel: Porozmawiajmy o wydarzeniu
       ctaHref: "#kontakt"
       points:
@@ -200,7 +200,7 @@ profiles:
       id: galeria
       eyebrow: Wydarzenie po Waszemu
       title: Oficjalnie, swobodnie albo jedno i drugie tego samego wieczoru.
-      lead: Przestrzeń może zmieniać charakter razem z programem — od ustawionych stołów i części oficjalnej po bar, muzykę oraz integrację zespołu.
+      lead: Przestrzeń może zmieniać charakter razem z programem, od ustawionych stołów i części oficjalnej po bar, muzykę oraz integrację zespołu.
       images:
         - src: /images/event-corporate.webp
           alt: Przestronna sala przygotowana na wydarzenie firmowe
@@ -298,7 +298,7 @@ profiles:
         - title: Chrzciny
           text: Kameralne lub większe przyjęcie z miejscem dla kilku pokoleń i spokojną oprawą rodzinnego dnia.
         - title: Okrągłe urodziny
-          text: Uroczysty obiad, tort, muzyka i przestrzeń do rozmowy lub tańca — zgodnie z planem jubilatki lub jubilata.
+          text: Uroczysty obiad, tort, muzyka i przestrzeń do rozmowy lub tańca, zgodnie z planem jubilatki lub jubilata.
         - title: Rocznice ślubu
           text: Od rodzinnego obiadu po większy jubileusz, który pozwala ponownie zgromadzić najbliższych przy jednym stole.
         - title: Spotkania pożegnalne
@@ -329,7 +329,7 @@ profiles:
       id: kontakt
       eyebrow: Porozmawiajmy spokojnie
       title: Powiedzcie, jakiego spotkania potrzebuje Wasza rodzina.
-      lead: Napiszcie lub zadzwońcie. Dobierzemy salę, menu i zakres pomocy odpowiedni do charakteru okazji — radosnej, uroczystej albo wymagającej dyskrecji.
+      lead: Napiszcie lub zadzwońcie. Dobierzemy salę, menu i zakres pomocy odpowiedni do charakteru okazji, niezależnie od tego, czy jest radosna, uroczysta albo wymaga dyskrecji.
       emailSubject: Zapytanie o uroczystość rodzinną
       image: /images/event-family.webp
       imageAlt: Kameralna sala przygotowana na uroczystość rodzinną

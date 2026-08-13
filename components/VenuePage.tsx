@@ -86,6 +86,10 @@ type LanguageSwitcherProps = {
   onToggle: () => void;
 };
 
+type DropdownMenuSurfaceProps = {
+  children: React.ReactNode;
+};
+
 type LogoProps = {
   brand: string;
 };
@@ -103,7 +107,6 @@ type EditorialHeadingProps = {
 
 type FeatureSectionProps = {
   feature: FeatureContent;
-  index: number;
 };
 
 type AnimatedStatProps = TrackRecordContent["stats"][number] & {
@@ -113,6 +116,18 @@ type AnimatedStatProps = TrackRecordContent["stats"][number] & {
 
 type TrackRecordSectionProps = {
   trackRecord: TrackRecordContent;
+};
+
+type GalleryLightboxProps = {
+  closeLabel: string;
+  currentIndex: number;
+  images: EventPageProfile["gallery"]["images"];
+  nextLabel: string;
+  onClose: () => void;
+  onNext: () => void;
+  onPrevious: () => void;
+  previousLabel: string;
+  reduceMotion: boolean;
 };
 
 type EventHeroProps = Pick<EventSelectionProps, "hero" | "selection"> & {
@@ -142,6 +157,8 @@ const MARQUEE_GROUPS = [0, 1] as const;
 const TRACK_RECORD_COUNT_DURATION_SECONDS = 1.4;
 const TRACK_RECORD_STAGGER_SECONDS = 0.18;
 const TRACK_RECORD_VIEWPORT_AMOUNT = 0.2;
+const CONTENT_IMAGE_HOVER_SCALE = 1.035;
+const GALLERY_LAYOUT_TRANSITION_SECONDS = 0.55;
 const SITE_TIME_ZONE = "Europe/Warsaw";
 const EDITORIAL_SENTENCE_BOUNDARY = /(?<=[.!?])\s+/u;
 const FLOATING_DROPDOWN_INITIAL = { opacity: 0, y: -8 } as const;
@@ -167,6 +184,20 @@ const ArrowIcon = () => (
   </svg>
 );
 
+const GalleryArrowIcon = (props: { direction: "next" | "previous" }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d={props.direction === "previous" ? "m15 5-7 7 7 7" : "m9 5 7 7-7 7"} />
+  </svg>
+);
+
+const GalleryCloseIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="m6 6 12 12M18 6 6 18" />
+  </svg>
+);
+
+const getGalleryImageLayoutId = (src: string) => `gallery-image-${src}`;
+
 const EditorialHeading = (props: EditorialHeadingProps) => {
   const Heading = props.level === 1 ? "h1" : "h2";
   const sentences = props.text.split(EDITORIAL_SENTENCE_BOUNDARY);
@@ -179,6 +210,82 @@ const EditorialHeading = (props: EditorialHeadingProps) => {
         </span>
       ))}
     </Heading>
+  );
+};
+
+const DropdownMenuSurface = (props: DropdownMenuSurfaceProps) => (
+  <div className="dropdown-menu__surface">{props.children}</div>
+);
+
+const GalleryLightbox = (props: GalleryLightboxProps) => {
+  const image = props.images[props.currentIndex];
+
+  if (!image) return null;
+
+  return (
+    <motion.div
+      className="gallery-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label={image.alt}
+      initial={props.reduceMotion ? false : { opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={props.reduceMotion ? undefined : { opacity: 0 }}
+      transition={{ duration: props.reduceMotion ? 0 : 0.28, ease: EASE }}
+      onClick={props.onClose}
+    >
+      <div className="gallery-lightbox__stage" onClick={(event) => event.stopPropagation()}>
+        <AnimatePresence initial={false} mode="wait">
+          <motion.img
+            className="gallery-lightbox__image"
+            src={image.src}
+            alt={image.alt}
+            key={image.src}
+            layoutId={getGalleryImageLayoutId(image.src)}
+            initial={props.reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={props.reduceMotion ? undefined : { opacity: 0 }}
+            transition={{
+              duration: props.reduceMotion ? 0 : 0.3,
+              ease: EASE,
+              layout: {
+                duration: props.reduceMotion ? 0 : GALLERY_LAYOUT_TRANSITION_SECONDS,
+                ease: EASE,
+              },
+            }}
+          />
+        </AnimatePresence>
+
+        <button
+          className="gallery-lightbox__control gallery-lightbox__close"
+          type="button"
+          aria-label={props.closeLabel}
+          autoFocus
+          onClick={props.onClose}
+        >
+          <GalleryCloseIcon />
+        </button>
+        <button
+          className="gallery-lightbox__control gallery-lightbox__previous"
+          type="button"
+          aria-label={props.previousLabel}
+          onClick={props.onPrevious}
+        >
+          <GalleryArrowIcon direction="previous" />
+        </button>
+        <button
+          className="gallery-lightbox__control gallery-lightbox__next"
+          type="button"
+          aria-label={props.nextLabel}
+          onClick={props.onNext}
+        >
+          <GalleryArrowIcon direction="next" />
+        </button>
+        <span className="gallery-lightbox__counter" aria-hidden="true">
+          {String(props.currentIndex + 1).padStart(2, "0")} / {String(props.images.length).padStart(2, "0")}
+        </span>
+      </div>
+    </motion.div>
   );
 };
 
@@ -208,20 +315,25 @@ const LanguageSwitcher = (props: LanguageSwitcherProps) => (
           exit={FLOATING_DROPDOWN_EXIT}
           transition={FLOATING_DROPDOWN_TRANSITION}
         >
-          {SUPPORTED_LOCALES.map((locale) => (
-            <a
-              className={locale === props.currentLocale ? "language-switcher__option--active" : undefined}
-              href={getLocalePath(locale)}
-              hrefLang={locale}
-              lang={locale}
-              aria-current={locale === props.currentLocale ? "page" : undefined}
-              key={locale}
-            >
-              <span aria-hidden="true">{LOCALES[locale].flag}</span>
-              <span>{LOCALES[locale].name}</span>
-              <i aria-hidden="true" />
-            </a>
-          ))}
+          <DropdownMenuSurface>
+            {SUPPORTED_LOCALES.map((locale) => (
+              <a
+                className={
+                  locale === props.currentLocale
+                    ? "dropdown-menu__option dropdown-menu__option--active language-switcher__option"
+                    : "dropdown-menu__option language-switcher__option"
+                }
+                href={getLocalePath(locale)}
+                hrefLang={locale}
+                lang={locale}
+                aria-current={locale === props.currentLocale ? "page" : undefined}
+                key={locale}
+              >
+                <span aria-hidden="true">{LOCALES[locale].flag}</span>
+                <span>{LOCALES[locale].name}</span>
+              </a>
+            ))}
+          </DropdownMenuSurface>
         </motion.nav>
       ) : null}
     </AnimatePresence>
@@ -501,25 +613,27 @@ const EventDropdown = (props: EventDropdownProps) => {
             exit={FLOATING_DROPDOWN_EXIT}
             transition={FLOATING_DROPDOWN_TRANSITION}
           >
-            {EVENT_KINDS.map((eventKind, index) => {
-              const isActive = index === props.selection.activeIndex;
+            <DropdownMenuSurface>
+              {EVENT_KINDS.map((eventKind, index) => {
+                const isActive = index === props.selection.activeIndex;
 
-              return (
-                <button
-                  className={isActive ? "event-dropdown__option event-dropdown__option--active" : "event-dropdown__option"}
-                  type="button"
-                  role="menuitemradio"
-                  aria-checked={isActive}
-                  key={eventKind}
-                  onClick={() => {
-                    props.onSelect(index);
-                    props.onClose();
-                  }}
-                >
-                  {props.hero.events[eventKind].tabLabel}
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    className={isActive ? "dropdown-menu__option dropdown-menu__option--active" : "dropdown-menu__option"}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={isActive}
+                    key={eventKind}
+                    onClick={() => {
+                      props.onSelect(index);
+                      props.onClose();
+                    }}
+                  >
+                    {props.hero.events[eventKind].tabLabel}
+                  </button>
+                );
+              })}
+            </DropdownMenuSurface>
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -981,7 +1095,7 @@ const Header = (props: HeaderProps) => {
 };
 
 const FeatureSection = (props: FeatureSectionProps) => {
-  const { feature, index } = props;
+  const { feature } = props;
   const reduceMotion = useReducedMotion();
 
   return (
@@ -999,16 +1113,14 @@ const FeatureSection = (props: FeatureSectionProps) => {
           style={{ objectPosition: feature.imagePosition }}
           initial={reduceMotion ? false : { scale: 1.08 }}
           whileInView={reduceMotion ? undefined : { scale: 1 }}
+          whileHover={reduceMotion ? undefined : { scale: CONTENT_IMAGE_HOVER_SCALE }}
           viewport={{ once: true, amount: 0.14 }}
           transition={{ duration: 1.5, ease: EASE }}
         />
       </div>
 
       <Reveal className="feature__content" delay={0.08}>
-        <p className="eyebrow">
-          <span>0{index + 1}</span>
-          {feature.eyebrow}
-        </p>
+        <p className="eyebrow">{feature.eyebrow}</p>
         <EditorialHeading level={2} text={feature.title} />
         <div className="prose" dangerouslySetInnerHTML={{ __html: feature.html }} />
       </Reveal>
@@ -1101,13 +1213,44 @@ export const VenuePage = (props: VenuePageProps) => {
   const reduceMotion = useReducedMotion();
   const { scrollTo } = useVenueScrollModel();
   const [selection, setSelection] = useState<HeroSelection>({ activeIndex: 0, direction: 1 });
+  const [galleryImageIndex, setGalleryImageIndex] = useState<number | null>(null);
   const activeKind = EVENT_KINDS[selection.activeIndex] ?? EVENT_KINDS[0];
   const activeProfile = content.eventProfiles[activeKind];
+  const galleryImageCount = activeProfile.gallery.images.length;
   const updatedDate = new Intl.DateTimeFormat(site.locale, {
     dateStyle: "medium",
     timeStyle: "short",
     timeZone: SITE_TIME_ZONE,
   }).format(new Date(updatedAt));
+
+  useEffect(() => {
+    if (galleryImageIndex === null) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setGalleryImageIndex(null);
+      } else if (event.key === "ArrowLeft") {
+        setGalleryImageIndex((currentIndex) =>
+          currentIndex === null
+            ? null
+            : (currentIndex - 1 + galleryImageCount) % galleryImageCount,
+        );
+      } else if (event.key === "ArrowRight") {
+        setGalleryImageIndex((currentIndex) =>
+          currentIndex === null ? null : (currentIndex + 1) % galleryImageCount,
+        );
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [galleryImageCount, galleryImageIndex]);
 
   const selectEvent = (requestedIndex: number) => {
     const nextIndex = Math.max(0, Math.min(EVENT_KINDS.length - 1, requestedIndex));
@@ -1118,8 +1261,18 @@ export const VenuePage = (props: VenuePageProps) => {
       activeIndex: nextIndex,
       direction: Math.sign(nextIndex - selection.activeIndex),
     });
+    setGalleryImageIndex(null);
     scrollTo(0, { immediate: Boolean(reduceMotion) });
   };
+
+  const showPreviousGalleryImage = () =>
+    setGalleryImageIndex((currentIndex) =>
+      currentIndex === null ? null : (currentIndex - 1 + galleryImageCount) % galleryImageCount,
+    );
+  const showNextGalleryImage = () =>
+    setGalleryImageIndex((currentIndex) =>
+      currentIndex === null ? null : (currentIndex + 1) % galleryImageCount,
+    );
 
   return (
     <div className="venue-page" lang={site.locale}>
@@ -1178,8 +1331,8 @@ export const VenuePage = (props: VenuePageProps) => {
         </section>
 
         <div className="features shell">
-          {activeProfile.features.map((feature, index) => (
-            <FeatureSection feature={feature} index={index} key={feature.id} />
+          {activeProfile.features.map((feature) => (
+            <FeatureSection feature={feature} key={feature.id} />
           ))}
         </div>
 
@@ -1231,16 +1384,27 @@ export const VenuePage = (props: VenuePageProps) => {
           </Reveal>
           <div className="gallery__grid">
             {activeProfile.gallery.images.map((item, index) => (
-              <motion.figure
+              <motion.button
                 className={`gallery__item gallery__item--${index + 1}`}
+                type="button"
+                aria-label={`${site.galleryOpenLabel}: ${item.alt}`}
                 key={item.src}
                 initial={reduceMotion ? false : { opacity: 0, y: 28 }}
                 whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.12 }}
                 transition={{ duration: 0.85, delay: (index % 2) * 0.08, ease: EASE }}
+                onClick={() => setGalleryImageIndex(index)}
               >
-                <img src={item.src} alt={item.alt} loading="lazy" decoding="async" />
-              </motion.figure>
+                <motion.img
+                  src={item.src}
+                  alt={item.alt}
+                  loading="lazy"
+                  decoding="async"
+                  layoutId={getGalleryImageLayoutId(item.src)}
+                  whileHover={reduceMotion ? undefined : { scale: CONTENT_IMAGE_HOVER_SCALE }}
+                  transition={{ duration: reduceMotion ? 0 : 0.8, ease: EASE }}
+                />
+              </motion.button>
             ))}
           </div>
         </section>
@@ -1250,11 +1414,13 @@ export const VenuePage = (props: VenuePageProps) => {
         <section className="contact" id={activeProfile.contact.id}>
           <div className="contact__inner shell">
             <div className="contact__image">
-              <img
+              <motion.img
                 src={activeProfile.contact.image}
                 alt={activeProfile.contact.imageAlt}
                 loading="lazy"
                 decoding="async"
+                whileHover={reduceMotion ? undefined : { scale: CONTENT_IMAGE_HOVER_SCALE }}
+                transition={{ duration: reduceMotion ? 0 : 0.8, ease: EASE }}
               />
             </div>
             <div className="contact__panel">
@@ -1293,6 +1459,21 @@ export const VenuePage = (props: VenuePageProps) => {
         </AnimatePresence>
       </main>
 
+      <AnimatePresence>
+        {galleryImageIndex !== null ? (
+          <GalleryLightbox
+            closeLabel={site.galleryCloseLabel}
+            currentIndex={galleryImageIndex}
+            images={activeProfile.gallery.images}
+            nextLabel={site.galleryNextLabel}
+            onClose={() => setGalleryImageIndex(null)}
+            onNext={showNextGalleryImage}
+            onPrevious={showPreviousGalleryImage}
+            previousLabel={site.galleryPreviousLabel}
+            reduceMotion={Boolean(reduceMotion)}
+          />
+        ) : null}
+      </AnimatePresence>
       <footer className="footer">
         <div className="shell footer__inner">
           <div className="footer__brand">

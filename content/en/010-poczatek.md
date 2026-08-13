@@ -10,7 +10,7 @@ events:
     lead: >-
       Timber interiors, daylight streaming through generous windows and the
       forest just beyond the door. A wedding venue with a character of its
-      own—close to Wrocław, yet far from the rush of the city.
+      own, close to Wrocław yet far from the rush of the city.
     primaryLabel: Ask about a wedding date
     desktopImage: /images/hero-forest.webp
     mobileImage: /images/hero-forest-mobile.webp
@@ -48,7 +48,7 @@ events:
     lead: >-
       Christenings, milestone birthdays, wedding anniversaries and quiet
       gatherings after a farewell. We adapt the setting to the tone of the
-      day—joyful, formal or discreet.
+      day, whether joyful, formal or discreet.
     primaryLabel: Ask about a family gathering
     desktopImage: /images/event-family.webp
     mobileImage: /images/event-family.webp

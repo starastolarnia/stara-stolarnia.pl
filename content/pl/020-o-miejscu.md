@@ -7,7 +7,7 @@ stats:
   - value: do 180
     label: Gości na przyjęciu
   - value: "5"
-    label: pokoje na miejscu
+    label: pokoi na miejscu
   - value: parter
     label: przestrzeń bez barier
 ---
