@@ -45,6 +45,11 @@ test("legacy Polish paths permanently redirect to their root equivalents on Verc
 
   assert.deepEqual(config.redirects, [
     {
+      source: "/pl",
+      destination: "/",
+      permanent: true,
+    },
+    {
       source: "/pl/:path*",
       destination: "/:path*",
       permanent: true,
