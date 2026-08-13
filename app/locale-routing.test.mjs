@@ -37,7 +37,14 @@ test("Polish links use root while the other languages keep prefixed paths", () =
     assert.equal(existsSync(new URL(`../out/${locale}/index.html`, import.meta.url)), true);
   }
 
-  assert.equal(existsSync(new URL("../out/pl/index.html", import.meta.url)), false);
+  const legacyPolishHtml = readExportedPage("pl/index.html");
+
+  assert.match(legacyPolishHtml, /http-equiv="refresh" content="0;url=\/"/i);
+  assert.match(legacyPolishHtml, /window\.location\.replace\("\/"\)/);
+  assert.match(
+    legacyPolishHtml,
+    /<link rel="canonical" href="https:\/\/stara-stolarnia\.pl\/"/,
+  );
 });
 
 test("legacy Polish paths permanently redirect to their root equivalents on Vercel", () => {
