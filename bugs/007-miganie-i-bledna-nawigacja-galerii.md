@@ -81,7 +81,11 @@ Dokładny cel: przejścia i kontrolki pełnoekranowego lightboxa. Nietknięte ro
 
 ### Cleanup
 
-- Ledger: worktree `/Users/gmm/tmp/codex/bug-006-regresja-1`, branch `bug/007-miganie-i-bledna-nawigacja-galerii`; utworzone na bazie `4c091ad0f2687fff44fc4c28951639ab9f85f97d`, do usunięcia po dostarczeniu na `main`.
+- Usunięto współdzielony worktree `/Users/gmm/tmp/codex/bug-006-regresja-1` po potwierdzeniu dostarczenia; usunięto branch `bug/007-miganie-i-bledna-nawigacja-galerii` przy zachowanym SHA `bc8ceb840e94b3d25b4affb5845168ec6c1bcc42`.
+- Zatrzymano robocze serwery na portach `3002` i `3003`. Surowe katalogi klatek i robocze contact sheety przeniesiono do Kosza; można je odzyskać. Zachowano wyłącznie trzy ignorowane nagrania MP4 o łącznym rozmiarze `288K` przez okres retencji.
+- Obowiązkowa kontrola poprzednich numerów: dla Bug 005 nie ma worktree ani brancha; zasoby Bug 006 usunięto w tym przebiegu. Worktree Bug 004 pozostawiono, ponieważ raport nadal ma status `test czerwony`; katalog `menimals-appstore-1.0.2-screenshots` jest poza zakresem tego zadania.
+- Sweep starszych plików tymczasowych wykazał katalogi systemowe `TemporaryDirectory.*` i sockety innych procesów o nieustalonym właścicielu; nie usuwano ich. Po cleanupie wolne miejsce: `18 GiB` na woluminie danych.
+- Na wyraźną prośbę użytkownika pozostawiono finalny statyczny build pod `http://127.0.0.1:3000/pl/` (proces `Python`, PID `89013`); odpowiedź HTTP `200`.
 
 ## Dowód końcowego compositora
 
@@ -90,6 +94,7 @@ Dokładny cel: przejścia i kontrolki pełnoekranowego lightboxa. Nietknięte ro
 - Dodatkowe nagranie po: [ciągły poziomy slide na desktopie](assets/007-miganie-i-bledna-nawigacja-galerii/after-desktop.mp4)
 - Obserwacja klatek przed: po kliknięciu Next stary kadr zanika do niemal pustej ramy, nowy pojawia się jako osobny mały kadr i ponownie skaluje do rozmiaru docelowego.
 - Obserwacja klatek po: stary i nowy kadr współistnieją podczas przejścia, jadą w przeciwnych kierunkach osi X i ani jedna z zarejestrowanych klatek nie pokazuje pustej ramy.
+- Validator: `VISUAL_TRUTH_GATE=PASS: claim fixed jest dozwolony`.
 
 ## Protokół weryfikacji
 

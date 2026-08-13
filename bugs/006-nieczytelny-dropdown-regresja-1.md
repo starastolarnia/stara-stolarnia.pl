@@ -82,7 +82,8 @@ Dokładny cel: rozwinięty panel języka i jego wiersze. Nietknięte rodzeństwo
 
 ### Cleanup
 
-- Ledger: worktree `/Users/gmm/tmp/codex/bug-006-regresja-1`, branch `bug/006-nieczytelny-dropdown-regresja-1`; utworzone na bazie `5bc81a69ca919aff8682b32196950703e9995ce2`, do usunięcia po dostarczeniu na `main`.
+- Usunięto worktree `/Users/gmm/tmp/codex/bug-006-regresja-1` po potwierdzeniu dostarczenia; usunięto branch `bug/006-nieczytelny-dropdown-regresja-1` przy zachowanym SHA `08e5922c4f4decec9b02c78df185a2f0a239b593`.
+- Zatrzymano roboczy serwer na porcie `3002`; screenshoty dowodowe `128K` pozostają w ignorowanym `bugs/assets/006-nieczytelny-dropdown-regresja-1/` przez okres retencji.
 
 ## Dowód końcowego compositora
 
