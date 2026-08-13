@@ -11,6 +11,7 @@ Generowany z nagłówków raportów — nie edytuj ręcznie. Regeneracja: patrz 
 | [Bug 005 regresja 1 — Zwężony desktop po zmianie typografii](./005-absurdalne-lamanie-naglowkow-regresja-1.md) | regresja: 2 | klient-lokalny |
 | [Bug 005 regresja 2 — Szarpanie strony podczas scrollowania](./005-absurdalne-lamanie-naglowkow-regresja-2.md) | regresja: 3 | klient-lokalny |
 | [Bug 005 regresja 3 — Przeskok między sekcjami podczas scrollowania](./005-absurdalne-lamanie-naglowkow-regresja-3.md) | regresja: 4 | klient-lokalny |
-| [Bug 005 regresja 4 — Nadal rwące przewijanie między sekcjami](./005-absurdalne-lamanie-naglowkow-regresja-4.md) | zweryfikowany | klient-lokalny |
-| [Bug 005 — Absurdalne łamanie nagłówków](./005-absurdalne-lamanie-naglowkow.md) | regresja: 4 | klient-lokalny |
+| [Bug 005 regresja 4 — Nadal rwące przewijanie między sekcjami](./005-absurdalne-lamanie-naglowkow-regresja-4.md) | regresja: 5 | klient-lokalny |
+| [Bug 005 regresja 5 — scroll nadal rwie](./005-absurdalne-lamanie-naglowkow-regresja-5.md) | zablokowany: brak dowodu końcowego compositora | klient-lokalny |
+| [Bug 005 — Absurdalne łamanie nagłówków](./005-absurdalne-lamanie-naglowkow.md) | regresja: 5 | klient-lokalny |
 | [Bug 006 — Nieczytelny dropdown](./006-nieczytelny-dropdown.md) | zweryfikowany | klient-lokalny |

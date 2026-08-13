@@ -2,7 +2,8 @@
 
 > Start pracy: 2026-08-13 19:57
 > Koniec pracy: 2026-08-13 20:18
-> Status: zweryfikowany
+> Status: regresja: 5
+> Regresja: [Poprzednia weryfikacja była fałszywie zielona; scroll nadal rwie](./005-absurdalne-lamanie-naglowkow-regresja-5.md)
 > Zgłoszenie: „no przecież to kurwa dalej rwie” ([nagranie użytkownika](assets/005-absurdalne-lamanie-naglowkow-regresja-4/user-report.mov))
 > Raport bazowy: ./005-absurdalne-lamanie-naglowkow.md
 > Klasyfikacja: klient-lokalny
