@@ -668,6 +668,9 @@ const Header = (props: HeaderProps) => {
   const [activeNavigationIndex, setActiveNavigationIndex] = useState(0);
   const [panel, setPanel] = useState<HeaderPanel>(null);
   const headerRef = useRef<HTMLElement>(null);
+  const isScrolledRef = useRef(false);
+  const activeNavigationIndexRef = useRef(0);
+  const navigationOffsetsRef = useRef<number[]>([]);
   const navigationTargetRef = useRef<number | null>(null);
   const navigationReleaseTimerRef = useRef<number | null>(null);
   const isEventDropdownOpen = panel === "events";
@@ -676,29 +679,66 @@ const Header = (props: HeaderProps) => {
 
   useMotionValueEvent(scrollY, "change", (value) => {
     const isPastHeroMenuThreshold = value > HEADER_SCROLL_THRESHOLD_PX;
-    setIsScrolled(isPastHeroMenuThreshold);
+
+    if (isScrolledRef.current !== isPastHeroMenuThreshold) {
+      isScrolledRef.current = isPastHeroMenuThreshold;
+      setIsScrolled(isPastHeroMenuThreshold);
+    }
 
     if (!isPastHeroMenuThreshold) {
-      setActiveNavigationIndex(0);
+      if (activeNavigationIndexRef.current !== 0) {
+        activeNavigationIndexRef.current = 0;
+        setActiveNavigationIndex(0);
+      }
       return;
     }
 
     if (navigationTargetRef.current !== null) {
-      setActiveNavigationIndex(navigationTargetRef.current);
+      if (activeNavigationIndexRef.current !== navigationTargetRef.current) {
+        activeNavigationIndexRef.current = navigationTargetRef.current;
+        setActiveNavigationIndex(navigationTargetRef.current);
+      }
       return;
     }
 
-    const sectionIndex = navigation.reduce((currentIndex, item, index) => {
-      const sectionId = item.href.startsWith("#") ? item.href.slice(1) : null;
-      const section = sectionId ? document.getElementById(sectionId) : null;
+    const sectionIndex = navigationOffsetsRef.current.reduce(
+      (currentIndex, sectionTop, index) =>
+        sectionTop <= value + HEADER_SECTION_OFFSET_PX ? index : currentIndex,
+      0,
+    );
 
-      return section && section.getBoundingClientRect().top <= HEADER_SECTION_OFFSET_PX
-        ? index
-        : currentIndex;
-    }, 0);
-
-    setActiveNavigationIndex(sectionIndex);
+    if (activeNavigationIndexRef.current !== sectionIndex) {
+      activeNavigationIndexRef.current = sectionIndex;
+      setActiveNavigationIndex(sectionIndex);
+    }
   });
+
+  useEffect(() => {
+    const refreshNavigationOffsets = () => {
+      navigationOffsetsRef.current = navigation.map((item) => {
+        const sectionId = item.href.startsWith("#") ? item.href.slice(1) : null;
+        const section = sectionId ? document.getElementById(sectionId) : null;
+
+        return section
+          ? section.getBoundingClientRect().top + window.scrollY
+          : Number.POSITIVE_INFINITY;
+      });
+    };
+
+    refreshNavigationOffsets();
+    window.addEventListener("load", refreshNavigationOffsets);
+    window.addEventListener("resize", refreshNavigationOffsets);
+    const transitionRefreshTimer = window.setTimeout(
+      refreshNavigationOffsets,
+      EVENT_SELECTION_TRANSITION_SECONDS * 1000,
+    );
+
+    return () => {
+      window.removeEventListener("load", refreshNavigationOffsets);
+      window.removeEventListener("resize", refreshNavigationOffsets);
+      window.clearTimeout(transitionRefreshTimer);
+    };
+  }, [navigation]);
 
   useEffect(() => {
     document.documentElement.lang = site.locale;
@@ -782,7 +822,10 @@ const Header = (props: HeaderProps) => {
       navigationReleaseTimerRef.current = null;
     }, PROGRAMMATIC_NAVIGATION_FALLBACK_MS);
 
-    setActiveNavigationIndex(sectionIndex);
+    if (activeNavigationIndexRef.current !== sectionIndex) {
+      activeNavigationIndexRef.current = sectionIndex;
+      setActiveNavigationIndex(sectionIndex);
+    }
     closePanels();
     window.history.replaceState(null, "", item.href);
     section.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
@@ -1062,15 +1105,16 @@ export const VenuePage = (props: VenuePageProps) => {
   const selectEvent = (requestedIndex: number) => {
     const nextIndex = Math.max(0, Math.min(EVENT_KINDS.length - 1, requestedIndex));
 
-    setSelection((currentSelection) => {
-      if (currentSelection.activeIndex === nextIndex) {
-        return currentSelection;
-      }
+    if (selection.activeIndex === nextIndex) return;
 
-      return {
-        activeIndex: nextIndex,
-        direction: Math.sign(nextIndex - currentSelection.activeIndex),
-      };
+    setSelection({
+      activeIndex: nextIndex,
+      direction: Math.sign(nextIndex - selection.activeIndex),
+    });
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: reduceMotion ? "auto" : "smooth",
     });
   };
 

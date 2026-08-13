@@ -360,6 +360,33 @@ test("the active event controls the complete page below the hero", () => {
   assert.match(component, /key=\{activeKind\}/);
 });
 
+test("the header keeps layout reads and redundant state updates out of the scroll callback", () => {
+  const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
+  const scrollHandler = component.match(
+    /useMotionValueEvent\(scrollY, "change", \(value\) => \{[\s\S]*?\n  \}\);/,
+  )?.[0];
+
+  assert.ok(scrollHandler, "the header scroll handler should exist");
+  assert.doesNotMatch(scrollHandler, /getBoundingClientRect/);
+  assert.match(scrollHandler, /navigationOffsetsRef\.current/);
+  assert.match(scrollHandler, /isScrolledRef\.current !== isPastHeroMenuThreshold/);
+  assert.match(scrollHandler, /activeNavigationIndexRef\.current !==/);
+  assert.match(component, /section\.getBoundingClientRect\(\)\.top \+ window\.scrollY/);
+  assert.match(component, /window\.addEventListener\("resize", refreshNavigationOffsets\)/);
+});
+
+test("changing an event scrolls to page top with the user's motion preference", () => {
+  const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
+  const selectEvent = component.match(/const selectEvent = [\s\S]*?(?=\n\n  return \()/)?.[0];
+
+  assert.ok(selectEvent, "the event selection handler should exist");
+  assert.match(selectEvent, /if \(selection\.activeIndex === nextIndex\) return;/);
+  assert.match(selectEvent, /window\.scrollTo\(\{/);
+  assert.match(selectEvent, /top:\s*0/);
+  assert.match(selectEvent, /left:\s*0/);
+  assert.match(selectEvent, /behavior:\s*reduceMotion \? "auto" : "smooth"/);
+});
+
 test("the desktop header follows the reference geometry and sequences both draggable menus", () => {
   const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
   const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
