@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element -- Local WebP assets are pre-sized; the hero also needs a responsive picture source. */
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   animate,
   AnimatePresence,
@@ -24,8 +25,10 @@ import type {
   PageContent,
   TrackRecordContent,
 } from "@/lib/content";
-import { EVENT_KINDS } from "@/lib/event-kinds";
-import { getLocalePath, LOCALES, SUPPORTED_LOCALES } from "@/lib/i18n";
+import { getEventPath } from "@/lib/event-routes";
+import { EVENT_KINDS, type EventKind } from "@/lib/event-kinds";
+import { LOCALES, SUPPORTED_LOCALES } from "@/lib/i18n";
+import { getStructuredData } from "@/lib/structured-data";
 import {
   getHeroLightDelay,
   getHeroLightRestingOpacity,
@@ -36,6 +39,7 @@ import { type VenueScroll, useVenueScrollModel } from "@/components/venue-scroll
 
 type VenuePageProps = {
   content: PageContent;
+  initialEventKind: EventKind;
 };
 
 type EventSelectionProps = Pick<PageContent, "hero"> & {
@@ -82,6 +86,7 @@ type DraggableSegmentedControlProps = {
 
 type LanguageSwitcherProps = {
   currentLocale: PageContent["site"]["locale"];
+  eventKind: EventKind;
   isOpen: boolean;
   label: string;
   onToggle: () => void;
@@ -397,21 +402,22 @@ const LanguageSwitcher = (props: LanguageSwitcherProps) => (
         >
           <DropdownMenuSurface>
             {SUPPORTED_LOCALES.map((locale) => (
-              <a
+              <Link
                 className={
                   locale === props.currentLocale
                     ? "dropdown-menu__option dropdown-menu__option--active language-switcher__option"
                     : "dropdown-menu__option language-switcher__option"
                 }
-                href={getLocalePath(locale)}
+                href={getEventPath(locale, props.eventKind)}
                 hrefLang={locale}
                 lang={locale}
+                scroll={false}
                 aria-current={locale === props.currentLocale ? "page" : undefined}
                 key={locale}
               >
                 <span aria-hidden="true">{LOCALES[locale].flag}</span>
                 <span>{LOCALES[locale].name}</span>
-              </a>
+              </Link>
             ))}
           </DropdownMenuSurface>
         </motion.nav>
@@ -1128,6 +1134,7 @@ const Header = (props: HeaderProps) => {
 
           <LanguageSwitcher
             currentLocale={site.locale}
+            eventKind={EVENT_KINDS[props.selection.activeIndex] ?? EVENT_KINDS[0]}
             isOpen={isLanguageOpen}
             label={site.languageLabel}
             onToggle={() =>
@@ -1292,7 +1299,10 @@ export const VenuePage = (props: VenuePageProps) => {
   const { site, hero, updatedAt } = content;
   const reduceMotion = useReducedMotion();
   const { scrollTo } = useVenueScrollModel();
-  const [selection, setSelection] = useState<HeroSelection>({ activeIndex: 0, direction: 1 });
+  const [selection, setSelection] = useState<HeroSelection>(() => ({
+    activeIndex: EVENT_KINDS.indexOf(props.initialEventKind),
+    direction: 1,
+  }));
   const [gallerySelection, setGallerySelection] = useState<GallerySelection | null>(null);
   const activeKind = EVENT_KINDS[selection.activeIndex] ?? EVENT_KINDS[0];
   const activeProfile = content.eventProfiles[activeKind];
@@ -1303,6 +1313,9 @@ export const VenuePage = (props: VenuePageProps) => {
     timeStyle: "short",
     timeZone: SITE_TIME_ZONE,
   }).format(new Date(updatedAt));
+  const structuredData = JSON.stringify(
+    getStructuredData({ content, eventKind: activeKind, locale: site.locale }),
+  ).replaceAll("<", "\\u003c");
 
   useEffect(() => {
     if (!isGalleryOpen) return;
@@ -1326,6 +1339,11 @@ export const VenuePage = (props: VenuePageProps) => {
       direction: Math.sign(nextIndex - selection.activeIndex),
     });
     setGallerySelection(null);
+    window.history.replaceState(
+      window.history.state,
+      "",
+      getEventPath(site.locale, EVENT_KINDS[nextIndex]),
+    );
     scrollTo(0, { immediate: Boolean(reduceMotion) });
   };
 
@@ -1365,6 +1383,7 @@ export const VenuePage = (props: VenuePageProps) => {
 
   return (
     <div className="venue-page" lang={site.locale}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredData }} />
       <a className="skip-link" href="#main">
         {site.skipLabel}
       </a>
@@ -1497,6 +1516,38 @@ export const VenuePage = (props: VenuePageProps) => {
                 />
               </motion.button>
             ))}
+          </div>
+        </section>
+
+        <section className="service-overview" id={content.serviceOverview.id}>
+          <div className="service-overview__inner shell">
+            <Reveal className="service-overview__intro">
+              <p className="eyebrow">{content.serviceOverview.eyebrow}</p>
+              <EditorialHeading level={2} text={content.serviceOverview.title} />
+              <p>{content.serviceOverview.lead}</p>
+            </Reveal>
+            <div className="service-overview__list">
+              {EVENT_KINDS.map((eventKind, index) => {
+                const item = content.serviceOverview.items[eventKind];
+
+                return (
+                  <Reveal delay={index * 0.06} key={eventKind}>
+                    <article className="service-overview__item">
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
+                      <Link
+                        className="text-link"
+                        href={getEventPath(site.locale, eventKind)}
+                        aria-current={eventKind === activeKind ? "page" : undefined}
+                      >
+                        {item.linkLabel}
+                        <ArrowIcon />
+                      </Link>
+                    </article>
+                  </Reveal>
+                );
+              })}
+            </div>
           </div>
         </section>
 

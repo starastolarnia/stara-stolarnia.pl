@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Fraunces, Manrope } from "next/font/google";
 
-import { LOCALE_REDIRECT_SCRIPT } from "@/lib/i18n";
 import { SITE_ORIGIN } from "@/lib/site-metadata";
 
 import "lenis/dist/lenis.css";
@@ -51,10 +50,6 @@ const RootLayout = (props: RootLayoutProps) => {
         <link
           href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
           rel="stylesheet"
-        />
-        <script
-          dangerouslySetInnerHTML={{ __html: LOCALE_REDIRECT_SCRIPT }}
-          id="locale-redirect"
         />
       </head>
       <body>{children}</body>

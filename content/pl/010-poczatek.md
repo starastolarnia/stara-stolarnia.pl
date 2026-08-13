@@ -11,6 +11,8 @@ events:
       Drewniane wnętrza, światło wpadające przez wielkie okna i las tuż za
       progiem. Miejsce na wesele z charakterem, blisko Wrocławia i daleko od
       miejskiego zgiełku.
+    metaTitle: Sala weselna pod Wrocławiem | Stara Stolarnia
+    metaDescription: Organizacja wesel w drewnianej sali w Bykowie pod Wrocławiem. Do 180 Gości, ceremonia w lesie, ogród, noclegi i bezpłatny parking.
     primaryLabel: Zapytaj o termin wesela
     desktopImage: /images/hero-forest.webp
     mobileImage: /images/hero-forest-mobile.webp
@@ -24,6 +26,8 @@ events:
       Majowe przyjęcie z jasną salą, dobrym jedzeniem i ogrodem, w którym dzieci
       mogą się pobawić. Blisko Wrocławia, z wygodnym dojazdem i bezpłatnym
       parkingiem.
+    metaTitle: Komunie pod Wrocławiem | Stara Stolarnia
+    metaDescription: Organizacja komunii w Bykowie pod Wrocławiem. Jasna sala, ogród dla dzieci, rodzinne menu, wygodny dojazd i bezpłatny parking.
     primaryLabel: Zapytaj o termin komunii
     desktopImage: /images/event-communions.webp
     mobileImage: /images/event-communions.webp
@@ -37,6 +41,8 @@ events:
       Rocznica firmy, wręczenie nagród, Wigilia firmowa albo integracja zespołu.
       Dopasujemy salę, menu i przebieg wydarzenia do tego, po co spotykacie się
       poza biurem.
+    metaTitle: Imprezy firmowe pod Wrocławiem | Stara Stolarnia
+    metaDescription: Organizacja imprez firmowych blisko Wrocławia. Integracje, jubileusze, Wigilie firmowe i gale z menu, obsługą oraz bezpłatnym parkingiem.
     primaryLabel: Zapytaj o imprezę firmową
     desktopImage: /images/event-corporate.webp
     mobileImage: /images/event-corporate.webp
@@ -50,6 +56,8 @@ events:
       Chrzciny, okrągłe urodziny, rocznice ślubu, ale także spokojne spotkanie
       po pożegnaniu. Dopasujemy oprawę do charakteru dnia: radośnie, uroczyście
       albo dyskretnie.
+    metaTitle: Uroczystości rodzinne pod Wrocławiem | Stara Stolarnia
+    metaDescription: Chrzciny, urodziny, rocznice i spotkania rodzinne w Bykowie pod Wrocławiem. Drewniana sala, indywidualne menu, ogród i parking.
     primaryLabel: Zapytaj o rodzinne spotkanie
     desktopImage: /images/event-family.webp
     mobileImage: /images/event-family.webp

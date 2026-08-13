@@ -11,6 +11,8 @@ events:
       Warme Holzinterieurs, Licht, das durch große Fenster fällt, und der Wald
       direkt vor der Tür. Ein Hochzeitsort mit eigenem Charakter, nah bei
       Breslau und doch weit weg vom Trubel der Stadt.
+    metaTitle: Hochzeitslocation bei Breslau | Stara Stolarnia
+    metaDescription: Hochzeiten in einem Holzsaal in Byków bei Breslau. Bis zu 180 Gäste, Trauung im Wald, Garten, Gästezimmer und kostenlose Parkplätze.
     primaryLabel: Hochzeitstermin anfragen
     desktopImage: /images/hero-forest.webp
     mobileImage: /images/hero-forest-mobile.webp
@@ -24,6 +26,8 @@ events:
       Eine Feier im Mai mit hellem Saal, gutem Essen und einem Garten, in dem
       Kinder spielen können. Nah bei Breslau, unkompliziert erreichbar und mit
       kostenlosen Parkplätzen.
+    metaTitle: Erstkommunion bei Breslau | Stara Stolarnia
+    metaDescription: Kommunionfeiern in Byków bei Breslau mit hellem Saal, Garten für Kinder, Familienmenü, guter Erreichbarkeit und kostenlosen Parkplätzen.
     primaryLabel: Kommunionstermin anfragen
     desktopImage: /images/event-communions.webp
     mobileImage: /images/event-communions.webp
@@ -37,6 +41,8 @@ events:
       Firmenjubiläum, Auszeichnungen, Weihnachtsfeier oder Teamevent. Wir
       stimmen Raum, Menü und Ablauf darauf ab, warum Ihr außerhalb des Büros
       zusammenkommt.
+    metaTitle: Firmenfeiern bei Breslau | Stara Stolarnia
+    metaDescription: Firmenfeiern bei Breslau, von Teamevents und Jubiläen bis zu Weihnachtsfeiern und Galas, mit Menü, Service und kostenlosen Parkplätzen.
     primaryLabel: Firmenfeier anfragen
     desktopImage: /images/event-corporate.webp
     mobileImage: /images/event-corporate.webp
@@ -50,6 +56,8 @@ events:
       Taufe, runder Geburtstag, Hochzeitstag oder ein stilles Beisammensein nach
       dem Abschied. Wir stimmen den Rahmen auf den Ton des Tages ab: freudig,
       festlich oder diskret.
+    metaTitle: Familienfeiern bei Breslau | Stara Stolarnia
+    metaDescription: Taufen, Geburtstage, Jubiläen und Familientreffen in Byków bei Breslau, mit Holzsaal, individuellem Menü, Garten und Parkplätzen.
     primaryLabel: Familientreffen anfragen
     desktopImage: /images/event-family.webp
     mobileImage: /images/event-family.webp

@@ -69,6 +69,8 @@ const heroEventSchema = z.object({
   eyebrow: copySchema,
   title: copySchema,
   lead: copySchema,
+  metaTitle: copySchema,
+  metaDescription: copySchema,
   primaryLabel: copySchema,
   desktopImage: z.string(),
   mobileImage: z.string(),
@@ -149,6 +151,21 @@ const trackRecordSchema = z.object({
     .length(4),
 });
 
+const serviceOverviewSchema = z.object({
+  id: z.string(),
+  eyebrow: copySchema,
+  title: copySchema,
+  lead: copySchema,
+  items: z.record(
+    z.enum(EVENT_KINDS),
+    z.object({
+      title: copySchema,
+      text: copySchema,
+      linkLabel: copySchema,
+    }),
+  ),
+});
+
 const contactSchema = z.object({
   id: z.string(),
   eyebrow: copySchema,
@@ -212,6 +229,7 @@ export type FeatureContent = z.infer<typeof featureSchema> & MarkdownBody;
 type OfferContent = z.infer<typeof offerSchema>;
 type GalleryContent = z.infer<typeof gallerySchema>;
 export type TrackRecordContent = z.infer<typeof trackRecordSchema>;
+export type ServiceOverviewContent = z.infer<typeof serviceOverviewSchema>;
 type ContactContent = z.infer<typeof contactSchema>;
 
 export type EventPageProfile = {
@@ -228,6 +246,7 @@ export type EventPageProfile = {
 export type PageContent = {
   site: SiteContent;
   hero: HeroContent;
+  serviceOverview: ServiceOverviewContent;
   trackRecord: TrackRecordContent;
   eventProfiles: Record<EventKind, EventPageProfile>;
   updatedAt: string;
@@ -298,7 +317,7 @@ const buildProfile = async (
 
 export const getPageContent = async (locale: SupportedLocale): Promise<PageContent> => {
   const basePath = path.join(process.cwd(), "content", locale);
-  const [site, hero, story, sala, ceremonia, goscinnosc, offer, gallery, trackRecord, contact, profileDocument] =
+  const [site, hero, story, sala, ceremonia, goscinnosc, offer, gallery, trackRecord, serviceOverview, contact, profileDocument] =
     await Promise.all([
       loadFrontmatter(path.join(basePath, "000-ustawienia-strony.md"), siteSchema),
       loadFrontmatter(path.join(basePath, "010-poczatek.md"), heroSchema),
@@ -309,6 +328,7 @@ export const getPageContent = async (locale: SupportedLocale): Promise<PageConte
       loadFrontmatter(path.join(basePath, "060-oferta.md"), offerSchema),
       loadFrontmatter(path.join(basePath, "070-galeria.md"), gallerySchema),
       loadFrontmatter(path.join(basePath, "075-doswiadczenie.md"), trackRecordSchema),
+      loadFrontmatter(path.join(basePath, "085-rodzaje-uroczystosci.md"), serviceOverviewSchema),
       loadFrontmatter(path.join(basePath, "080-kontakt.md"), contactSchema),
       loadFrontmatter(
         path.join(basePath, "090-rodzaje-uroczystosci.md"),
@@ -339,6 +359,7 @@ export const getPageContent = async (locale: SupportedLocale): Promise<PageConte
   return {
     site,
     hero,
+    serviceOverview,
     trackRecord,
     eventProfiles: {
       weddings: weddingProfile,

@@ -239,7 +239,7 @@ test("display headings keep complete sentences together before balancing their l
   assert.match(component, /const sentences = props\.text\.split\(EDITORIAL_SENTENCE_BOUNDARY\);/);
   assert.match(component, /className="editorial-heading__sentence"/);
   assert.match(component, /<EditorialHeading level=\{1\} text=\{activeEvent\.title\} \/>/);
-  assert.equal(component.match(/<EditorialHeading level=\{2\}/g)?.length, 6);
+  assert.equal(component.match(/<EditorialHeading level=\{2\}/g)?.length, 7);
   assert.match(styles, /\.editorial-heading__sentence\s*\{[^}]*text-wrap:\s*pretty;[^}]*display:\s*block/s);
   assert.match(styles, /@media \(min-width:\s*48rem\)[\s\S]*?\.editorial-heading__sentence\s*\{[^}]*text-wrap:\s*balance/s);
   assert.match(styles, /\.hero h1\s*\{[^}]*max-width:\s*min\(18ch,100%\);/s);
@@ -620,7 +620,17 @@ test("gallery keeps initial zoom separate from directional image slides", () => 
   assert.match(component, /onKeyDown=\{handleKeyDown\}/);
   assert.match(styles, /\.gallery-lightbox__stage\s*\{[^}]*grid-template-columns:/s);
   assert.match(styles, /\.gallery-lightbox__image-frame\s*\{[^}]*grid-column:\s*2;[^}]*grid-row:\s*2;/s);
-  assert.doesNotMatch(styles, /\.gallery-lightbox__previous\s*\{[^}]*position:\s*absolute/s);
+  assert.match(styles, /@media \(max-width:47\.999rem\)\s*\{[\s\S]*?\.gallery-lightbox__stage\s*\{[^}]*width:\s*100dvw;[^}]*height:\s*100svh;[^}]*display:\s*block/s);
+  assert.match(styles, /@media \(max-width:47\.999rem\)\s*\{[\s\S]*?\.gallery-lightbox__image-frame\s*\{[^}]*width:\s*100dvw;[^}]*height:\s*100svh;[^}]*position:\s*absolute;[^}]*inset:\s*0/s);
+  assert.match(styles, /@media \(max-width:47\.999rem\)\s*\{[\s\S]*?\.gallery-lightbox__control\s*\{[^}]*position:\s*absolute/s);
+});
+
+test("language changes keep the current scroll position while targeting the matching event page", () => {
+  const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
+
+  assert.match(component, /href=\{getEventPath\(locale, props\.eventKind\)\}/);
+  assert.match(component, /scroll=\{false\}/);
+  assert.match(component, /eventKind=\{EVENT_KINDS\[props\.selection\.activeIndex\] \?\? EVENT_KINDS\[0\]\}/);
 });
 
 test("the typography system keeps the restored top-bar fonts and Central European coverage", () => {

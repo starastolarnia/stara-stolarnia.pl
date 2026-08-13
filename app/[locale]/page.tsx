@@ -7,7 +7,11 @@ import {
   parseLocale,
   SUPPORTED_LOCALES,
 } from "@/lib/content";
+import { EVENT_KINDS } from "@/lib/event-kinds";
+import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { getPageMetadata } from "@/lib/site-metadata";
+
+const EVENT_KIND = EVENT_KINDS[0];
 
 type LocalePageProps = {
   params: Promise<{
@@ -16,7 +20,7 @@ type LocalePageProps = {
 };
 
 export const generateStaticParams = () =>
-  SUPPORTED_LOCALES.map((locale) => ({ locale }));
+  SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map((locale) => ({ locale }));
 
 export const generateMetadata = async (props: LocalePageProps): Promise<Metadata> => {
   const { locale: requestedLocale } = await props.params;
@@ -29,8 +33,8 @@ export const generateMetadata = async (props: LocalePageProps): Promise<Metadata
   const content = await getPageContent(locale);
 
   return getPageMetadata({
-    canonicalPath: `/${locale}/`,
     content,
+    eventKind: EVENT_KIND,
     locale,
   });
 };
@@ -45,7 +49,7 @@ const LocalePage = async (props: LocalePageProps) => {
 
   const content = await getPageContent(locale);
 
-  return <VenuePage content={content} />;
+  return <VenuePage content={content} initialEventKind={EVENT_KIND} />;
 };
 
 export default LocalePage;

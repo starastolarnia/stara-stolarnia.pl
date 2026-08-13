@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 
 import { VenuePage } from "@/components/VenuePage";
 import { getDefaultContent } from "@/lib/content";
-import { EVENT_KINDS } from "@/lib/event-kinds";
 import { getPageMetadata } from "@/lib/site-metadata";
 
-const EVENT_KIND = EVENT_KINDS[0];
+const EVENT_KIND = "family" as const;
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const content = await getDefaultContent();
@@ -13,8 +12,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
   return getPageMetadata({ content, eventKind: EVENT_KIND, locale: "pl" });
 };
 
-const HomePage = async () => (
+const FamilyCelebrationsPage = async () => (
   <VenuePage content={await getDefaultContent()} initialEventKind={EVENT_KIND} />
 );
 
-export default HomePage;
+export default FamilyCelebrationsPage;

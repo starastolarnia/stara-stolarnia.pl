@@ -11,6 +11,8 @@ events:
       Timber interiors, daylight streaming through generous windows and the
       forest just beyond the door. A wedding venue with a character of its
       own, close to Wrocław yet far from the rush of the city.
+    metaTitle: Wedding venue near Wrocław | Stara Stolarnia
+    metaDescription: Weddings in a timber venue in Byków near Wrocław. Up to 180 guests, a woodland ceremony, garden, guest rooms and free parking.
     primaryLabel: Ask about a wedding date
     desktopImage: /images/hero-forest.webp
     mobileImage: /images/hero-forest-mobile.webp
@@ -23,6 +25,8 @@ events:
     lead: >-
       A May reception with a bright room, good food and a garden where children
       can play. Close to Wrocław, with straightforward access and free parking.
+    metaTitle: First Communion venue near Wrocław | Stara Stolarnia
+    metaDescription: First Communion receptions in Byków near Wrocław, with a bright hall, garden for children, family menu, easy access and free parking.
     primaryLabel: Ask about a Communion date
     desktopImage: /images/event-communions.webp
     mobileImage: /images/event-communions.webp
@@ -36,6 +40,8 @@ events:
       A company anniversary, award evening, Christmas party or team event. We
       shape the room, menu and schedule around the reason you are gathering away
       from the office.
+    metaTitle: Corporate events near Wrocław | Stara Stolarnia
+    metaDescription: Corporate events near Wrocław, including team gatherings, anniversaries, Christmas parties and awards with catering and free parking.
     primaryLabel: Plan a company event
     desktopImage: /images/event-corporate.webp
     mobileImage: /images/event-corporate.webp
@@ -49,6 +55,8 @@ events:
       Christenings, milestone birthdays, wedding anniversaries and quiet
       gatherings after a farewell. We adapt the setting to the tone of the
       day, whether joyful, formal or discreet.
+    metaTitle: Family celebrations near Wrocław | Stara Stolarnia
+    metaDescription: Christenings, birthdays, anniversaries and family gatherings in Byków near Wrocław, with a timber hall, tailored menu, garden and parking.
     primaryLabel: Ask about a family gathering
     desktopImage: /images/event-family.webp
     mobileImage: /images/event-family.webp

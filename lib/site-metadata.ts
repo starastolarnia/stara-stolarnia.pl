@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
 import type { PageContent, SupportedLocale } from "@/lib/content";
-import { EVENT_KINDS } from "@/lib/event-kinds";
-import { LOCALES } from "@/lib/i18n";
+import { getEventPath } from "@/lib/event-routes";
+import type { EventKind } from "@/lib/event-kinds";
+import { LOCALES, SUPPORTED_LOCALES } from "@/lib/i18n";
 
 const DEFAULT_SITE_ORIGIN = "https://stara-stolarnia.pl";
 const VERCEL_PRODUCTION_HOSTNAME = process.env.VERCEL_PROJECT_PRODUCTION_URL;
@@ -11,22 +12,25 @@ export const SITE_ORIGIN = VERCEL_PRODUCTION_HOSTNAME
   ? `https://${VERCEL_PRODUCTION_HOSTNAME}`
   : DEFAULT_SITE_ORIGIN;
 
-const LOCALE_HOME_PATHS = Object.fromEntries(
-  Object.entries(LOCALES).map(([locale, config]) => [locale, config.path]),
-) as Record<SupportedLocale, string>;
-
 type PageMetadataInput = {
-  canonicalPath: string;
   content: Pick<PageContent, "hero" | "site">;
+  eventKind: EventKind;
   locale: SupportedLocale;
 };
 
 export const getPageMetadata = (input: PageMetadataInput): Metadata => {
-  const { canonicalPath, content, locale } = input;
+  const { content, eventKind, locale } = input;
   const { hero, site } = content;
-  const shareEvent = hero.events[EVENT_KINDS[0]];
+  const shareEvent = hero.events[eventKind];
+  const canonicalPath = getEventPath(locale, eventKind);
   const canonicalUrl = new URL(canonicalPath, SITE_ORIGIN).toString();
   const shareImageUrl = new URL(shareEvent.desktopImage, SITE_ORIGIN).toString();
+  const languageAlternates = Object.fromEntries(
+    SUPPORTED_LOCALES.map((alternateLocale) => [
+      alternateLocale,
+      getEventPath(alternateLocale, eventKind),
+    ]),
+  );
   const shareImage = {
     url: shareImageUrl,
     secureUrl: shareImageUrl,
@@ -37,15 +41,18 @@ export const getPageMetadata = (input: PageMetadataInput): Metadata => {
   };
 
   return {
-    title: site.metaTitle,
-    description: site.metaDescription,
+    title: shareEvent.metaTitle,
+    description: shareEvent.metaDescription,
     alternates: {
       canonical: canonicalUrl,
-      languages: LOCALE_HOME_PATHS,
+      languages: {
+        ...languageAlternates,
+        "x-default": getEventPath("pl", eventKind),
+      },
     },
     openGraph: {
-      title: site.metaTitle,
-      description: site.metaDescription,
+      title: shareEvent.metaTitle,
+      description: shareEvent.metaDescription,
       url: canonicalUrl,
       siteName: site.brand,
       locale: LOCALES[locale].openGraphLocale,
@@ -54,8 +61,8 @@ export const getPageMetadata = (input: PageMetadataInput): Metadata => {
     },
     twitter: {
       card: "summary_large_image",
-      title: site.metaTitle,
-      description: site.metaDescription,
+      title: shareEvent.metaTitle,
+      description: shareEvent.metaDescription,
       images: [shareImage],
     },
     pinterest: {

@@ -3,7 +3,7 @@ export const LOCALES = {
     flag: "🇵🇱",
     name: "Polski",
     openGraphLocale: "pl_PL",
-    path: "/pl/",
+    path: "/",
   },
   en: {
     flag: "🇬🇧",
@@ -34,12 +34,3 @@ export const isSupportedLocale = (locale: string): locale is SupportedLocale =>
   Object.hasOwn(LOCALES, locale);
 
 export const getLocalePath = (locale: SupportedLocale) => LOCALES[locale].path;
-
-const localeRedirectConfig = {
-  defaultLocale: DEFAULT_LOCALE,
-  paths: Object.fromEntries(
-    SUPPORTED_LOCALES.map((locale) => [locale, getLocalePath(locale)]),
-  ),
-};
-
-export const LOCALE_REDIRECT_SCRIPT = `(()=>{const config=${JSON.stringify(localeRedirectConfig)};if(window.location.pathname!=="/")return;const languages=navigator.languages?.length?navigator.languages:[navigator.language];let locale=config.defaultLocale;for(const language of languages){const candidate=String(language).toLowerCase().split("-")[0];if(Object.hasOwn(config.paths,candidate)){locale=candidate;break}}window.location.replace(config.paths[locale]+window.location.search+window.location.hash)})();`;
