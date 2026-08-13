@@ -1295,14 +1295,21 @@ export const VenuePage = (props: VenuePageProps) => {
 
       <footer className="footer">
         <div className="shell footer__inner">
-          <a href="#top" aria-label={site.homeLabel}>
-            <Logo brand={site.brand} />
-          </a>
-          <p>{activeProfile.footerText}</p>
-          <div className="footer__links">
-            <a href={site.facebookHref} target="_blank" rel="noreferrer">
+          <div className="footer__brand">
+            <a href="#top" aria-label={site.homeLabel}>
+              <Logo brand={site.brand} />
+            </a>
+            <a
+              className="footer__facebook"
+              href={site.facebookHref}
+              target="_blank"
+              rel="noreferrer"
+            >
               {site.facebookLabel}
             </a>
+          </div>
+          <p>{activeProfile.footerText}</p>
+          <div className="footer__links">
             <a
               className="footer__partner"
               href={site.partnerHref}

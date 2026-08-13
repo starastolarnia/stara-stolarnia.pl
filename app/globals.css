@@ -1148,7 +1148,7 @@ h2 {
     font-size: 0.8rem;
 }
 .footer {
-    color: var(--track-record-gold);
+    color: var(--white);
     background-color: var(--track-record-background);
     background-image: var(--track-record-pattern);
     background-size: var(--track-record-pattern-size);
@@ -1160,10 +1160,15 @@ h2 {
 }
 .footer .logo {
     width: fit-content;
-    color: inherit;
+    color: var(--track-record-gold);
     text-align: left
 }
-.footer__inner>p,.footer__links {
+.footer__brand {
+    justify-items: start;
+    gap: 1rem;
+    display: grid
+}
+.footer__inner>p,.footer__facebook,.footer__links {
     letter-spacing: .08em;
     text-transform: uppercase;
     font-size: .65rem
@@ -1176,7 +1181,7 @@ h2 {
     gap: .55rem;
     display: flex
 }
-.footer__links a {
+.footer__facebook {
     border-bottom: 1px solid;
     width: fit-content
 }
