@@ -593,13 +593,34 @@ test("content photos use subtle Motion zoom and gallery images expand into an ac
   assert.match(component, /const GalleryLightbox =/);
   assert.match(component, /role="dialog"\s*aria-modal="true"/s);
   assert.match(component, /layoutId=\{getGalleryImageLayoutId\(item\.src\)\}/);
-  assert.match(component, /layoutId=\{getGalleryImageLayoutId\(image\.src\)\}/);
+  assert.match(component, /layoutId=\{getGalleryImageLayoutId\(props\.images\[props\.originIndex\]\.src\)\}/);
   assert.match(component, /event\.key === "Escape"/);
   assert.match(component, /event\.key === "ArrowLeft"/);
   assert.match(component, /event\.key === "ArrowRight"/);
   assert.match(styles, /\.gallery-lightbox\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*0/s);
   assert.match(styles, /\.gallery__item\s*\{[^}]*cursor:\s*zoom-in;/s);
   assert.doesNotMatch(component, /className="hero__media"[\s\S]{0,300}whileHover=/s);
+});
+
+test("gallery keeps initial zoom separate from directional image slides", () => {
+  const component = readFileSync(new URL("./VenuePage.tsx", import.meta.url), "utf8");
+  const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.match(component, /type GallerySelection = \{[\s\S]*?currentIndex: number;[\s\S]*?direction: number;[\s\S]*?originIndex: number;/s);
+  assert.match(component, /const GALLERY_SLIDE_VARIANTS = \{/);
+  assert.match(component, /x: direction > 0 \? "100%" : "-100%"/);
+  assert.match(component, /x: direction > 0 \? "-100%" : "100%"/);
+  assert.match(component, /className="gallery-lightbox__image-frame"[\s\S]*?layoutId=\{getGalleryImageLayoutId\(props\.images\[props\.originIndex\]\.src\)\}/s);
+  assert.match(component, /<motion\.img[\s\S]*?layoutId=\{getGalleryImageLayoutId\(item\.src\)\}/s);
+  assert.doesNotMatch(component, /<AnimatePresence initial=\{false\} mode="wait">/);
+  assert.match(component, /drag=\{props\.reduceMotion \? false : "x"\}/);
+  assert.match(component, /onDragEnd=/);
+  assert.match(component, /className="gallery-lightbox__dots"/);
+  assert.doesNotMatch(component, /gallery-lightbox__counter/);
+  assert.match(component, /onKeyDown=\{handleKeyDown\}/);
+  assert.match(styles, /\.gallery-lightbox__stage\s*\{[^}]*grid-template-columns:/s);
+  assert.match(styles, /\.gallery-lightbox__image-frame\s*\{[^}]*grid-column:\s*2;[^}]*grid-row:\s*2;/s);
+  assert.doesNotMatch(styles, /\.gallery-lightbox__previous\s*\{[^}]*position:\s*absolute/s);
 });
 
 test("the typography system keeps the restored top-bar fonts and Central European coverage", () => {

@@ -11,6 +11,7 @@ galleryOpenLabel: Bild im Vollbild öffnen
 galleryCloseLabel: Galerie schließen
 galleryPreviousLabel: Vorheriges Bild
 galleryNextLabel: Nächstes Bild
+galleryNavigationLabel: Galerienavigation
 updatedLabel: Zuletzt aktualisiert
 metaTitle: Stara Stolarnia | Hochzeitslocation am Waldrand
 metaDescription: Eine familiengeführte Hochzeitslocation mit warmem Holzambiente in Byków bei Breslau. Feiern mit bis zu 180 Gästen, Trauungen im Wald und herzliche Gastfreundschaft.

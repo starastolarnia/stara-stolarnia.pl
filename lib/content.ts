@@ -45,6 +45,7 @@ const siteSchema = z.object({
   galleryCloseLabel: copySchema,
   galleryPreviousLabel: copySchema,
   galleryNextLabel: copySchema,
+  galleryNavigationLabel: copySchema,
   updatedLabel: copySchema,
   metaTitle: copySchema,
   metaDescription: copySchema,

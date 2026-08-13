@@ -11,6 +11,7 @@ galleryOpenLabel: Відкрити фото на весь екран
 galleryCloseLabel: Закрити галерею
 galleryPreviousLabel: Попереднє фото
 galleryNextLabel: Наступне фото
+galleryNavigationLabel: Навігація галереї
 updatedLabel: Останнє оновлення
 metaTitle: Stara Stolarnia | весільна зала на узліссі
 metaDescription: Затишна дерев’яна весільна зала в Бикові біля Вроцлава. Святкування до 180 гостей, церемонії в лісі та щира родинна гостинність.

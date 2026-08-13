@@ -8,6 +8,7 @@ import {
   AnimatePresence,
   LayoutGroup,
   motion,
+  type PanInfo,
   useDragControls,
   useInView,
   useMotionValue,
@@ -121,11 +122,15 @@ type TrackRecordSectionProps = {
 type GalleryLightboxProps = {
   closeLabel: string;
   currentIndex: number;
+  direction: number;
   images: EventPageProfile["gallery"]["images"];
+  navigationLabel: string;
   nextLabel: string;
   onClose: () => void;
   onNext: () => void;
   onPrevious: () => void;
+  onSelect: (requestedIndex: number) => void;
+  originIndex: number;
   previousLabel: string;
   reduceMotion: boolean;
 };
@@ -140,6 +145,12 @@ type EventHeroProps = Pick<EventSelectionProps, "hero" | "selection"> & {
 type HeroSelection = {
   activeIndex: number;
   direction: number;
+};
+
+type GallerySelection = {
+  currentIndex: number;
+  direction: number;
+  originIndex: number;
 };
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -159,12 +170,19 @@ const TRACK_RECORD_STAGGER_SECONDS = 0.18;
 const TRACK_RECORD_VIEWPORT_AMOUNT = 0.2;
 const CONTENT_IMAGE_HOVER_SCALE = 1.035;
 const GALLERY_LAYOUT_TRANSITION_SECONDS = 0.55;
+const GALLERY_SWIPE_DISTANCE_PX = 56;
+const GALLERY_SWIPE_VELOCITY_PX = 480;
 const SITE_TIME_ZONE = "Europe/Warsaw";
 const EDITORIAL_SENTENCE_BOUNDARY = /(?<=[.!?])\s+/u;
 const FLOATING_DROPDOWN_INITIAL = { opacity: 0, y: -8 } as const;
 const FLOATING_DROPDOWN_VISIBLE = { opacity: 1, y: 0 } as const;
 const FLOATING_DROPDOWN_EXIT = { opacity: 0, y: -6 } as const;
 const FLOATING_DROPDOWN_TRANSITION = { duration: 0.18, ease: EASE } as const;
+const GALLERY_SLIDE_VARIANTS = {
+  enter: (direction: number) => ({ x: direction > 0 ? "100%" : "-100%" }),
+  center: { x: "0%" },
+  exit: (direction: number) => ({ x: direction > 0 ? "-100%" : "100%" }),
+};
 
 const Logo = (props: LogoProps) => {
   const { brand } = props;
@@ -219,8 +237,36 @@ const DropdownMenuSurface = (props: DropdownMenuSurfaceProps) => (
 
 const GalleryLightbox = (props: GalleryLightboxProps) => {
   const image = props.images[props.currentIndex];
+  const originImage = props.images[props.originIndex];
 
-  if (!image) return null;
+  if (!image || !originImage) return null;
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      props.onClose();
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      props.onPrevious();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      props.onNext();
+    }
+  };
+
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (
+      info.offset.x <= -GALLERY_SWIPE_DISTANCE_PX ||
+      info.velocity.x <= -GALLERY_SWIPE_VELOCITY_PX
+    ) {
+      props.onNext();
+    } else if (
+      info.offset.x >= GALLERY_SWIPE_DISTANCE_PX ||
+      info.velocity.x >= GALLERY_SWIPE_VELOCITY_PX
+    ) {
+      props.onPrevious();
+    }
+  };
 
   return (
     <motion.div
@@ -233,29 +279,9 @@ const GalleryLightbox = (props: GalleryLightboxProps) => {
       exit={props.reduceMotion ? undefined : { opacity: 0 }}
       transition={{ duration: props.reduceMotion ? 0 : 0.28, ease: EASE }}
       onClick={props.onClose}
+      onKeyDown={handleKeyDown}
     >
       <div className="gallery-lightbox__stage" onClick={(event) => event.stopPropagation()}>
-        <AnimatePresence initial={false} mode="wait">
-          <motion.img
-            className="gallery-lightbox__image"
-            src={image.src}
-            alt={image.alt}
-            key={image.src}
-            layoutId={getGalleryImageLayoutId(image.src)}
-            initial={props.reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={props.reduceMotion ? undefined : { opacity: 0 }}
-            transition={{
-              duration: props.reduceMotion ? 0 : 0.3,
-              ease: EASE,
-              layout: {
-                duration: props.reduceMotion ? 0 : GALLERY_LAYOUT_TRANSITION_SECONDS,
-                ease: EASE,
-              },
-            }}
-          />
-        </AnimatePresence>
-
         <button
           className="gallery-lightbox__control gallery-lightbox__close"
           type="button"
@@ -273,6 +299,46 @@ const GalleryLightbox = (props: GalleryLightboxProps) => {
         >
           <GalleryArrowIcon direction="previous" />
         </button>
+
+        <motion.div
+          className="gallery-lightbox__image-frame"
+          layoutId={getGalleryImageLayoutId(props.images[props.originIndex].src)}
+          transition={{
+            layout: {
+              duration: props.reduceMotion ? 0 : GALLERY_LAYOUT_TRANSITION_SECONDS,
+              ease: EASE,
+            },
+          }}
+        >
+          <AnimatePresence initial={false} custom={props.direction}>
+            <motion.img
+              className="gallery-lightbox__image"
+              src={image.src}
+              alt={image.alt}
+              draggable={false}
+              key={image.src}
+              custom={props.direction}
+              variants={GALLERY_SLIDE_VARIANTS}
+              initial={props.reduceMotion ? false : "enter"}
+              animate="center"
+              exit={props.reduceMotion ? { opacity: 0 } : "exit"}
+              transition={
+                props.reduceMotion
+                  ? { duration: 0 }
+                  : {
+                      x: { type: "spring", stiffness: 230, damping: 28, mass: 1 },
+                      opacity: { duration: 0.16 },
+                    }
+              }
+              drag={props.reduceMotion ? false : "x"}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.08}
+              dragMomentum={false}
+              onDragEnd={handleDragEnd}
+            />
+          </AnimatePresence>
+        </motion.div>
+
         <button
           className="gallery-lightbox__control gallery-lightbox__next"
           type="button"
@@ -281,9 +347,23 @@ const GalleryLightbox = (props: GalleryLightboxProps) => {
         >
           <GalleryArrowIcon direction="next" />
         </button>
-        <span className="gallery-lightbox__counter" aria-hidden="true">
-          {String(props.currentIndex + 1).padStart(2, "0")} / {String(props.images.length).padStart(2, "0")}
-        </span>
+
+        <nav className="gallery-lightbox__dots" aria-label={props.navigationLabel}>
+          {props.images.map((dotImage, index) => (
+            <button
+              className={
+                index === props.currentIndex
+                  ? "gallery-lightbox__dot gallery-lightbox__dot--active"
+                  : "gallery-lightbox__dot"
+              }
+              type="button"
+              aria-label={dotImage.alt}
+              aria-current={index === props.currentIndex ? "true" : undefined}
+              key={dotImage.src}
+              onClick={() => props.onSelect(index)}
+            />
+          ))}
+        </nav>
       </div>
     </motion.div>
   );
@@ -1213,10 +1293,11 @@ export const VenuePage = (props: VenuePageProps) => {
   const reduceMotion = useReducedMotion();
   const { scrollTo } = useVenueScrollModel();
   const [selection, setSelection] = useState<HeroSelection>({ activeIndex: 0, direction: 1 });
-  const [galleryImageIndex, setGalleryImageIndex] = useState<number | null>(null);
+  const [gallerySelection, setGallerySelection] = useState<GallerySelection | null>(null);
   const activeKind = EVENT_KINDS[selection.activeIndex] ?? EVENT_KINDS[0];
   const activeProfile = content.eventProfiles[activeKind];
   const galleryImageCount = activeProfile.gallery.images.length;
+  const isGalleryOpen = gallerySelection !== null;
   const updatedDate = new Intl.DateTimeFormat(site.locale, {
     dateStyle: "medium",
     timeStyle: "short",
@@ -1224,33 +1305,16 @@ export const VenuePage = (props: VenuePageProps) => {
   }).format(new Date(updatedAt));
 
   useEffect(() => {
-    if (galleryImageIndex === null) return;
+    if (!isGalleryOpen) return;
 
     const previousOverflow = document.body.style.overflow;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setGalleryImageIndex(null);
-      } else if (event.key === "ArrowLeft") {
-        setGalleryImageIndex((currentIndex) =>
-          currentIndex === null
-            ? null
-            : (currentIndex - 1 + galleryImageCount) % galleryImageCount,
-        );
-      } else if (event.key === "ArrowRight") {
-        setGalleryImageIndex((currentIndex) =>
-          currentIndex === null ? null : (currentIndex + 1) % galleryImageCount,
-        );
-      }
-    };
 
     document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [galleryImageCount, galleryImageIndex]);
+  }, [isGalleryOpen]);
 
   const selectEvent = (requestedIndex: number) => {
     const nextIndex = Math.max(0, Math.min(EVENT_KINDS.length - 1, requestedIndex));
@@ -1261,18 +1325,43 @@ export const VenuePage = (props: VenuePageProps) => {
       activeIndex: nextIndex,
       direction: Math.sign(nextIndex - selection.activeIndex),
     });
-    setGalleryImageIndex(null);
+    setGallerySelection(null);
     scrollTo(0, { immediate: Boolean(reduceMotion) });
   };
 
   const showPreviousGalleryImage = () =>
-    setGalleryImageIndex((currentIndex) =>
-      currentIndex === null ? null : (currentIndex - 1 + galleryImageCount) % galleryImageCount,
+    setGallerySelection((currentSelection) =>
+      currentSelection === null
+        ? null
+        : {
+            ...currentSelection,
+            currentIndex:
+              (currentSelection.currentIndex - 1 + galleryImageCount) % galleryImageCount,
+            direction: -1,
+          },
     );
   const showNextGalleryImage = () =>
-    setGalleryImageIndex((currentIndex) =>
-      currentIndex === null ? null : (currentIndex + 1) % galleryImageCount,
+    setGallerySelection((currentSelection) =>
+      currentSelection === null
+        ? null
+        : {
+            ...currentSelection,
+            currentIndex: (currentSelection.currentIndex + 1) % galleryImageCount,
+            direction: 1,
+          },
     );
+  const selectGalleryImage = (requestedIndex: number) =>
+    setGallerySelection((currentSelection) => {
+      if (currentSelection === null || requestedIndex === currentSelection.currentIndex) {
+        return currentSelection;
+      }
+
+      return {
+        ...currentSelection,
+        currentIndex: requestedIndex,
+        direction: Math.sign(requestedIndex - currentSelection.currentIndex),
+      };
+    });
 
   return (
     <div className="venue-page" lang={site.locale}>
@@ -1393,7 +1482,9 @@ export const VenuePage = (props: VenuePageProps) => {
                 whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.12 }}
                 transition={{ duration: 0.85, delay: (index % 2) * 0.08, ease: EASE }}
-                onClick={() => setGalleryImageIndex(index)}
+                onClick={() =>
+                  setGallerySelection({ currentIndex: index, direction: 0, originIndex: index })
+                }
               >
                 <motion.img
                   src={item.src}
@@ -1460,15 +1551,19 @@ export const VenuePage = (props: VenuePageProps) => {
       </main>
 
       <AnimatePresence>
-        {galleryImageIndex !== null ? (
+        {gallerySelection !== null ? (
           <GalleryLightbox
             closeLabel={site.galleryCloseLabel}
-            currentIndex={galleryImageIndex}
+            currentIndex={gallerySelection.currentIndex}
+            direction={gallerySelection.direction}
             images={activeProfile.gallery.images}
+            navigationLabel={site.galleryNavigationLabel}
             nextLabel={site.galleryNextLabel}
-            onClose={() => setGalleryImageIndex(null)}
+            onClose={() => setGallerySelection(null)}
             onNext={showNextGalleryImage}
             onPrevious={showPreviousGalleryImage}
+            onSelect={selectGalleryImage}
+            originIndex={gallerySelection.originIndex}
             previousLabel={site.galleryPreviousLabel}
             reduceMotion={Boolean(reduceMotion)}
           />
