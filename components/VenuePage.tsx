@@ -4,11 +4,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
+  animate,
   AnimatePresence,
   LayoutGroup,
   motion,
   useDragControls,
   useInView,
+  useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
@@ -134,8 +136,7 @@ const HEADER_SCROLL_THRESHOLD_PX = 100;
 const HEADER_SECTION_OFFSET_PX = 176;
 const PROGRAMMATIC_NAVIGATION_FALLBACK_MS = 1600;
 const MARQUEE_GROUPS = [0, 1] as const;
-const TRACK_RECORD_COUNT_DURATION_MS = 1400;
-const TRACK_RECORD_EASING_POWER = 3;
+const TRACK_RECORD_COUNT_DURATION_SECONDS = 1.4;
 const TRACK_RECORD_STAGGER_SECONDS = 0.09;
 const TRACK_RECORD_VIEWPORT_AMOUNT = 0.65;
 const SITE_TIME_ZONE = "Europe/Warsaw";
@@ -973,32 +974,26 @@ const AnimatedStat = (props: AnimatedStatProps) => {
   const reduceMotion = useReducedMotion();
   const statRef = useRef<HTMLElement>(null);
   const isInView = useInView(statRef, { once: true, amount: TRACK_RECORD_VIEWPORT_AMOUNT });
-  const [displayValue, setDisplayValue] = useState(0);
-  const resolvedValue = reduceMotion ? props.value : displayValue;
+  const count = useMotionValue(reduceMotion ? props.value : 0);
+  const displayValue = useTransform(count, (latest) => Math.round(latest));
 
   useEffect(() => {
-    if (reduceMotion || !isInView) {
+    if (reduceMotion) {
+      count.set(props.value);
       return;
     }
 
-    let frameId = 0;
-    const startedAt = performance.now();
+    if (!isInView) {
+      return;
+    }
 
-    const updateCounter = (timestamp: number) => {
-      const progress = Math.min((timestamp - startedAt) / TRACK_RECORD_COUNT_DURATION_MS, 1);
-      const easedProgress = 1 - (1 - progress) ** TRACK_RECORD_EASING_POWER;
+    const controls = animate(count, props.value, {
+      duration: TRACK_RECORD_COUNT_DURATION_SECONDS,
+      ease: EASE,
+    });
 
-      setDisplayValue(Math.round(props.value * easedProgress));
-
-      if (progress < 1) {
-        frameId = requestAnimationFrame(updateCounter);
-      }
-    };
-
-    frameId = requestAnimationFrame(updateCounter);
-
-    return () => cancelAnimationFrame(frameId);
-  }, [isInView, props.value, reduceMotion]);
+    return () => controls.stop();
+  }, [count, isInView, props.value, reduceMotion]);
 
   return (
     <motion.article
@@ -1010,7 +1005,7 @@ const AnimatedStat = (props: AnimatedStatProps) => {
       transition={{ duration: 0.7, delay: reduceMotion ? 0 : props.delay, ease: EASE }}
     >
       <strong>
-        <span>{resolvedValue}</span>
+        <motion.span>{displayValue}</motion.span>
         <sup>{props.suffix}</sup>
       </strong>
       <span>{props.label}</span>
