@@ -194,7 +194,7 @@ test("the event selector uses one draggable CSS capsule inside the header surfac
   assert.doesNotMatch(styles, /\.event-switcher__tab--active\s*\{[^}]*(?:transform|scale|background|box-shadow|border)/s);
   assert.match(styles, /\.event-switcher-frame\s*\{[^}]*overflow:\s*hidden;?/s);
   assert.doesNotMatch(component, /className="event-switcher__surface"/);
-  assert.match(styles, /\.segmented-control__thumb-content\s*\{[^}]*backdrop-filter:\s*blur\(12px\);[^}]*border-radius:\s*99px;/s);
+  assert.match(styles, /\.segmented-control__thumb-content\s*\{[^}]*background:\s*#ffffffa8;[^}]*border:\s*1px solid #ffffffb8;[^}]*border-radius:\s*99px;/s);
   assert.match(styles, /\.segmented-control__thumb-content,\.event-dropdown__trigger-shell\s*\{[^}]*opacity:\s*1!important/s);
   assert.match(styles, /\.event-switcher-frame\s*\{[^}]*min-height:\s*var\(--event-switcher-height\);/s);
   assert.match(styles, /@media \(min-width:\s*68rem\)[\s\S]*?\.event-switcher-frame\s*\{[^}]*max-width:\s*none;/s);
@@ -373,6 +373,26 @@ test("the header keeps layout reads and redundant state updates out of the scrol
   assert.match(scrollHandler, /activeNavigationIndexRef\.current !==/);
   assert.match(component, /section\.getBoundingClientRect\(\)\.top \+ window\.scrollY/);
   assert.match(component, /window\.addEventListener\("resize", refreshNavigationOffsets\)/);
+});
+
+test("the fixed header keeps one backdrop blur instead of stacking compositor passes", () => {
+  const styles = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+  const fixedHeaderRule = styles.match(/\.site-header\s*\{[^}]*\}/s)?.[0] ?? "";
+  const nestedSurfaceSelectors = [
+    "site-header__cta",
+    "event-dropdown__trigger-shell",
+    "segmented-control__thumb-content",
+  ];
+
+  assert.match(fixedHeaderRule, /backdrop-filter:\s*blur\(14px\);/s);
+
+  for (const selector of nestedSurfaceSelectors) {
+    const surfaceRule =
+      styles.match(new RegExp(`(?:^|\\n)\\.${selector}\\s*\\{[^}]*\\}`, "s"))?.[0] ?? "";
+
+    assert.ok(surfaceRule, `${selector} should keep its material rule`);
+    assert.doesNotMatch(surfaceRule, /backdrop-filter:/s);
+  }
 });
 
 test("changing an event scrolls to page top with the user's motion preference", () => {
