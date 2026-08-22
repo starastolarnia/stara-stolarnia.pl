@@ -50,6 +50,11 @@ export const getPageMetadata = (input: PageMetadataInput): Metadata => {
         "x-default": getEventPath("pl", eventKind),
       },
     },
+    robots: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
     openGraph: {
       title: shareEvent.metaTitle,
       description: shareEvent.metaDescription,

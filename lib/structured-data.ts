@@ -6,6 +6,14 @@ import { SITE_ORIGIN } from "@/lib/site-metadata";
 const BUSINESS_ID = `${SITE_ORIGIN}/#venue`;
 const WEBSITE_ID = `${SITE_ORIGIN}/#website`;
 const INTERNATIONAL_PHONE = "+48 506 979 921";
+const BUSINESS_IMAGE_PATHS = [
+  "/images/stara-stolarnia-venue-1x1.webp",
+  "/images/hero-forest.webp",
+  "/images/stara-stolarnia-venue-16x9.webp",
+] as const;
+const BUSINESS_IMAGE_URLS = BUSINESS_IMAGE_PATHS.map((path) =>
+  new URL(path, SITE_ORIGIN).toString(),
+);
 
 type StructuredDataInput = {
   content: PageContent;
@@ -19,6 +27,7 @@ export const getStructuredData = (input: StructuredDataInput) => {
   const event = hero.events[eventKind];
   const pageUrl = new URL(getEventPath(locale, eventKind), SITE_ORIGIN).toString();
   const imageUrl = new URL(event.desktopImage, SITE_ORIGIN).toString();
+  const primaryImageId = `${pageUrl}#primaryimage`;
   const serviceId = `${pageUrl}#service`;
 
   return {
@@ -30,7 +39,7 @@ export const getStructuredData = (input: StructuredDataInput) => {
         name: site.brand,
         description: serviceOverview.lead,
         url: SITE_ORIGIN,
-        image: imageUrl,
+        image: BUSINESS_IMAGE_URLS,
         telephone: INTERNATIONAL_PHONE,
         email: content.eventProfiles[eventKind].contact.email,
         address: {
@@ -52,13 +61,20 @@ export const getStructuredData = (input: StructuredDataInput) => {
         publisher: { "@id": BUSINESS_ID },
       },
       {
+        "@type": "ImageObject",
+        "@id": primaryImageId,
+        url: imageUrl,
+        contentUrl: imageUrl,
+        caption: event.imageAlt,
+      },
+      {
         "@type": "Service",
         "@id": serviceId,
         name: event.tabLabel,
         serviceType: event.eyebrow,
         description: event.lead,
         url: pageUrl,
-        image: imageUrl,
+        image: { "@id": primaryImageId },
         areaServed: {
           "@type": "AdministrativeArea",
           name: "Wrocław i okolice",
@@ -75,6 +91,7 @@ export const getStructuredData = (input: StructuredDataInput) => {
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": BUSINESS_ID },
         mainEntity: { "@id": serviceId },
+        primaryImageOfPage: { "@id": primaryImageId },
       },
     ],
   };

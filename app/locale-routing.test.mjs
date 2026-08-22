@@ -9,6 +9,7 @@ const eventPaths = {
   de: ["de/", "de/kommunionen/", "de/firmenfeiern/", "de/familienfeiern/"],
   uk: ["uk/", "uk/pershe-prychastia/", "uk/korporatyvni-podii/", "uk/simeini-sviata/"],
 };
+const WEDDING_IMAGE_URL = "https://stara-stolarnia.pl/images/hero-forest.webp";
 
 test("root export renders the Polish page without a locale redirect", () => {
   const html = readExportedPage("index.html");
@@ -99,11 +100,29 @@ test("pages publish local business and service structured data plus crawlable in
 
   const structuredData = JSON.parse(jsonLd);
   const types = structuredData["@graph"].map((entry) => entry["@type"]);
+  const business = structuredData["@graph"].find(
+    (entry) => Array.isArray(entry["@type"]) && entry["@type"].includes("LocalBusiness"),
+  );
+  const primaryImage = structuredData["@graph"].find(
+    (entry) => entry["@type"] === "ImageObject",
+  );
+  const webPage = structuredData["@graph"].find((entry) => entry["@type"] === "WebPage");
 
   assert.ok(types.some((type) => Array.isArray(type) && type.includes("LocalBusiness")));
+  assert.ok(business);
+  assert.ok(primaryImage);
+  assert.ok(webPage);
   assert.ok(types.includes("Service"));
   assert.ok(types.includes("WebPage"));
-  assert.equal(structuredData["@graph"][0].address.addressLocality, "Byków");
+  assert.equal(business.address.addressLocality, "Byków");
+  assert.deepEqual(business.image, [
+    "https://stara-stolarnia.pl/images/stara-stolarnia-venue-1x1.webp",
+    WEDDING_IMAGE_URL,
+    "https://stara-stolarnia.pl/images/stara-stolarnia-venue-16x9.webp",
+  ]);
+  assert.equal(primaryImage.contentUrl, WEDDING_IMAGE_URL);
+  assert.deepEqual(webPage.primaryImageOfPage, { "@id": primaryImage["@id"] });
+  assert.match(html, /<meta name="robots" content="[^"]*max-image-preview:large/);
 
   for (const path of eventPaths.pl) {
     assert.match(html, new RegExp(`href="/${path}"`));
