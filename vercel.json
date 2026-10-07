@@ -11,5 +11,11 @@
       "destination": "/:path*",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/zohoverify/verifyforzoho.html",
+      "destination": "/zohoverify/verifyforzoho"
+    }
   ]
 }
